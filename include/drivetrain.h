@@ -3,14 +3,14 @@ class Drivetrain {
 
 float wheelDiameter;
 float gearRatio;
-const float wheelCircumference;
+float wheelCircumference;
 
 
 //The angle of the vector created when a motor drives forward compared to the heading
-const int northWheelAngle; 
-const int southWheelAngle; 
-const int eastWheelAngle; 
-const int westWheelAngle;
+int northWheelAngle; 
+int southWheelAngle; 
+int eastWheelAngle; 
+int westWheelAngle;
 
 vex::motor northMotor = NULL;
 vex::motor southMotor = NULL;
