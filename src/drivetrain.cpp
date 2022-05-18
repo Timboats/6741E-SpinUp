@@ -18,13 +18,11 @@ Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, vex::motor northMot
     this -> southMotor = southMotor;
     this -> eastMotor = eastMotor;
     this -> westMotor = westMotor;
-    this -> gps1 = gps1;
-    /*
-    Figure this out later
+    this -> gps1 = gps1;    
 
-    if(gps2 != 0){
+    if(gps2.installed()){
         this -> gps2 = gps2;
-    }*/
+    }
 
 
 }
@@ -43,8 +41,19 @@ void Drivetrain::goToPos(int x, int y){
   float northVoltage = 0;
   float eastVoltage = 0;
 
+  int currentX = gps1.xPosition(mm);
+  int currentY = gps1.yPosition(mm);
+
   while(true){
-      //Next time working define a fuction that does the distance formula
+      currentX = gps1.xPosition(mm);
+      currentY = gps1.yPosition(mm);
+
+      error = Formula::twoCoordDistance(currentX, currentY, x, y);
+      totalVoltage = Kp * error;
+      angleToSetPos = atan2(y - currentY, x - currentX);
+
+      //northVoltage
+      
       
 
   }
