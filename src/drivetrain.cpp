@@ -60,30 +60,23 @@ void Drivetrain::goToPos(int x, int y){
         totalVoltage = Kp * error;
         angleToSetPos = atan2(y - currentY, x - currentX);
 
-        northVoltage = ((int)(totalVoltage * cos((double)(abs2(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
+        northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
 
-        eastVoltage = ((int)(totalVoltage * cos((double)(abs2(angleToSetPos - (Simpler::degreeToStdPos(heading - 135)) * (M_PI/180))))));
+        eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 135)) * (M_PI/180))))));
 
         northMotor.spin(forward, (northVoltage), vex::voltageUnits::mV);
         eastMotor.spin(forward, (eastVoltage), vex::voltageUnits::mV);
         southMotor.spin(forward, -(northVoltage), vex::voltageUnits::mV);
         westMotor.spin(forward, -(eastVoltage), vex::voltageUnits::mV);
 
-        if (abs(error) <= 1){
+        if (Simpler::abs(error) <= 1){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if (deltaTime > 500){
                 stopAllDrive();
                 return;
             }
-        } else {
-            prevTime = Brain.Timer.time(msec);
-   }
-
-
-      
-      
-      
-
+        } 
+        prevTime = Brain.Timer.time(msec);
   }
   
     

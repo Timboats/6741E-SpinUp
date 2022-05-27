@@ -8,5 +8,7 @@ class Formula{
 class Simpler{
     public:
     static int degreeToStdPos(int angle);
+    static float abs(float val);
+    static int sign(float val);
 
 };
