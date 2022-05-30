@@ -121,3 +121,34 @@ void Drivetrain::faceHeading(int heading){
         }
     }
 }
+float Drivetrain::turnToPoint(int x, int y){
+    const float Kp = 1;
+    const float Ki = 0;
+    const float Kd = 0;
+
+    float deltaTime = 0;
+    float prevTime = 0;
+    int error = 0;
+
+    float motorVoltage = 0;
+
+    int desiredAngle = 0;
+    int angleFromDesired = 0;
+
+    int currentX = gps1.xPosition(mm);
+    int currentY = gps1.yPosition(mm);
+
+    desiredAngle = atan2(y - currentY, x - currentX) * (180/M_PI);
+
+    angleFromDesired = ((Simpler::degreeToStdPos(gps1.heading()) - desiredAngle) + 360) % 360;
+
+    if (angleFromDesired > 180){
+        error = -(180 - (angleFromDesired - 180));
+    } else {
+        error = angleFromDesired;
+    }
+
+    motorVoltage = Kp * error;
+
+    return motorVoltage;
+}

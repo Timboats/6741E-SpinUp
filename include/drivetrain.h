@@ -25,6 +25,7 @@ Drivetrain(float wheelDiameter, float gearRatio, vex::motor northMotor, vex::mot
 void goToPos(int x, int y);
 void stopAllDrive();
 void faceHeading(int heading);
+float turnToPoint(int x, int y);
   
 
 
