@@ -112,7 +112,7 @@ void Drivetrain::faceHeading(int heading){
         if(Simpler::abs(error) <= 1){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if(deltaTime > 500){
-                stopAllDrive;
+                stopAllDrive();
                 return;
             }
         }
