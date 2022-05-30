@@ -24,6 +24,7 @@ public:
 Drivetrain(float wheelDiameter, float gearRatio, vex::motor northMotor, vex::motor southMotor, vex::motor eastMotor, vex::motor westMotor, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, vex::gps gps1, vex::gps gps2 = NULL);
 void goToPos(int x, int y);
 void stopAllDrive();
+void faceHeading(int heading);
   
 
 
