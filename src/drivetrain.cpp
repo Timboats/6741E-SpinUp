@@ -32,8 +32,15 @@ void Drivetrain::stopAllDrive(){
     eastMotor.stop();
     westMotor.stop();
 }
+
+void printToController (float value, int xPos, int yPos){
+  Controller1.Screen.setCursor(xPos,yPos);
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.print(value);
+}
+
 void Drivetrain::goToPos(int x, int y){
-    const float Kp = 750;
+    const float Kp = 40;
     const float Ki = 0;
     const float Kd = 0;
 
@@ -42,7 +49,7 @@ void Drivetrain::goToPos(int x, int y){
     int error = 0;
     float totalVoltage = 0;
 
-    int angleToSetPos = 0;
+    double angleToSetPos = 0;
     int heading = gps1.heading();
 
     float northVoltage = 0;
@@ -57,25 +64,30 @@ void Drivetrain::goToPos(int x, int y){
         heading = gps1.heading();
 
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
+
+        // printToController(error, 5, 3);
+
         totalVoltage = Kp * error;
         angleToSetPos = atan2(y - currentY, x - currentX);
 
         northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
 
         eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 135)) * (M_PI/180))))));
-
+        
         northMotor.spin(forward, (northVoltage), vex::voltageUnits::mV);
         eastMotor.spin(forward, (eastVoltage), vex::voltageUnits::mV);
         southMotor.spin(forward, -(northVoltage), vex::voltageUnits::mV);
         westMotor.spin(forward, -(eastVoltage), vex::voltageUnits::mV);
-
-        if (Simpler::abs(error) <= 1){
+        
+        printToController(Simpler::abs(error), 5, 3);
+        if (Simpler::abs(error) <= 100){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if (deltaTime > 500){
                 stopAllDrive();
                 return;
             }
         } 
+        
         prevTime = Brain.Timer.time(msec);
   }
   

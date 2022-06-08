@@ -19,12 +19,79 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
+#include "drivetrain.h"
 
 using namespace vex;
+competition Competition;
+Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
+
+void pre_auton(void){
+  vexcodeInit();
+  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
+
+
+}
+
+void testGoToMethod(){
+  int randomAngle = 0;
+  int xRandom = 0;
+  int yRandom = 0; 
+
+  srand((unsigned) Brain.Timer.time(msec));
+  randomAngle = (rand() % 360) + 1;
+  train.faceHeading(randomAngle);
+  //This is to prove that the goTo method works no matter the heading of the robot
+
+  srand((unsigned) Brain.Timer.time(msec));
+  xRandom = (rand() % 1601) - 800;
+
+  wait(rand() % 3 + 1, seconds);
+
+  srand((unsigned) Brain.Timer.time(msec));
+  yRandom = (rand() % 1601) - 800;
+  //generates a set of random coordinates
+
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1,1);
+  Controller1.Screen.print(xRandom);
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print(yRandom);
+  //This prints the desired position, that was randomly generated, on the screen of the controller
+
+  train.goToPos(xRandom, yRandom);
+  //This sends the robot to a random x and y position
+
+  Controller1.Screen.setCursor(1,7);
+  Controller1.Screen.print(GPS16.xPosition(inches));
+  Controller1.Screen.setCursor(2,7);
+  Controller1.Screen.print(GPS16.yPosition(inches));
+  //This prints where the robot actually went on the screen of the controller
+
+  return;
+}
+
+void autonomous(void){
+  // train.goToPos(0, 0);
+
+  testGoToMethod();
+  
+
+
+}
+
+void usercontrol(void){
+  Controller1.Screen.print("Exited");
+
+}
 
 
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
-  vexcodeInit();
+  Competition.autonomous(autonomous);
+  Competition.drivercontrol(usercontrol);
+  pre_auton();
+  while (true) {
+    wait(100, msec);
+  }
 }
