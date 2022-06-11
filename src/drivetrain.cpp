@@ -66,8 +66,6 @@ void Drivetrain::goToPos(int x, int y){
 
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
 
-        // printToController(error, 5, 3);
-
         totalVoltage = Kp * error;
         angleToSetPos = atan2(y - currentY, x - currentX);
 
@@ -80,16 +78,20 @@ void Drivetrain::goToPos(int x, int y){
         southMotor.spin(forward, -(northVoltage), vex::voltageUnits::mV);
         westMotor.spin(forward, -(eastVoltage), vex::voltageUnits::mV);
         
-        printToController(Simpler::abs(error), 5, 3);
-        if (Simpler::abs(error) <= 100){
+        
+
+
+        if (Simpler::abs(error) <= 26){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if (deltaTime > 500){
                 stopAllDrive();
                 return;
             }
+        } else {
+            prevTime = Brain.Timer.time(msec);
+
         } 
         
-        prevTime = Brain.Timer.time(msec);
   }
   
     

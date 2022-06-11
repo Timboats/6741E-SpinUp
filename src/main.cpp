@@ -64,9 +64,9 @@ void testGoToMethod(){
   //This sends the robot to a random x and y position
 
   Controller1.Screen.setCursor(1,7);
-  Controller1.Screen.print(GPS16.xPosition(inches));
+  Controller1.Screen.print(GPS16.xPosition(mm));
   Controller1.Screen.setCursor(2,7);
-  Controller1.Screen.print(GPS16.yPosition(inches));
+  Controller1.Screen.print(GPS16.yPosition(mm));
   //This prints where the robot actually went on the screen of the controller
 
   return;
