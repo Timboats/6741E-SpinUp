@@ -22,6 +22,9 @@
 
 #include "vex.h"
 #include "drivetrain.h"
+#include "mathlib.h"
+
+bool buttonAState = 0;
 
 using namespace vex;
 competition Competition;
@@ -32,6 +35,41 @@ void pre_auton(void){
   train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
 
 
+}
+
+void toggleButtonA(){
+  if (buttonAState == 0){
+    buttonAState = 1;
+  } else {
+    buttonAState = 0;
+  }
+}
+
+float turnTowardsPoint(int x, int y){
+  float motorPercentage = 0;
+  float Kp = 1;
+  int error = 0;
+  int angleFromDesired = 0;
+  int desiredAngle = 0;
+  
+  desiredAngle = atan2(y - GPS16.yPosition(inches), x - GPS16.xPosition(inches)) * (180/M_PI);
+
+  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(GPS16.heading())) + 360) % 360);
+  //finds the difference in the current angle and the desired angle from 0 to 360 degrees
+
+  if (angleFromDesired > 180){
+    error = -(180 - (angleFromDesired - 180));
+  } else {
+    error = angleFromDesired;
+  }
+  //translates angleFromDesired to -180 to 180 degrees
+
+  motorPercentage = Kp * error;
+  //calculates the desired voltage of the motors
+
+  //printToController(desiredAngle, 1, 1);
+    
+  return(motorPercentage);
 }
 
 void testGoToMethod(){
@@ -83,7 +121,27 @@ void autonomous(void){
 
 void usercontrol(void){
   Controller1.Screen.print("Exited");
+  int storedPercentage = 0;
 
+  while(true){
+
+
+    if (buttonAState == 1){
+      storedPercentage = turnTowardsPoint(0, 0);
+    } else {
+      storedPercentage = 0;
+    }
+    //This will allow the robot to turn to face a goal while still being able to be driven around
+
+    NorthMotor.spin(forward, -(Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
+    SouthMotor.spin(forward, -(Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
+    EastMotor.spin(forward, (Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
+    WestMotor.spin(forward, (Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
+    //This allows for driver control. By modifying the value outputed by the control stick, the movement of the robot is relative to the field, rather than the heading.
+
+    
+
+  }
 }
 
 
