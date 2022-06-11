@@ -120,7 +120,6 @@ void autonomous(void){
 }
 
 void usercontrol(void){
-  Controller1.Screen.print("Exited");
   int storedPercentage = 0;
 
   while(true){
