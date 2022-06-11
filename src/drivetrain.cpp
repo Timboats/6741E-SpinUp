@@ -41,13 +41,17 @@ void printToController (float value, int xPos, int yPos){
 }
 
 void Drivetrain::goToPos(int x, int y){
-    const float Kp = 40;
+    const float Kp = 155;
     const float Ki = 0;
-    const float Kd = 0;
+    const float Kd = 8000;
+
+    float integral = 0;
+
 
     float deltaTime = 0;
     float prevTime = 0;
     int error = 0;
+    int prevError = 0;
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
@@ -66,7 +70,9 @@ void Drivetrain::goToPos(int x, int y){
 
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
 
-        totalVoltage = Kp * error;
+        integral = integral + error;
+
+        totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
         angleToSetPos = atan2(y - currentY, x - currentX);
 
         northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
@@ -81,7 +87,7 @@ void Drivetrain::goToPos(int x, int y){
         
 
 
-        if (Simpler::abs(error) <= 26){
+        if (Simpler::abs(error) <= 2){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if (deltaTime > 500){
                 stopAllDrive();
@@ -91,7 +97,8 @@ void Drivetrain::goToPos(int x, int y){
             prevTime = Brain.Timer.time(msec);
 
         } 
-        
+
+        prevError = error;
   }
   
     
