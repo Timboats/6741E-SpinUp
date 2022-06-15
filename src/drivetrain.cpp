@@ -5,6 +5,8 @@
 #include "iostream"
 #include "mathlib.h"
 
+
+
 Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, vex::motor northMotor, vex::motor southMotor, vex::motor eastMotor, vex::motor westMotor, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, vex::gps gps1, vex::gps gps2){
     this -> wheelDiameter = wheelDiameter;
     this -> gearRatio = gearRatio;
@@ -41,17 +43,19 @@ void printToController (float value, int xPos, int yPos){
 }
 
 void Drivetrain::goToPos(int x, int y){
-    const float Kp = 155;
-    const float Ki = 0;
-    const float Kd = 8000;
+    const float Kp = 101;
+    const float Ki = 0.2;
+    const float Kd = 0;
+    const int maxErr = 15;
+    const int windupUpperLimit = 2;
 
     float integral = 0;
 
 
     float deltaTime = 0;
     float prevTime = 0;
-    int error = 0;
-    int prevError = 0;
+    float error = 0;
+    float prevError = 0;
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
@@ -72,6 +76,11 @@ void Drivetrain::goToPos(int x, int y){
 
         integral = integral + error;
 
+        if (error > windupUpperLimit){
+            integral = 0;
+        }
+
+
         totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
         angleToSetPos = atan2(y - currentY, x - currentX);
 
@@ -87,7 +96,7 @@ void Drivetrain::goToPos(int x, int y){
         
 
 
-        if (Simpler::abs(error) <= 2){
+        if (Simpler::abs(error) <= maxErr){
             deltaTime = Brain.Timer.time(msec) - prevTime;
             if (deltaTime > 500){
                 stopAllDrive();
