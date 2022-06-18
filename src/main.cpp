@@ -131,11 +131,8 @@ void usercontrol(void){
       storedPercentage = 0;
     }
     //This will allow the robot to turn to face a goal while still being able to be driven around
+    train.steeringControl(Controller1, storedPercentage);
 
-    NorthMotor.spin(forward, -(Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
-    SouthMotor.spin(forward, -(Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
-    EastMotor.spin(forward, (Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
-    WestMotor.spin(forward, (Controller1.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) - (Controller1.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercentage, pct);
     //This allows for driver control. By modifying the value outputed by the control stick, the movement of the robot is relative to the field, rather than the heading.
 
     

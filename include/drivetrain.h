@@ -26,11 +26,7 @@ void goToPos(int x, int y);
 void stopAllDrive();
 void faceHeading(int heading);
 float turnToPoint(int x, int y);
+void steeringControl(vex::controller driveController, int storedPercent);
   
-
-
-
-
-
 
 };

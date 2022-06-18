@@ -35,13 +35,17 @@ void Drivetrain::stopAllDrive(){
     eastMotor.stop();
     westMotor.stop();
 }
-
 void printToController (float value, int xPos, int yPos){
   Controller1.Screen.setCursor(xPos,yPos);
   Controller1.Screen.clearScreen();
   Controller1.Screen.print(value);
 }
-
+void Drivetrain::steeringControl(vex::controller driveController, int storedPercent){
+    northMotor.spin(forward, -(driveController.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) - (driveController.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 45) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercent, pct);
+    southMotor.spin(forward, -(driveController.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) - (driveController.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 225) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercent, pct);
+    eastMotor.spin(forward, (driveController.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) - (driveController.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 135) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercent, pct);
+    westMotor.spin(forward, (driveController.Axis3.position() * (cos(Simpler::abs((90 - (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) - (driveController.Axis4.position() * (cos(Simpler::abs((90 + (Simpler::degreeToStdPos(GPS16.heading())) - 315) * (M_PI/180))))) + Controller1.Axis1.position() + storedPercent, pct);
+}
 void Drivetrain::goToPos(int x, int y){
     const float Kp = 101;
     const float Ki = 0.2;
