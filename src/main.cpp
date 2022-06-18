@@ -20,6 +20,7 @@
 
 //test
 
+
 #include "vex.h"
 #include "drivetrain.h"
 #include "mathlib.h"
@@ -30,44 +31,67 @@ using namespace vex;
 competition Competition;
 Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
 
-void pre_auton(void){
-  vexcodeInit();
-  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
-
-
-}
-
 void toggleButtonA(){
   if (buttonAState == 0){
     buttonAState = 1;
   } else {
     buttonAState = 0;
   }
+  return;
 }
+
+void pre_auton(void){
+  vexcodeInit();
+  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
+
+  Controller1.ButtonA.pressed(toggleButtonA);
+}
+
+int errorTTP = 0;
+int prevErrorTTP = 0;
 
 float turnTowardsPoint(int x, int y){
   float motorPercentage = 0;
-  float Kp = 1;
-  int error = 0;
+  const float Kp = 0.9;
+  const float Ki = 0.01;
+  const float Kd = 0.2;
+  const int windupUpperLimit = 10;
+  float integral = 0;
   int angleFromDesired = 0;
   int desiredAngle = 0;
   
+  
+
   desiredAngle = atan2(y - GPS16.yPosition(inches), x - GPS16.xPosition(inches)) * (180/M_PI);
 
   angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(GPS16.heading())) + 360) % 360);
   //finds the difference in the current angle and the desired angle from 0 to 360 degrees
 
   if (angleFromDesired > 180){
-    error = -(180 - (angleFromDesired - 180));
+    errorTTP = -(180 - (angleFromDesired - 180));
   } else {
-    error = angleFromDesired;
+    errorTTP = angleFromDesired;
   }
   //translates angleFromDesired to -180 to 180 degrees
 
-  motorPercentage = Kp * error;
+  integral = integral + errorTTP;
+
+  if (errorTTP > windupUpperLimit){
+    integral = 0;
+  }
+
+  motorPercentage = -(Kp * errorTTP) + (Ki*integral) + (Kd*(errorTTP - prevErrorTTP));
   //calculates the desired voltage of the motors
 
   //printToController(desiredAngle, 1, 1);
+
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1,1);
+  Controller1.Screen.print(motorPercentage);
+  Controller1.Screen.setCursor(3,1);
+  Controller1.Screen.print(errorTTP);
+
+  prevErrorTTP = errorTTP; 
     
   return(motorPercentage);
 }
@@ -120,9 +144,13 @@ void autonomous(void){
 }
 
 void usercontrol(void){
+
   int storedPercentage = 0;
 
   while(true){
+
+    
+    
 
 
     if (buttonAState == 1){
