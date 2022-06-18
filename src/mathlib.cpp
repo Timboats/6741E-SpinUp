@@ -21,3 +21,7 @@ int Simpler::sign(float val){
   }
   return(-1);
 }
+float Formula::findComponentVector(float magnitudeOne, float angleOne, float angleTwo){
+  float magnitudeTwo = magnitudeOne * cos(angleOne - angleTwo);
+  return magnitudeTwo;
+}
