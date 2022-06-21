@@ -146,21 +146,15 @@ void usercontrol(void){
 
   while(true){
 
-    
-    
-
-
     if (buttonAState == 1){
       storedPercentage = turnTowardsPoint(0, 0);
     } else {
       storedPercentage = 0;
     }
     //This will allow the robot to turn to face a goal while still being able to be driven around
+
     train.steeringControl(Controller1, storedPercentage);
-
     //This allows for driver control. By modifying the value outputed by the control stick, the movement of the robot is relative to the field, rather than the heading.
-
-    
 
   }
 }
