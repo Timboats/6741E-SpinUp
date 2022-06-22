@@ -41,10 +41,16 @@ void printToController (float value, int xPos, int yPos){
   Controller1.Screen.print(value);
 }
 void Drivetrain::steeringControl(vex::controller driveController, int storedPercent){
-    float northComponent = -(driveController.Axis3.position() * (cos((90 - (Simpler::degreeToStdPos(gps1.heading())) - northWheelAngle) * (M_PI/180)))) - (driveController.Axis4.position() * (cos((90 + (Simpler::degreeToStdPos(gps1.heading())) - northWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
-    float southComponent = -(driveController.Axis3.position() * (cos((90 - (Simpler::degreeToStdPos(gps1.heading())) - southWheelAngle) * (M_PI/180)))) - (driveController.Axis4.position() * (cos((90 + (Simpler::degreeToStdPos(gps1.heading())) - southWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
-    float eastComponent = (driveController.Axis3.position() * (cos((90 - (Simpler::degreeToStdPos(gps1.heading())) - eastWheelAngle) * (M_PI/180)))) - (driveController.Axis4.position() * (cos((90 + (Simpler::degreeToStdPos(gps1.heading())) - eastWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
-    float westComponent = (driveController.Axis3.position() * (cos((90 - (Simpler::degreeToStdPos(gps1.heading())) - westWheelAngle) * (M_PI/180)))) - (driveController.Axis4.position() * (cos((90 + (Simpler::degreeToStdPos(gps1.heading())) - westWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
+    double desiredAngle = 0;
+    double desiredMagnitude = 0;
+
+    desiredAngle = atan2(driveController.Axis3.position(), driveController.Axis4.position()) * (180/M_PI);
+    desiredMagnitude = sqrt(pow(driveController.Axis3.position(), 2) + pow(driveController.Axis4.position(), 2));
+
+    float northComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.heading())) - northWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
+    float southComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.heading())) - southWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
+    float eastComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.heading())) - eastWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
+    float westComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.heading())) - westWheelAngle) * (M_PI/180)))) + driveController.Axis1.position();
 
     northMotor.spin(forward, northComponent + storedPercent, pct);
     southMotor.spin(forward, southComponent + storedPercent, pct);
