@@ -29,7 +29,7 @@ bool buttonAState = 0;
 
 using namespace vex;
 competition Competition;
-Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
+Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GPS16);
 
 void toggleButtonA(){
   if (buttonAState == 0){
@@ -42,7 +42,7 @@ void toggleButtonA(){
 
 void pre_auton(void){
   vexcodeInit();
-  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
+  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GPS16);
 
   Controller1.ButtonA.pressed(toggleButtonA);
 }
