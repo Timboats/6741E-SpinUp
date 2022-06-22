@@ -26,6 +26,7 @@
 #include "mathlib.h"
 
 bool buttonAState = 0;
+bool buttonBState = 0;
 
 using namespace vex;
 competition Competition;
@@ -40,11 +41,21 @@ void toggleButtonA(){
   return;
 }
 
+void toggleButtonB(){
+  if (buttonBState == 0){
+    buttonBState = 1;
+  } else {
+    buttonBState = 0;
+  }
+  return;
+}
+
 void pre_auton(void){
   vexcodeInit();
   train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 0, 0, 0, 0, GPS16);
 
   Controller1.ButtonA.pressed(toggleButtonA);
+  Controller1.ButtonB.pressed(toggleButtonB);
 }
 
 int errorTTP = 0;
@@ -131,6 +142,21 @@ void testGoToMethod(){
   return;
 }
 
+float totalError = 0;
+float averError = 0;
+float prevTime = 0;
+float deltaTime = 0;
+float numOfInterations = 0;
+
+float ttpErrorOverTime(){
+
+  totalError = totalError + Simpler::abs(errorTTP);
+
+  averError = totalError/numOfInterations;
+
+  return(averError);
+}
+
 void autonomous(void){
   // train.goToPos(0, 0);
 
@@ -140,14 +166,45 @@ void autonomous(void){
 
 }
 
+int ranX = 0;
+int ranY = 0;
+
 void usercontrol(void){
 
   int storedPercentage = 0;
 
+  srand((unsigned) Brain.Timer.time(msec));
+  ranX = (rand() % 141) - 70;
+
+  wait(100, msec);
+
+  srand((unsigned) Brain.Timer.time(msec));
+  ranY = (rand() % 141) - 70;
+
   while(true){
 
+    if (buttonBState == 1){
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.setCursor(1,1);
+      Controller1.Screen.print(ttpErrorOverTime());
+      Controller1.Screen.setCursor(2,1);
+      Controller1.Screen.print(totalError);
+      Controller1.Screen.setCursor(3,1);
+      Controller1.Screen.print(numOfInterations);
+      Controller1.Screen.setCursor(2,10);
+      Controller1.Screen.print(ranX);
+      Controller1.Screen.setCursor(3,10);
+      Controller1.Screen.print(ranY);
+      numOfInterations = numOfInterations + 1;
+    } else {
+      numOfInterations = 0;
+      totalError = 0;
+    }
+
+    
+
     if (buttonAState == 1){
-      storedPercentage = turnTowardsPoint(0, 0);
+      storedPercentage = turnTowardsPoint(ranX, ranY);
     } else {
       storedPercentage = 0;
     }
