@@ -49,6 +49,9 @@ void pre_auton(void){
 
 int errorTTP = 0;
 int prevErrorTTP = 0;
+//There is no loop inside the turnTowardsPoint function
+//So, these variables needed to be global
+//They have TTP at the end to indicate this (Turn Towards Point)
 
 float turnTowardsPoint(int x, int y){
   float motorPercentage = 0;
@@ -59,8 +62,6 @@ float turnTowardsPoint(int x, int y){
   float integral = 0;
   int angleFromDesired = 0;
   int desiredAngle = 0;
-  
-  
 
   desiredAngle = atan2(y - GPS16.yPosition(inches), x - GPS16.xPosition(inches)) * (180/M_PI);
 
@@ -75,25 +76,21 @@ float turnTowardsPoint(int x, int y){
   //translates angleFromDesired to -180 to 180 degrees
 
   integral = integral + errorTTP;
+  //Adds up the area of the error versus time graph from a specified time until the current time
 
   if (errorTTP > windupUpperLimit){
     integral = 0;
   }
+  //Defines the lower limit of the integral
 
   motorPercentage = -(Kp * errorTTP) + (Ki*integral) + (Kd*(errorTTP - prevErrorTTP));
   //calculates the desired voltage of the motors
 
-  //printToController(desiredAngle, 1, 1);
-
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.setCursor(1,1);
-  Controller1.Screen.print(motorPercentage);
-  Controller1.Screen.setCursor(3,1);
-  Controller1.Screen.print(errorTTP);
-
   prevErrorTTP = errorTTP; 
+  //Used to calculate integral
     
   return(motorPercentage);
+  //Value is fed into motor to facillitate desired action
 }
 
 void testGoToMethod(){
@@ -149,21 +146,15 @@ void usercontrol(void){
 
   while(true){
 
-    
-    
-
-
     if (buttonAState == 1){
       storedPercentage = turnTowardsPoint(0, 0);
     } else {
       storedPercentage = 0;
     }
     //This will allow the robot to turn to face a goal while still being able to be driven around
+
     train.steeringControl(Controller1, storedPercentage);
-
     //This allows for driver control. By modifying the value outputed by the control stick, the movement of the robot is relative to the field, rather than the heading.
-
-    
 
   }
 }
