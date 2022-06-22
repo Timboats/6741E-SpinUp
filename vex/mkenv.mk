@@ -76,7 +76,7 @@ CLEAN = $(RMDIR) $(BUILD) 2> /dev/null || :
 endif
 
 # toolchain include and lib locations
-TOOL_INC  = -I"$(TOOLCHAIN)/$(PLATFORM)/clang/$(HEADERS)/include" -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include"  -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include/c++/4.9.3"  -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include/c++/4.9.3/arm-none-eabi/armv7-ar/thumb"
+TOOL_INC  = -I"$(TOOLCHAIN)/$(PLATFORM)/clang/$(HEADERS)/include" -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include"  -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include/c++/4.9.3"  -I"$(TOOLCHAIN)/$(PLATFORM)/gcc/include/c++/4.9.3/arm-none-eabi/armv7-ar/thumb -I/Users/ahmad/Documents/vexcode-projects/6741E-SpinUp/vex/include"
 TOOL_LIB  = -L"$(TOOLCHAIN)/$(PLATFORM)/gcc/libs"
 
 # compiler flags
