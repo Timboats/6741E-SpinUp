@@ -55,10 +55,10 @@ int prevErrorTTP = 0;
 
 float turnTowardsPoint(int x, int y){
   float motorPercentage = 0;
-  const float Kp = 1;
+  const float Kp = 0.9;
   const float Ki = 0.01;
-  const float Kd = 0.3;
-  const int windupUpperLimit = 15;
+  const float Kd = 0.2;
+  const int windupUpperLimit = 10;
   float integral = 0;
   int angleFromDesired = 0;
   int desiredAngle = 0;
