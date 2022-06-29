@@ -1,4 +1,27 @@
 #include "main.h"
+#include "drivetrain.h"
+
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+pros::Motor EastMotor(1, pros::E_MOTOR_GEARSET_18);
+pros::Motor NorthMotor(2, pros::E_MOTOR_GEARSET_18);
+pros::Motor SouthMotor(10, pros::E_MOTOR_GEARSET_18);
+pros::Motor WestMotor(9, pros::E_MOTOR_GEARSET_18);
+pros::Gps GpsPrimary(16, 0.00, -0.0127, 180); //if bugs check this line
+
+Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
+
+/**
+ * Things that might break
+ *
+ * Controller axis returning values from -127 to 127 instead of -100 to 100
+ * Me not recalling the constructors of everything in on_init
+ * Me using pointers in for motors and gps 
+ * me using get_status().x * 1000 to get pos in mm
+ */
+
+
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -74,10 +97,6 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
-
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
@@ -85,8 +104,8 @@ void opcontrol() {
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+		EastMotor = left;
+		WestMotor = right;
 		pros::delay(20);
 	}
 }
