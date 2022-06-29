@@ -1,6 +1,8 @@
 #include "main.h"
 #include "drivetrain.h"
 #include "mathlib.h"
+#include "pros/misc.hpp"
+#include "pros/motors.hpp"
 #include "pros/rtos.hpp"
 #include <string>
 
@@ -15,7 +17,7 @@ pros::Motor SouthMotor(10, pros::E_MOTOR_GEARSET_18);
 pros::Motor WestMotor(9, pros::E_MOTOR_GEARSET_18);
 pros::Gps GpsPrimary(16, 0.00, -0.0127, 180); //if bugs check this line
 
-Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
+// Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
 
 
 /**
@@ -64,6 +66,18 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
+
+  master = pros::Controller(pros::E_CONTROLLER_MASTER);
+
+
+
+
+  // train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
+
+  
+
+
+
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
@@ -124,7 +138,7 @@ void testGoToMethod(){
 
   srand((unsigned) pros::millis());
   randomAngle = (rand() % 360) + 1;
-  train.faceHeading(randomAngle);
+  // train.faceHeading(randomAngle);
   //This is to prove that the goTo method works no matter the heading of the robot
 
   srand((unsigned) pros::millis());
@@ -141,7 +155,7 @@ void testGoToMethod(){
   master.set_text(2, 1, std::to_string(yRandom));
   //This prints the desired position, that was randomly generated, on the screen of the controller
 
-  train.goToPos(xRandom, yRandom);
+  // train.goToPos(xRandom, yRandom);
   //This sends the robot to a random x and y position
 
   master.set_text(1, 7, std::to_string(GpsPrimary.get_status().x * 1000));
@@ -192,8 +206,13 @@ void competition_initialize() {}
  */
 void autonomous() {
 	// train.goToPos(0, 0);
+    pros::Motor EastMotor(1, pros::E_MOTOR_GEARSET_18);
 
-  testGoToMethod();
+    EastMotor.move(127);
+
+
+
+  // testGoToMethod();
 }
 
 /**
@@ -222,7 +241,7 @@ void opcontrol() {
 		}
     //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    train.steeringControl(master, storedPercentage);
+    // train.steeringControl(master, storedPercentage);
     //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}
