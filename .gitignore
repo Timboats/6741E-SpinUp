@@ -1,5 +1,17 @@
-/.vscode
-/bin
-/build
-compile_commands.json
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+*.bin
+*.elf
+
+# PROS
+bin/
+.vscode/
 .DS_Store
+compile_commands.json
+temp.log
+temp.errors
+*.ini
+.d/
