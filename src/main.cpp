@@ -1,23 +1,27 @@
 #include "main.h"
 #include "drivetrain.h"
 #include "mathlib.h"
+#include "pros/gps.hpp"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
+#include <cstddef>
 #include <string>
 
 bool buttonAState = 0;
 
+pros::Motor EastMotor = pros::Motor(1, pros::E_MOTOR_GEARSET_18);
+pros::Motor NorthMotor = pros::Motor(2, pros::E_MOTOR_GEARSET_18);
+pros::Motor SouthMotor = pros::Motor(10, pros::E_MOTOR_GEARSET_18);
+pros::Motor WestMotor = pros::Motor(9, pros::E_MOTOR_GEARSET_18);
+
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Motor EastMotor(1, pros::E_MOTOR_GEARSET_18);
-pros::Motor NorthMotor(2, pros::E_MOTOR_GEARSET_18);
-pros::Motor SouthMotor(10, pros::E_MOTOR_GEARSET_18);
-pros::Motor WestMotor(9, pros::E_MOTOR_GEARSET_18);
-pros::Gps GpsPrimary(16, 0.00, -0.0127, 180); //if bugs check this line
+pros::Gps GpsPrimary = pros::Gps(16, 0.00, -0.0127, 180);
 
-// Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
+
+Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
 
 
 /**
@@ -42,12 +46,7 @@ void toggleButtonA(){
 
 
 
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
+
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
@@ -69,14 +68,7 @@ void initialize() {
 
   master = pros::Controller(pros::E_CONTROLLER_MASTER);
 
-
-
-
-  // train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
-
-  
-
-
+  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
 
 	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -138,7 +130,7 @@ void testGoToMethod(){
 
   srand((unsigned) pros::millis());
   randomAngle = (rand() % 360) + 1;
-  // train.faceHeading(randomAngle);
+  train.faceHeading(randomAngle);
   //This is to prove that the goTo method works no matter the heading of the robot
 
   srand((unsigned) pros::millis());
@@ -155,7 +147,7 @@ void testGoToMethod(){
   master.set_text(2, 1, std::to_string(yRandom));
   //This prints the desired position, that was randomly generated, on the screen of the controller
 
-  // train.goToPos(xRandom, yRandom);
+  train.goToPos(xRandom, yRandom);
   //This sends the robot to a random x and y position
 
   master.set_text(1, 7, std::to_string(GpsPrimary.get_status().x * 1000));
@@ -166,12 +158,6 @@ void testGoToMethod(){
 
   return;
 }
-
-
-
-
-
-
 
 
 
@@ -206,13 +192,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 	// train.goToPos(0, 0);
-    pros::Motor EastMotor(1, pros::E_MOTOR_GEARSET_18);
-
-    EastMotor.move(127);
-
-
-
-  // testGoToMethod();
+  testGoToMethod();
 }
 
 /**
@@ -241,7 +221,7 @@ void opcontrol() {
 		}
     //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    // train.steeringControl(master, storedPercentage);
+    train.steeringControl(master, storedPercentage);
     //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}

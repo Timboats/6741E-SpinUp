@@ -2,6 +2,8 @@
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <memory>
+#include <ostream>
+#include <string>
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "drivetrain.h"
@@ -27,6 +29,7 @@ Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, pros::Motor northMo
     this -> eastMotor = &eastMotor;
     this -> westMotor = &westMotor;
     this -> gps1 = &gps1;    
+
 
     // if(gps2 == ){
     //     this -> gps2 = gps2;
@@ -84,6 +87,7 @@ void Drivetrain::goToPos(int x, int y){
     int currentY = gps1->get_status().y * 1000;
 
     while(true){
+        std::cout << std::to_string(gps1->get_heading()) <<std::endl;
         currentX = gps1->get_status().x * 1000;
         currentY = gps1->get_status().y * 1000;
         heading = gps1->get_heading();
