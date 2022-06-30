@@ -19,16 +19,16 @@ int westWheelAngle;
 
 
 
-pros::Motor* northMotor;
-pros::Motor* southMotor;
-pros::Motor* eastMotor;
-pros::Motor* westMotor;
+int northMotorPort;
+int southMotorPort;
+int eastMotorPort;
+int westMotorPort;
 
-pros::Gps* gps1;
-pros::Gps* gps2;
+int gps1Port;
+int gps2Port;
 
 public:
-Drivetrain(float wheelDiameter, float gearRatio, pros::Motor northMotor, pros::Motor southMotor, pros::Motor eastMotor, pros::Motor westMotor, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, pros::Gps gps1, pros::Gps gps2 = NULL);
+Drivetrain(float wheelDiameter, float gearRatio, int northMotorPort, int southMotorPort, int eastMotorPort, int westMotorPort, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, int gps1Port, int gps2Port = -1);
 void goToPos(int x, int y);
 void stopAllDrive();
 void faceHeading(int heading);

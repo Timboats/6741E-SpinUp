@@ -60,11 +60,6 @@
  * button press in opcontrol() for testing purposes).
  */
 
-extern pros::Motor EastMotor;
-extern pros::Motor NorthMotor;
-extern pros::Motor SouthMotor;
-extern pros::Motor WestMotor;
-extern pros::Gps GpsPrimary;
 
 #ifdef __cplusplus
 extern "C" {

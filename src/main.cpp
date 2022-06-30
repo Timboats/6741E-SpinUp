@@ -2,37 +2,27 @@
 #include "drivetrain.h"
 #include "mathlib.h"
 #include "pros/gps.hpp"
+#include "pros/llemu.hpp"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <string>
 
+#define NORTHMOTORPORT 2
+#define SOUTHMOTORPORT 10
+#define EASTMOTORPORT 1
+#define WESTMOTORPORT 9
+#define GPS1PORT 16
+
 bool buttonAState = 0;
-
-pros::Motor EastMotor = pros::Motor(1, pros::E_MOTOR_GEARSET_18);
-pros::Motor NorthMotor = pros::Motor(2, pros::E_MOTOR_GEARSET_18);
-pros::Motor SouthMotor = pros::Motor(10, pros::E_MOTOR_GEARSET_18);
-pros::Motor WestMotor = pros::Motor(9, pros::E_MOTOR_GEARSET_18);
-
-
-pros::Controller master(pros::E_CONTROLLER_MASTER);
-
-pros::Gps GpsPrimary = pros::Gps(16, 0.00, -0.0127, 180);
-
-
-Drivetrain train(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
-
+pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
 /**
  * Things that might break
- *
- * Controller axis returning values from -127 to 127 instead of -100 to 100
- * Me not recalling the constructors of everything in on_init
- * Me using pointers in for motors and gps 
- * me using get_status().x * 1000 to get pos in mm
+ * Controller axis returning values from -127 to 127 instead of -100 to 100 
  * on press button callbacks
- * me using pros::millis()
  */
 
 void toggleButtonA(){
@@ -44,9 +34,6 @@ void toggleButtonA(){
   return;
 }
 
-
-
-
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
@@ -57,22 +44,21 @@ void on_center_button() {
 	}
 }
 
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
 void initialize() {
 	pros::lcd::initialize();
 
-  master = pros::Controller(pros::E_CONTROLLER_MASTER);
+  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18);
+  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
+  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
+  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.0127, 180);
 
-  train = Drivetrain(3.25, 1, NorthMotor, SouthMotor, EastMotor, WestMotor, 45, 225, 135, 315, GpsPrimary);
+  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "FREDDYYYY!!!");
+  // std::cout << NorthMotor << std::endl;
 
-	pros::lcd::register_btn1_cb(on_center_button);
+	// pros::lcd::register_btn1_cb(on_center_button);
 	//Controller1.ButtonA.pressed(toggleButtonA);
 
 }
@@ -84,6 +70,7 @@ int prevErrorTTP = 0;
 //They have TTP at the end to indicate this (Turn Towards Point)
 
 float turnTowardsPoint(int x, int y){
+  pros::Gps GpsPrimary(GPS1PORT);
   float motorPercentage = 0;
   const float Kp = 1;
   const float Ki = 0.01;
@@ -124,6 +111,8 @@ float turnTowardsPoint(int x, int y){
 }
 
 void testGoToMethod(){
+  pros::Gps GpsPrimary(GPS1PORT);
+
   int randomAngle = 0;
   int xRandom = 0;
   int yRandom = 0; 
@@ -191,7 +180,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	// train.goToPos(0, 0);
+  // train.goToPos(0, 0);
   testGoToMethod();
 }
 
@@ -209,6 +198,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+  // autonomous();
 	int storedPercentage = 0;
 
 	while (true) {
