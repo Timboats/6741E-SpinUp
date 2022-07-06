@@ -202,6 +202,9 @@ void opcontrol() {
 	int storedPercentage = 0;
 
 	while (true) {
+    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
+      toggleButtonA();
+    }
 
 		if (buttonAState == 1){
 			storedPercentage = turnTowardsPoint(0, 0);
