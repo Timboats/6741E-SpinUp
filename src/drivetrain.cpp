@@ -81,7 +81,7 @@ void Drivetrain::goToPos(int x, int y){
 
 
 
-    const float Kp = 101;
+    const float Kp = 100;
     const float Ki = 0.2;
     const float Kd = 0;
     const int maxErr = 15;
@@ -101,8 +101,8 @@ void Drivetrain::goToPos(int x, int y){
     float northVoltage = 0;
     float eastVoltage = 0;
 
-    int currentX = gps1.get_status().x * 1000;
-    int currentY = gps1.get_status().y * 1000;
+    int currentX = 0;
+    int currentY = 0;
     
 
     while(true){
@@ -110,7 +110,11 @@ void Drivetrain::goToPos(int x, int y){
         currentY = gps1.get_status().y * 1000;
         heading = gps1.get_heading();
 
+
+        
+
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
+
 
         integral = integral + error;
 
@@ -120,16 +124,20 @@ void Drivetrain::goToPos(int x, int y){
 
 
         totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
+
         angleToSetPos = atan2(y - currentY, x - currentX);
+
 
         northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
 
         eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 135)) * (M_PI/180))))));
+
+
         
-        northMotor.move_voltage(northVoltage);
-        eastMotor.move_voltage(eastVoltage);
-        southMotor.move_voltage(-northVoltage);
-        westMotor.move_voltage(-eastVoltage);
+        northMotor.move_voltage(-northVoltage);
+        eastMotor.move_voltage(-eastVoltage);
+        southMotor.move_voltage(northVoltage);
+        westMotor.move_voltage(eastVoltage);
         
         
 

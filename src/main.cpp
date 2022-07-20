@@ -51,7 +51,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.0127, 180);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.0127);
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
@@ -132,16 +132,20 @@ void testGoToMethod(){
   //generates a set of random coordinates
 
   master.clear();
-  master.set_text(1, 1, std::to_string(xRandom));
-  master.set_text(2, 1, std::to_string(yRandom));
+  std::cout << "Dx: "+std::to_string(xRandom) << std::endl;
+  std::cout << "Dy: "+std::to_string(yRandom) << std::endl;
+
+
   //This prints the desired position, that was randomly generated, on the screen of the controller
 
   train.goToPos(xRandom, yRandom);
   //This sends the robot to a random x and y position
 
-  master.set_text(1, 7, std::to_string(GpsPrimary.get_status().x * 1000));
 
-  master.set_text(2, 7, std::to_string(GpsPrimary.get_status().y * 1000));
+  std::cout << "Ax: "+std::to_string(GpsPrimary.get_status().x * 1000) << std::endl;
+
+  std::cout << "Ay: "+std::to_string(GpsPrimary.get_status().y * 1000) << std::endl;
+
 
   //This prints where the robot actually went on the screen of the controller
 
@@ -180,8 +184,15 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  // train.goToPos(0, 0);
+  pros::Gps GpsPrimary(GPS1PORT);
+
+
+  // train.goToPos(0, 0, master);
   testGoToMethod();
+  
+  // master.set_text(1, 1, std::to_string(GpsPrimary.get_heading()));
+  // pros::delay(100);
+
 }
 
 /**
@@ -198,7 +209,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  // autonomous();
+  autonomous();
 	int storedPercentage = 0;
 
 	while (true) {
