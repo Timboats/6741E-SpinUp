@@ -21,7 +21,6 @@ Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOT
 
 /**
  * Things that might break
- * Controller axis returning values from -127 to 127 instead of -100 to 100 
  * on press button callbacks
  */
 
@@ -52,6 +51,7 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.0127);
+  
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
