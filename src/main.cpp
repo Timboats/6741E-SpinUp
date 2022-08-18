@@ -9,11 +9,11 @@
 #include <cstddef>
 #include <string>
 
-#define NORTHMOTORPORT 2
-#define SOUTHMOTORPORT 10
-#define EASTMOTORPORT 1
-#define WESTMOTORPORT 9
-#define GPS1PORT 16
+#define NORTHMOTORPORT 20
+#define SOUTHMOTORPORT 1
+#define EASTMOTORPORT 13
+#define WESTMOTORPORT 10
+#define GPS1PORT 12
 
 bool buttonAState = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
@@ -209,7 +209,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  autonomous();
+  // autonomous();
 	int storedPercentage = 0;
 
 	while (true) {
