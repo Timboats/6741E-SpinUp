@@ -13,7 +13,7 @@
 #define SOUTHMOTORPORT 1
 #define EASTMOTORPORT 13
 #define WESTMOTORPORT 10
-#define GPS1PORT 12
+#define GPS1PORT 14
 
 bool buttonAState = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
@@ -43,6 +43,8 @@ void on_center_button() {
 	}
 }
 
+
+
 void initialize() {
 	pros::lcd::initialize();
 
@@ -50,7 +52,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.0127);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.03);
   
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
@@ -209,7 +211,6 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  // autonomous();
 	int storedPercentage = 0;
 
 	while (true) {

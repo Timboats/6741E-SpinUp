@@ -1,9 +1,6 @@
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
-#include <cstddef>
-#include <memory>
-#include <ostream>
 #include <string>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -79,8 +76,6 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-
-
     const float Kp = 100;
     const float Ki = 0.2;
     const float Kd = 0;
@@ -140,8 +135,6 @@ void Drivetrain::goToPos(int x, int y){
         westMotor.move_voltage(eastVoltage);
         
         
-
-
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
             if (deltaTime > 500){
@@ -165,16 +158,18 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    const float Kp = 250;
+    const float Kp = 75;
     const float Ki = 0;
     const float Kd = 0;
 
     float deltaTime = 0;
     float prevTime = 0;
-    int error = 0;
+    float error = 0;
+    float prevError = 0;
 
     int angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
+
 
     while(true){
         angleFromSet = ((Simpler::degreeToStdPos(gps1.get_heading()) - heading) + 360) % 360;
@@ -185,7 +180,7 @@ void Drivetrain::faceHeading(int heading){
             error = angleFromSet;
         }
 
-        totalVoltage = Kp * error;
+        totalVoltage = (Kp * error) + (Kd*(error - prevError));
 
         northMotor.move_voltage(totalVoltage);
         eastMotor.move_voltage(totalVoltage);
@@ -203,6 +198,7 @@ void Drivetrain::faceHeading(int heading){
             prevTime = pros::millis();
         }
     }
+    prevError = error;
 }
 float Drivetrain::turnToPoint(int x, int y){
     pros::Gps gps1(gps1Port);
