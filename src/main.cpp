@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <string>
 #include "braingui.h"
+#include "vexfs.h"
 
 
 #define NORTHMOTORPORT 20
@@ -21,10 +22,7 @@ bool buttonAState = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
-/**
- * Things that might break
- * on press button callbacks
- */
+//TODO button callbacks still might not work problem-digital_new could be helpful tho
 
 void toggleButtonA(){
   if (buttonAState == 0){
@@ -35,19 +33,8 @@ void toggleButtonA(){
   return;
 }
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
-
-
 void initialize() {
+  fileSysInit(); //Checks if all needed files exist. If not it creates them
   //TODO replace the below line with the custom init
   lvglInitEx();
   
