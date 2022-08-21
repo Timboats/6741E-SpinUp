@@ -8,6 +8,8 @@
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <string>
+#include "braingui.h"
+
 
 #define NORTHMOTORPORT 20
 #define SOUTHMOTORPORT 1
@@ -46,7 +48,9 @@ void on_center_button() {
 
 
 void initialize() {
-	pros::lcd::initialize();
+  //TODO replace the below line with the custom init
+  lvglInitEx();
+  
 
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18);
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
@@ -57,10 +61,7 @@ void initialize() {
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
 
-	pros::lcd::set_text(1, "FREDDYYYY!!!");
-  // std::cout << NorthMotor << std::endl;
 
-	// pros::lcd::register_btn1_cb(on_center_button);
 	//Controller1.ButtonA.pressed(toggleButtonA);
 
 }
@@ -214,20 +215,20 @@ void opcontrol() {
 	int storedPercentage = 0;
 
 	while (true) {
-    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
-      toggleButtonA();
-    }
+    // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
+    //   toggleButtonA();
+    // }
 
-		if (buttonAState == 1){
-			storedPercentage = turnTowardsPoint(0, 0);
-		} 
-		else {
-			storedPercentage = 0;
-		}
-    //This will allow the robot to turn to face a goal while still being able to be driven around
+		// if (buttonAState == 1){
+		// 	storedPercentage = turnTowardsPoint(0, 0);
+		// } 
+		// else {
+		// 	storedPercentage = 0;
+		// }
+    // //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    train.steeringControl(master, storedPercentage);
-    //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
+    // train.steeringControl(master, storedPercentage);
+    // //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}
 }
