@@ -11,16 +11,15 @@
 #include "braingui.h"
 #include "vexfs.h"
 
-
-#define NORTHMOTORPORT 20
-#define SOUTHMOTORPORT 1
-#define EASTMOTORPORT 13
-#define WESTMOTORPORT 10
-#define GPS1PORT 14
+#define NORTHMOTORPORT 10
+#define SOUTHMOTORPORT 13
+#define EASTMOTORPORT 20
+#define WESTMOTORPORT 1
+#define GPS1PORT 15
 
 bool buttonAState = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
 
 //TODO button callbacks still might not work problem-digital_new could be helpful tho
 
@@ -39,10 +38,10 @@ void initialize() {
   lvglInitEx();
   
 
-  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18);
-  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
-  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18);
-  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18);
+  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.03);
   
 
@@ -162,17 +161,7 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
+
 void autonomous() {
   pros::Gps GpsPrimary(GPS1PORT);
 
@@ -185,22 +174,11 @@ void autonomous() {
 
 }
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
-void opcontrol() {
-	int storedPercentage = 0;
 
+void opcontrol() {
+  train.goToPos(0, 0);
+	int storedPercentage = 0;
+  
 	while (true) {
     // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
     //   toggleButtonA();
@@ -214,7 +192,7 @@ void opcontrol() {
 		// }
     // //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    // train.steeringControl(master, storedPercentage);
+    train.steeringControl(master, storedPercentage);
     // //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}

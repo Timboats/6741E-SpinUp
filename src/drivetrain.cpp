@@ -76,10 +76,10 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    const float Kp = 100;
-    const float Ki = 0.2;
+    const float Kp = 85;
+    const float Ki = 0;
     const float Kd = 0;
-    const int maxErr = 15;
+    const int maxErr = 5;
     const int windupUpperLimit = 2;
 
     float integral = 0;
@@ -123,9 +123,9 @@ void Drivetrain::goToPos(int x, int y){
         angleToSetPos = atan2(y - currentY, x - currentX);
 
 
-        northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 225)) * (M_PI/180))))));
+        northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
 
-        eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - 135)) * (M_PI/180))))));
+        eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
 
 
         
@@ -158,7 +158,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    const float Kp = 75;
+    const float Kp = 100;
     const float Ki = 0;
     const float Kd = 0;
 
