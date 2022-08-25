@@ -176,7 +176,8 @@ void autonomous() {
 
 
 void opcontrol() {
-  train.goToPos(0, 0);
+  // train.goToPos(0, 0);
+  testGoToMethod();
 	int storedPercentage = 0;
   
 	while (true) {

@@ -76,11 +76,11 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    const float Kp = 85;
-    const float Ki = 0;
+    const float Kp = 54.96; //was 61
+    const float Ki = 0.03; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 5;
-    const int windupUpperLimit = 2;
+    const int maxErr = 10;
+    const int windupUpperLimit = 8;
 
     float integral = 0;
     
@@ -92,6 +92,7 @@ void Drivetrain::goToPos(int x, int y){
 
     double angleToSetPos = 0;
     int heading = gps1.get_heading();
+    int initHeading = heading; //Might have to be removed later
 
     float northVoltage = 0;
     float eastVoltage = 0;
@@ -117,6 +118,8 @@ void Drivetrain::goToPos(int x, int y){
             integral = 0;
         }
 
+        
+        float poopityScoop = turnToPoint(cos(initHeading)+currentX, sin(initHeading)+currentY); //Might have to be removed later
 
         totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
 
@@ -129,10 +132,10 @@ void Drivetrain::goToPos(int x, int y){
 
 
         
-        northMotor.move_voltage(-northVoltage);
-        eastMotor.move_voltage(-eastVoltage);
-        southMotor.move_voltage(northVoltage);
-        westMotor.move_voltage(eastVoltage);
+        northMotor.move_voltage(-northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
+        eastMotor.move_voltage(-eastVoltage+poopityScoop);
+        southMotor.move_voltage(northVoltage+poopityScoop);
+        westMotor.move_voltage(eastVoltage+poopityScoop);
         
         
         if (Simpler::abs(error) <= maxErr){
@@ -158,7 +161,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    const float Kp = 100;
+    const float Kp = 500;
     const float Ki = 0;
     const float Kd = 0;
 
