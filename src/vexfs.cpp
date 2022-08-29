@@ -1,6 +1,8 @@
 #include "vexfs.h"
 #include "errno.h"
 #include "unistd.h"
+#include <cstdio>
+#include <string>
 
 
 #define SETTINGSPATH "/usd/code_settings.txt"
@@ -36,7 +38,23 @@ void fileSysInit(){
 settings getSettings(){
     settings settingsContents;
     FILE* file = fopen(SETTINGSPATH, "r");
+    
+
+    // fscanf(file, "%s", num);
+
+    // printf("%s", num);
 
     fclose(file);
+    
     return settingsContents;
+}
+
+
+
+void writeSettings(settings tempSettings){
+    FILE* file = fopen(SETTINGSPATH, "w");
+    fprintf(file, "%f\n%f\n%f\n%f\n%f\n%f", tempSettings.goToPos_kp, tempSettings.goToPos_ki, tempSettings.goToPos_kd, tempSettings.faceHeading_kp, tempSettings.faceHeading_ki, tempSettings.faceHeading_kd);
+
+    printf("Settings have been saved succesfully! :)\n");
+    fclose(file);
 }
