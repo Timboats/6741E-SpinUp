@@ -1,4 +1,9 @@
 #pragma once
+#include "pros/misc.hpp"
+#include "pros/motors.hpp"
+#include "pros/gps.hpp"
+#include <cstddef>
+
 class Drivetrain {
 
 float wheelDiameter;
@@ -12,21 +17,23 @@ int southWheelAngle;
 int eastWheelAngle; 
 int westWheelAngle;
 
-vex::motor northMotor = NULL;
-vex::motor southMotor = NULL;
-vex::motor eastMotor = NULL;
-vex::motor westMotor = NULL;
 
-vex::gps gps1 = NULL;
-vex::gps gps2 = NULL;
+
+int northMotorPort;
+int southMotorPort;
+int eastMotorPort;
+int westMotorPort;
+
+int gps1Port;
+int gps2Port;
 
 public:
-Drivetrain(float wheelDiameter, float gearRatio, vex::motor northMotor, vex::motor southMotor, vex::motor eastMotor, vex::motor westMotor, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, vex::gps gps1, vex::gps gps2 = NULL);
+Drivetrain(float wheelDiameter, float gearRatio, int northMotorPort, int southMotorPort, int eastMotorPort, int westMotorPort, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, int gps1Port, int gps2Port = -1);
 void goToPos(int x, int y);
 void stopAllDrive();
 void faceHeading(int heading);
 float turnToPoint(int x, int y);
-void steeringControl(vex::controller driveController, int storedPercent);
+void steeringControl(pros::Controller driveController, int storedPercent);
   
 
 };
