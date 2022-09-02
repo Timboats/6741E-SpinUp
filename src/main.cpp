@@ -3,6 +3,7 @@
 #include "mathlib.h"
 #include "pros/gps.hpp"
 #include "pros/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
@@ -18,6 +19,8 @@
 #define GPS1PORT 15
 
 bool buttonAState = 0;
+int driveDirection = 1;
+
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
 
@@ -49,6 +52,13 @@ void initialize() {
 
 
 	//Controller1.ButtonA.pressed(toggleButtonA);
+
+}
+
+void controllerButtonCalls(){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
+    driveDirection = -driveDirection;
+  }
 
 }
 
@@ -143,22 +153,9 @@ void testGoToMethod(){
 
 
 
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
 void disabled() {}
 
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
+
 void competition_initialize() {}
 
 
@@ -187,6 +184,8 @@ void opcontrol() {
   // getSettings();
   
 	while (true) {
+    controllerButtonCalls();
+
     // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
     //   toggleButtonA();
     // }
@@ -199,7 +198,7 @@ void opcontrol() {
 		// }
     // //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    train.steeringControl(master, storedPercentage, -1);
+    train.steeringControl(master, storedPercentage, driveDirection);
     // //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}
