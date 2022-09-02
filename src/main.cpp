@@ -22,35 +22,35 @@
 #define launcherMotorRightPort 19
 
 bool buttonAState = 0;
-float leftMotorVoltage = 0;
-float rightMotorVoltage = 0;
+float leftMotorVelocity = 0;
+float rightMotorVelocity = 0;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
 
 void controllerInput(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
-    if(leftMotorVoltage != -12){
-      leftMotorVoltage-=0.5;
-      master.print(0, 0, "Left: %f", leftMotorVoltage);
+    if(leftMotorVelocity != -600){
+      leftMotorVelocity-=25;
+      master.print(0, 0, "Left: %f", leftMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
-    if(leftMotorVoltage != 12){
-      leftMotorVoltage+=0.5;
-      master.print(0, 0, "Left: %f", leftMotorVoltage);
+    if(leftMotorVelocity != 600){
+      leftMotorVelocity+=25;
+      master.print(0, 0, "Left: %f", leftMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
-    if(rightMotorVoltage != -12){
-      rightMotorVoltage-=0.5;
-      master.print(1, 0, "Right: %f", rightMotorVoltage);
+    if(rightMotorVelocity != -600){
+      rightMotorVelocity-=25;
+      master.print(1, 0, "Right: %f", rightMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
-    if(rightMotorVoltage != 12){
-      rightMotorVoltage+=0.5;
-      master.print(1, 0, "Right: %f", rightMotorVoltage);
+    if(rightMotorVelocity != 600){
+      rightMotorVelocity+=25;
+      master.print(1, 0, "Right: %f", rightMotorVelocity);
 
     }
   }
@@ -109,8 +109,17 @@ void opcontrol() {
     pros::Motor launcherMotorLeft(launcherMotorLeftPort);
     pros::Motor launcherMotorRight(launcherMotorRightPort);
 
-    launcherMotorLeft.move_voltage(leftMotorVoltage*1000);
-    launcherMotorRight.move_voltage(rightMotorVoltage*1000);
+    launcherMotorLeft.move_velocity(leftMotorVelocity);
+    launcherMotorRight.move_velocity(rightMotorVelocity);
+
+    // float deltaTime = 1000;
+    // float prevTime = 0;
+
+    // if(pros::millis() - prevTime > deltaTime){
+      std::cout << "Right: " << launcherMotorRight.get_actual_velocity() << " " << "Left: " << launcherMotorLeft.get_actual_velocity() << std::endl;
+    //   prevTime = pros::millis();
+    // } 
+
 	  pros::delay(20);
 	}
 }
