@@ -178,7 +178,7 @@ void autonomous() {
 void opcontrol() {
   // train.goToPos(0, 0);
   // testGoToMethod();
-	// int storedPercentage = 0;
+	int storedPercentage = 0;
 
   settings blank;
   blank.goToPos_kp = 92;
@@ -199,7 +199,7 @@ void opcontrol() {
 		// }
     // //This will allow the robot to turn to face a goal while still being able to be driven around
 
-    // train.steeringControl(master, storedPercentage);
+    train.steeringControl(master, storedPercentage, -1);
     // //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
 		pros::delay(20);
 	}

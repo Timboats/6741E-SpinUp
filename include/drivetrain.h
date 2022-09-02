@@ -33,7 +33,7 @@ void goToPos(int x, int y);
 void stopAllDrive();
 void faceHeading(int heading);
 float turnToPoint(int x, int y);
-void steeringControl(pros::Controller driveController, int storedPercent);
+void steeringControl(pros::Controller driveController, int storedPercent, int direction);
   
 
 };
