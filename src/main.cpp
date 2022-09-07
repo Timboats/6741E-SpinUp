@@ -31,27 +31,26 @@ Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOT
 void controllerInput(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
     if(leftMotorVelocity != -600){
-      leftMotorVelocity-=25;
+      leftMotorVelocity-=20;
       master.print(0, 0, "Left: %f", leftMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
     if(leftMotorVelocity != 600){
-      leftMotorVelocity+=25;
+      leftMotorVelocity+=20;
       master.print(0, 0, "Left: %f", leftMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
     if(rightMotorVelocity != -600){
-      rightMotorVelocity-=25;
+      rightMotorVelocity-=20;
       master.print(1, 0, "Right: %f", rightMotorVelocity);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
     if(rightMotorVelocity != 600){
-      rightMotorVelocity+=25;
+      rightMotorVelocity+=20;
       master.print(1, 0, "Right: %f", rightMotorVelocity);
-
     }
   }
 }
