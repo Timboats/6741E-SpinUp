@@ -63,7 +63,10 @@ void controllerInput(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
     launcherMotorLeft.move_velocity(0);
     launcherMotorRight.move_velocity(0);
-    
+  }
+
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
+    driveDirection = -driveDirection;
   }
 }
 
