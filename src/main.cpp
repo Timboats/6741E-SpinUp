@@ -22,36 +22,48 @@
 #define launcherMotorRightPort 2
 
 bool buttonAState = 0;
-float leftMotorVelocity = 0;
-float rightMotorVelocity = 0;
+const float leftMotorVelocity = 450;
+const float rightMotorVelocity = 600;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
 
 void controllerInput(){
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
-    if(leftMotorVelocity != -600){
-      leftMotorVelocity-=20;
-      master.print(0, 0, "Left: %f", leftMotorVelocity);
-    }
-  }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
-    if(leftMotorVelocity != 600){
-      leftMotorVelocity+=20;
-      master.print(0, 0, "Left: %f", leftMotorVelocity);
-    }
+  pros::Motor launcherMotorLeft(launcherMotorLeftPort);
+  pros::Motor launcherMotorRight(launcherMotorRightPort);
+  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
+  //   if(leftMotorVelocity != -600){
+  //     leftMotorVelocity-=20;
+  //     master.print(0, 0, "Left: %f", leftMotorVelocity);
+  //   }
+  // }
+  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
+  //   if(leftMotorVelocity != 600){
+  //     leftMotorVelocity+=20;
+  //     master.print(0, 0, "Left: %f", leftMotorVelocity);
+  //   }
+  // }
+  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
+  //   if(rightMotorVelocity != -600){
+  //     rightMotorVelocity-=20;
+  //     master.print(1, 0, "Right: %f", rightMotorVelocity);
+  //   }
+  // }
+  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
+  //   if(rightMotorVelocity != 600){
+  //     rightMotorVelocity+=20;
+  //     master.print(1, 0, "Right: %f", rightMotorVelocity);
+  //   }
+  // }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
+    launcherMotorLeft.move_velocity(leftMotorVelocity);
+    launcherMotorRight.move_velocity(rightMotorVelocity);
+    
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
-    if(rightMotorVelocity != -600){
-      rightMotorVelocity-=20;
-      master.print(1, 0, "Right: %f", rightMotorVelocity);
-    }
-  }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
-    if(rightMotorVelocity != 600){
-      rightMotorVelocity+=20;
-      master.print(1, 0, "Right: %f", rightMotorVelocity);
-    }
+    launcherMotorLeft.move_velocity(0);
+    launcherMotorRight.move_velocity(0);
+    
   }
 }
 
@@ -105,19 +117,9 @@ void autonomous() {
 void opcontrol() {
 	while (true) {
     controllerInput();
-    pros::Motor launcherMotorLeft(launcherMotorLeftPort);
-    pros::Motor launcherMotorRight(launcherMotorRightPort);
+    
 
-    launcherMotorLeft.move_velocity(leftMotorVelocity);
-    launcherMotorRight.move_velocity(rightMotorVelocity);
-
-    // float deltaTime = 1000;
-    // float prevTime = 0;
-
-    // if(pros::millis() - prevTime > deltaTime){
-      std::cout << "Right: " << launcherMotorRight.get_actual_velocity() << " " << "Left: " << launcherMotorLeft.get_actual_velocity() << std::endl;
-    //   prevTime = pros::millis();
-    // } 
+   
 
 	  pros::delay(20);
 	}
