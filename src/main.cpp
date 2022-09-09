@@ -14,12 +14,12 @@
 #include "vexfs.h"
 
 #define NORTHMOTORPORT 10
-#define SOUTHMOTORPORT 13
-#define EASTMOTORPORT 20
-#define WESTMOTORPORT 1
-#define GPS1PORT 15
-#define launcherMotorLeftPort 18 //POV from entrance/intake of launcher
-#define launcherMotorRightPort 19
+#define SOUTHMOTORPORT 20
+#define EASTMOTORPORT 1
+#define WESTMOTORPORT 11
+#define GPS1PORT 13
+#define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
+#define launcherMotorRightPort 2
 
 bool buttonAState = 0;
 float leftMotorVelocity = 0;
