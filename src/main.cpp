@@ -14,16 +14,17 @@
 #include "vexfs.h"
 
 #define NORTHMOTORPORT 10
-#define SOUTHMOTORPORT 20
-#define EASTMOTORPORT 1
-#define WESTMOTORPORT 11
+#define SOUTHMOTORPORT 11
+#define EASTMOTORPORT 20
+#define WESTMOTORPORT 1
 #define GPS1PORT 13
 #define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 2
 
+int driveDirection = 1;
 bool buttonAState = 0;
-const float leftMotorVelocity = 450;
-const float rightMotorVelocity = 600;
+const float leftMotorVelocity = 300;
+const float rightMotorVelocity = 500;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
@@ -65,7 +66,7 @@ void controllerInput(){
     launcherMotorRight.move_velocity(0);
   }
 
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
     driveDirection = -driveDirection;
   }
 }
@@ -89,7 +90,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.03);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
 
   pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
@@ -113,6 +114,7 @@ void competition_initialize() {}
 
 
 void autonomous() {
+  train.goToPos(0, 0);
 
 }
 
@@ -120,6 +122,7 @@ void autonomous() {
 void opcontrol() {
 	while (true) {
     controllerInput();
+    train.steeringControl(master, 0, driveDirection);
     
 
    
