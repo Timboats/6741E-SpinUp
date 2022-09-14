@@ -13,10 +13,14 @@
 #include "vexfs.h"
 
 #define NORTHMOTORPORT 10
-#define SOUTHMOTORPORT 13
+#define SOUTHMOTORPORT 11
 #define EASTMOTORPORT 20
 #define WESTMOTORPORT 1
-#define GPS1PORT 15
+#define GPS1PORT 13
+#define LAUNCHERMOTORLEFTPORT 9
+#define LAUNCHERMOTORRIGHTPORT 2
+
+
 
 bool buttonAState = 0;
 int driveDirection = 1;
