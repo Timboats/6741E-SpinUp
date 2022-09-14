@@ -49,7 +49,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.03);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.23);
   
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
@@ -186,6 +186,7 @@ void opcontrol() {
   blank.goToPos_ki = 45;
   writeSettings(blank);
   // getSettings();
+  train.goToPos(0, 0);
   
 	while (true) {
     controllerButtonCalls();
