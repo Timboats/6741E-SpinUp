@@ -132,10 +132,10 @@ void Drivetrain::goToPos(int x, int y){
 
 
         
-        northMotor.move_voltage(-northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
-        eastMotor.move_voltage(-eastVoltage+poopityScoop);
-        southMotor.move_voltage(northVoltage+poopityScoop);
-        westMotor.move_voltage(eastVoltage+poopityScoop);
+        northMotor.move_voltage(northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
+        eastMotor.move_voltage(eastVoltage+poopityScoop);
+        southMotor.move_voltage(-northVoltage+poopityScoop);
+        westMotor.move_voltage(-eastVoltage+poopityScoop);
         
         
         if (Simpler::abs(error) <= maxErr){

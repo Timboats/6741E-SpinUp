@@ -45,10 +45,10 @@ void initialize() {
   lvglInitEx();
   
 
-  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
+  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
   
 
@@ -186,7 +186,7 @@ void opcontrol() {
   blank.goToPos_ki = 45;
   writeSettings(blank);
   // getSettings();
-  train.goToPos(0, 0);
+  // train.goToPos(0, 0);
   
 	while (true) {
     controllerButtonCalls();
