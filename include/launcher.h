@@ -1,0 +1,2 @@
+
+void autoAim(bool isBlueGoal);
