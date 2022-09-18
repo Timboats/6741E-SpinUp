@@ -1,4 +1,5 @@
 #include "launcher.h"
+#include "main.h"
 #include "mathlib.h"
 #include "cmath"
 #include <cstddef>
@@ -8,6 +9,8 @@
 #define DISCMASS 0.065 //in kg
 #define DISCAREA 15328 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
+#define LAUNCHERMOTORRATIO 3/4 
+#define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     float RHO = 1.23; //in g/mm/mm/mm
@@ -72,27 +75,44 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     return curVelocity;
 }
 
+
+
 float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robotXPos, float robotYPos){
     float displacementFromGoal = Simpler::abs(Formula::twoCoordDistance(goalXPos, goalYPos, robotXPos, robotYPos));
 
+    float requiredVelocity = runFlightSim(displacementFromGoal, goalZPos);
+
+    return (requiredVelocity/VELOCITYTORPMCONST); //input is in mm/sec, output is in RPM 
 
 }
 
 void autoAim(bool isBlueGoal){
+    //for the purposes of testing, until we get the intertial sensor position tracking to be functional
+    float robotXPos = 10;
+    float robotYPos = 10;
+    Drivetrain::goToPos(robotXPos, robotYPos);
+    ////////////////////////////////////////////////////////
+
     float goalZPos = 30;
+    float goalXPos = 0;
+    float goalYPos = 0;
 
     if(isBlueGoal == 1){
-        float goalXPos = -1332;
-        float goalYPos = -1332;
+        goalXPos = -1332;
+        goalYPos = -1332;
     } else{
-        float goalXPos = 1332;
-        float goalYPos = 1332;
+        goalXPos = 1332;
+        goalYPos = 1332;
     }
 
-    std::printf("%f\n", runFlightSim(2000, 1000));
+    float targetRPM = findRequiredRPM(goalXPos, goalYPos, goalZPos, robotXPos, robotYPos);
 
+    launcherMotorRight.move_velocity(targetRPM);
+    launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
 
-
+    float angleFromGoal = std::atan2(goalYPos - robotYPos, goalXPos - robotXPos); //in radians
     
+    Drivetrain::faceHeading(angleFromGoal * (180/M_PI));
 
+    //insert launch code when launching system is complete
 }
