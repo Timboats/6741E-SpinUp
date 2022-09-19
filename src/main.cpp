@@ -104,7 +104,7 @@ void autonomous() {
 
 
 void opcontrol() {
-  train.goToPos((-200), (-200));
+  //train.goToPos((-200), (-200));
 
   autoAim(1, train);
 	/*

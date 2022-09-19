@@ -3,6 +3,7 @@
 #include "mathlib.h"
 #include "cmath"
 #include "drivetrain.h"
+#include "pros/gps.hpp"
 #include <cstddef>
 #include <cstdio>
 
@@ -15,8 +16,10 @@
 #define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
 #define launcherMotorLeftPort 11 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 3
+#define GPS1PORT 15
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
+    printf("flight sim start \n");
     float RHO = 1.23; //in g/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
     float CL0 = 0.1; //The lift coefficient indepedent of angle of attack
@@ -82,9 +85,12 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
 
 
 float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robotXPos, float robotYPos){
-    float displacementFromGoal = Simpler::abs(Formula::twoCoordDistance(goalXPos, goalYPos, robotXPos, robotYPos));
+    printf("findRequiredRPM start \n");
+    float displacementFromGoal = ( Simpler::abs((Formula::twoCoordDistance(goalXPos, goalYPos, robotXPos, robotYPos))));
+    printf("displacement from goal: %f \n", displacementFromGoal);
 
-    float requiredVelocity = runFlightSim(displacementFromGoal, goalZPos);
+    float requiredVelocity = (runFlightSim(displacementFromGoal, goalZPos));
+    printf("flight sim end");  
 
     return (requiredVelocity/VELOCITYTORPMCONST); //input is in mm/sec, output is in RPM 
 
@@ -93,10 +99,19 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
 void autoAim(bool isBlueGoal, Drivetrain train){
     pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
     pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
+    pros::Gps gps1(GPS1PORT);
+    /*
+    printf("before \n");
+    runFlightSim(1000, 0);
+    printf("after \n");
+    */
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
-    float robotXPos = 10;
-    float robotYPos = 10;
-    train.goToPos(robotXPos, robotYPos);
+    float robotXPos = gps1.get_status().x * 1000;
+    float robotYPos = gps1.get_status().y * 1000;
+    
+    printf("robot pos grab Complete \n");
+    printf("robot x pos: %f \n", robotXPos);
+    printf("robot y pos: %f \n", robotYPos);
     ////////////////////////////////////////////////////////
 
     float goalZPos = 30;
@@ -112,13 +127,20 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     }
 
     float targetRPM = findRequiredRPM(goalXPos, goalYPos, goalZPos, robotXPos, robotYPos);
+    printf("vel to RPM complete \n");
 
     launcherMotorRight.move_velocity(targetRPM);
     launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
+    printf("motor vel set complete \n");
 
     float angleFromGoal = std::atan2(goalYPos - robotYPos, goalXPos - robotXPos); //in radians
     
     train.faceHeading(angleFromGoal * (180/M_PI));
+    printf("position facing complete \n");
+
+    while(true){
+        printf("p");
+    }
 
     //insert launch code when launching system is complete
 }
