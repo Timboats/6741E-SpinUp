@@ -104,8 +104,11 @@ void autonomous() {
 
 
 void opcontrol() {
-  autoAim(1);
-	while (true) {
+  train.goToPos((-200), (-200));
+
+  autoAim(1, train);
+	/*
+  while (true) {
     controllerInput();
     pros::Motor launcherMotorLeft(launcherMotorLeftPort);
     pros::Motor launcherMotorRight(launcherMotorRightPort);
@@ -123,4 +126,5 @@ void opcontrol() {
 
 	  pros::delay(20);
 	}
+  */
 }

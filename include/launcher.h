@@ -1,2 +1,3 @@
 
-void autoAim(bool isBlueGoal);
+#include "drivetrain.h"
+void autoAim(bool isBlueGoal, Drivetrain train);

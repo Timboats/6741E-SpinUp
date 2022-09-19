@@ -2,8 +2,10 @@
 #include "main.h"
 #include "mathlib.h"
 #include "cmath"
+#include "drivetrain.h"
 #include <cstddef>
 #include <cstdio>
+
 
 #define GRAVITY -9810 //in mm/s/s
 #define DISCMASS 0.065 //in kg
@@ -11,6 +13,8 @@
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
 #define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
+#define launcherMotorLeftPort 11 //POV from entrance/intake of launcher
+#define launcherMotorRightPort 3
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     float RHO = 1.23; //in g/mm/mm/mm
@@ -86,11 +90,13 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
 
 }
 
-void autoAim(bool isBlueGoal){
+void autoAim(bool isBlueGoal, Drivetrain train){
+    pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
+    pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
     float robotXPos = 10;
     float robotYPos = 10;
-    Drivetrain::goToPos(robotXPos, robotYPos);
+    train.goToPos(robotXPos, robotYPos);
     ////////////////////////////////////////////////////////
 
     float goalZPos = 30;
@@ -112,7 +118,7 @@ void autoAim(bool isBlueGoal){
 
     float angleFromGoal = std::atan2(goalYPos - robotYPos, goalXPos - robotXPos); //in radians
     
-    Drivetrain::faceHeading(angleFromGoal * (180/M_PI));
+    train.faceHeading(angleFromGoal * (180/M_PI));
 
     //insert launch code when launching system is complete
 }
