@@ -20,7 +20,7 @@
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("flight sim start \n");
-    float RHO = 1.23; //in g/mm/mm/mm
+    float RHO = 0.00123; //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
     float CL0 = 0.1; //The lift coefficient indepedent of angle of attack
     float CLA = 1.4; //The lift coefficient dependent on angle of attack
@@ -48,13 +48,18 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     float CD = 0; //variable for the drag coefficient
     int iterations = 0;
     
+    printf("external loop for sim started \n");
+    printf("init d vel: %f \n", curVelocityD);
     while(Simpler::abs(curZ - desiredHeight) > maxError){
+        printf("external loop for sim iterated \n");
         curDisplacement = initDisplacement;
         curZ = zInit;
         curTime = 0;
 
+        printf("sim started \n");
         while(curDisplacement < desiredDisplacement){
-            ALPHA = discAngle = atan2(curVelocityZ,curVelocityD);
+        
+            ALPHA = discAngle - atan2(curVelocityZ, curVelocityD);
 
             CL = CL0 + CLA*ALPHA*(M_PI/180);
             CD = CD0 + CDA*pow((ALPHA - ALPHA0) * (M_PI/180), 2);
@@ -65,19 +70,23 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
             curVelocityD = curVelocityD + deltaCurVelocityD;
             curVelocityZ = curVelocityZ + deltaCurVelocityZ;
 
-            curDisplacement = curDisplacement + curVelocityD;
-            curZ = curZ + curVelocityZ;
+            curDisplacement = curDisplacement + curVelocityD*deltaTime;
+            curZ = curZ + curVelocityZ*deltaTime;
 
             curTime = curTime + deltaTime;
         }
+        printf("sim ended \n");
 
         curVelocity = curVelocity - Kp*(curZ - desiredHeight);
+        printf("current velocity %f \n", curVelocity);
 
         curVelocityD = curVelocity*cos(initVelocityAngle*(M_PI/180)); 
         curVelocityZ = curVelocity*sin(initVelocityAngle*(M_PI/180));
 
         iterations = iterations + 1; 
     }
+    printf("external loop for sim ended \n");
+    printf("final velocity %f \n", curVelocity);
 
     return curVelocity;
 }
@@ -100,11 +109,11 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
     pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
-    /*
+    
     printf("before \n");
     runFlightSim(1000, 0);
     printf("after \n");
-    */
+    
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
     float robotXPos = gps1.get_status().x * 1000;
     float robotYPos = gps1.get_status().y * 1000;

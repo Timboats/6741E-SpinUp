@@ -66,7 +66,7 @@ void toggleButtonA(){
 }
 
 void initialize() {
-  fileSysInit(); //Checks if all needed files exist. If not it creates them
+  // fileSysInit(); //Checks if all needed files exist. If not it creates them
   //TODO replace the below line with the custom init
   lvglInitEx();
   
