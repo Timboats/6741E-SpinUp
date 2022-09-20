@@ -11,6 +11,7 @@
 #include <string>
 #include "braingui.h"
 #include "vexfs.h"
+#include "inertialpos.h"
 
 #define NORTHMOTORPORT 10
 #define SOUTHMOTORPORT 11
@@ -19,7 +20,7 @@
 #define GPS1PORT 13
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
-
+#define INERTIALSENSORPORT 8
 
 
 bool buttonAState = 0;
@@ -50,6 +51,11 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
+  pros::Imu Inertial(INERTIALSENSORPORT);
+
+  Inertial.reset();
+
+  
   
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
@@ -177,34 +183,16 @@ void autonomous() {
 
 
 void opcontrol() {
-  // train.goToPos(0, 0);
-  // testGoToMethod();
-	int storedPercentage = 0;
-
-  settings blank;
-  blank.goToPos_kp = 92;
-  blank.goToPos_ki = 45;
-  writeSettings(blank);
-  // getSettings();
-  // train.goToPos(0, 0);
-  
+  float prevTime = 0;
+  float prevVelocity = 0;
 	while (true) {
-    controllerButtonCalls();
+    float deltaTime = pros::millis() - prevTime;
+    float velocity = updateXVelocity(deltaTime, prevVelocity, INERTIALSENSORPORT);
+    prevVelocity = velocity;
+    prevTime = pros::millis();
 
-    // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == true){
-    //   toggleButtonA();
-    // }
-
-		// if (buttonAState == 1){
-		// 	storedPercentage = turnTowardsPoint(0, 0);
-		// } 
-		// else {
-		// 	storedPercentage = 0;
-		// }
-    // //This will allow the robot to turn to face a goal while still being able to be driven around
-
-    train.steeringControl(master, storedPercentage, driveDirection);
-    // //This allows for driver control. By modifying the value outputted by the control stick, the movement of the robot is relative to the field, rather than the heading.
+    printf("X velocity: %f ", velocity);
+    
 		pros::delay(20);
 	}
 }
