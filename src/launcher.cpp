@@ -13,19 +13,19 @@
 #define DISCAREA 15328 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
-#define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
-#define launcherMotorLeftPort 11 //POV from entrance/intake of launcher
-#define launcherMotorRightPort 3
+#define VELOCITYTORPMCONST 11.94 //divide to convert from mm/sec to RPM
+#define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
+#define launcherMotorRightPort 2
 #define GPS1PORT 15
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("flight sim start \n");
-    float RHO = 0.00123; //in kg/mm/mm/mm
+    float RHO = 1.225 * pow(10, -9); //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
-    float CL0 = 0.1; //The lift coefficient indepedent of angle of attack
-    float CLA = 1.4; //The lift coefficient dependent on angle of attack
-    float CD0 = 0.08; //The drag coefficient indepedent of angle of attack
-    float CDA = 2.72; //The drag coefficient dependent on angle of attack
+    float CL0 = 0.0001; //The lift coefficient indepedent of angle of attack
+    float CLA = 0.0014; //The lift coefficient dependent on angle of attack
+    float CD0 = 0.00008; //The drag coefficient indepedent of angle of attack
+    float CDA = 0.00272; //The drag coefficient dependent on angle of attack
     float ALPHA0 = 0; //The angle of attack at which lift in 0 & drag is at a minimum
     float maxError = 1; //in mm
     float Kp = 1.8; //A constant value
@@ -47,6 +47,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     float CL = 0; //variable for the lift coefficient
     float CD = 0; //variable for the drag coefficient
     int iterations = 0;
+    int curIterations = 0;
     
     printf("external loop for sim started \n");
     printf("init d vel: %f \n", curVelocityD);
@@ -58,6 +59,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
 
         printf("sim started \n");
         while(curDisplacement < desiredDisplacement){
+            //printf("D offset: %f, Z offset: %f, D velocity: %f, Z velocity: %f, Current Time: %f \n", curDisplacement, curZ, curVelocityD, curVelocityZ, curTime);
         
             ALPHA = discAngle - atan2(curVelocityZ, curVelocityD);
 
@@ -74,6 +76,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
             curZ = curZ + curVelocityZ*deltaTime;
 
             curTime = curTime + deltaTime;
+
         }
         printf("sim ended \n");
 
@@ -110,9 +113,9 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
     
-    printf("before \n");
-    runFlightSim(1000, 0);
-    printf("after \n");
+    //printf("before \n");
+    //runFlightSim(1000, 0);
+    //printf("after \n");
     
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
     float robotXPos = gps1.get_status().x * 1000;
