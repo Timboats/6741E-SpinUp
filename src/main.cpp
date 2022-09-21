@@ -17,7 +17,7 @@
 #define SOUTHMOTORPORT 11
 #define EASTMOTORPORT 20
 #define WESTMOTORPORT 1
-#define GPS1PORT 13
+#define GPS1PORT 15
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
 #define INERTIALSENSORPORT 8
@@ -183,15 +183,25 @@ void autonomous() {
 
 
 void opcontrol() {
+  pros::Imu Inertial(INERTIALSENSORPORT);
+  pros::Gps GpsPrimaryInit(GPS1PORT);
   float prevTime = 0;
   float prevVelocity = 0;
-	while (true) {
-    float deltaTime = pros::millis() - prevTime;
-    float velocity = updateXVelocity(deltaTime, prevVelocity, INERTIALSENSORPORT);
-    prevVelocity = velocity;
-    prevTime = pros::millis();
+  while(Inertial.is_calibrating())
+  {
 
-    printf("X velocity: %f ", velocity);
+  }
+  float deltaTime = 0;
+	while (true) {
+    // deltaTime = pros::millis() - prevTime;
+    // float velocity = updateXVelocity(deltaTime, prevVelocity, INERTIALSENSORPORT);
+    // prevVelocity = velocity;
+    // prevTime = pros::millis();
+
+    // printf("X velocity: %f\n ", velocity); 
+
+    printf("Gps: %f, Imu: %f\n", GpsPrimaryInit.get_heading(), Inertial.get_heading());
+    
     
 		pros::delay(20);
 	}
