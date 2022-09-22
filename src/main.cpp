@@ -199,8 +199,8 @@ void opcontrol() {
     // prevTime = pros::millis();
 
     // printf("X velocity: %f\n ", velocity); 
-
-    printf("Gps: %f, Imu: %f\n", GpsPrimaryInit.get_heading(), Inertial.get_heading());
+    controllerButtonCalls();
+    train.steeringControl(master, 0, driveDirection);
     
     
 		pros::delay(20);

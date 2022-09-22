@@ -1,3 +1,4 @@
+#include "pros/imu.hpp"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
@@ -52,7 +53,8 @@ void Drivetrain::steeringControl(pros::Controller driveController, int storedPer
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
-    pros::Gps gps1(gps1Port);
+    pros::Imu inertial(inertialPort);
+
 
     double desiredAngle = 0;
     double desiredMagnitude = 0;
@@ -60,10 +62,10 @@ void Drivetrain::steeringControl(pros::Controller driveController, int storedPer
     desiredAngle = atan2(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X)) * (180/M_PI); 
     desiredMagnitude = sqrt(pow(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), 2) + pow(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X), 2));
 
-    float northComponent = -direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.get_heading())) - northWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    float southComponent = -direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.get_heading())) - southWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    float eastComponent = direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.get_heading())) - eastWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    float westComponent = direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(gps1.get_heading())) - westWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float northComponent = -direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(inertial.get_heading())) - northWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float southComponent = -direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(inertial.get_heading())) - southWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float eastComponent = direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(inertial.get_heading())) - eastWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float westComponent = direction*(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(inertial.get_heading())) - westWheelAngle) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
     northMotor.move(northComponent + storedPercent);
     southMotor.move(southComponent + storedPercent);
