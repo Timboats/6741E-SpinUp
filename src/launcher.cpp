@@ -145,14 +145,20 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
     printf("motor vel set complete \n");
 
-    float angleFromGoal = std::atan2(goalYPos - robotYPos, goalXPos - robotXPos); //in radians
+    float angleFromGoal = (int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360; //in degrees & simplified to 0 to 360
+    printf("desired robot heading: %f \n", angleFromGoal);
     
-    train.faceHeading(angleFromGoal * (180/M_PI));
+    train.faceHeading(angleFromGoal);
     printf("position facing complete \n");
+
+    //this is for debugging feel free to remove it.
+    float robotHeading = gps1.get_heading();
+    printf("current heading: %f \n", robotHeading);
+    /////////////////////////////
 
     while(true){
         printf("p");
-    }
+    } //Just to stop the code from reutrning for debugging
 
     //insert launch code when launching system is complete
 }
