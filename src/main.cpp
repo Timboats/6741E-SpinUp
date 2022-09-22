@@ -27,7 +27,7 @@ bool buttonAState = 0;
 int driveDirection = 1;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, GPS1PORT);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
 
 //TODO button callbacks still might not work problem-digital_new could be helpful tho
 
@@ -58,7 +58,7 @@ void initialize() {
   
   
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, GPS1PORT);
+  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, GPS1PORT);
 
 
 	//Controller1.ButtonA.pressed(toggleButtonA);

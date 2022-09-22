@@ -13,7 +13,7 @@
 
 
 
-Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, int northMotorPort, int southMotorPort, int eastMotorPort, int westMotorPort, int northWheelAngle, int southWheelAngle, int eastWheelAngle, int westWheelAngle, int gps1Port, int gps2Port){
+Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, unsigned int northMotorPort, unsigned int southMotorPort, unsigned int eastMotorPort, unsigned int westMotorPort, unsigned int northWheelAngle, unsigned int southWheelAngle, unsigned int eastWheelAngle, unsigned int westWheelAngle, unsigned int inertialPort, unsigned int gps1Port, int gps2Port){
     this -> wheelDiameter = wheelDiameter;
     this -> gearRatio = gearRatio;
     this -> wheelCircumference = M_PI * wheelDiameter;
@@ -27,6 +27,7 @@ Drivetrain::Drivetrain(float wheelDiameter, float gearRatio, int northMotorPort,
     this -> eastMotorPort = eastMotorPort;
     this -> westMotorPort = westMotorPort;
     this -> gps1Port = gps1Port;
+    this -> inertialPort = inertialPort;
 
     
     // if(gps2 == ){
