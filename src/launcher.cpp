@@ -4,6 +4,8 @@
 #include "cmath"
 #include "drivetrain.h"
 #include "pros/gps.hpp"
+#include "pros/misc.h"
+#include "pros/misc.hpp"
 #include <cstddef>
 #include <cstdio>
 
@@ -17,6 +19,7 @@
 #define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 2
 #define GPS1PORT 15
+pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("flight sim start \n");
@@ -104,11 +107,13 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
     float requiredVelocity = (runFlightSim(displacementFromGoal, goalZPos));
     printf("flight sim end");  
 
+    //con.print(0, 0, "flywheel RPM: %f \n", (requiredVelocity/VELOCITYTORPMCONST));
     return (requiredVelocity/VELOCITYTORPMCONST); //input is in mm/sec, output is in RPM 
 
 }
 
 void autoAim(bool isBlueGoal, Drivetrain train){
+    con.clear();
     pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
     pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
@@ -146,18 +151,18 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     printf("motor vel set complete \n");
 
     float angleFromGoal = (int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360; //in degrees & simplified to 0 to 360
-    printf("desired robot heading: %f \n", angleFromGoal);
+    //con.print(1, 0, "des heading: %f \n", angleFromGoal);
     
     train.faceHeading(angleFromGoal);
     printf("position facing complete \n");
 
     //this is for debugging feel free to remove it.
     float robotHeading = gps1.get_heading();
-    printf("current heading: %f \n", robotHeading);
+    con.print(0, 1, "%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
     /////////////////////////////
 
     while(true){
-        printf("p");
+        printf("p \n");
     } //Just to stop the code from reutrning for debugging
 
     //insert launch code when launching system is complete

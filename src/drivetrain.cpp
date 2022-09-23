@@ -77,7 +77,7 @@ void Drivetrain::goToPos(int x, int y){
     pros::Gps gps1(gps1Port);
 
     const float Kp = 54.96; //was 61
-    const float Ki = 0.03; //9 is pretty good
+    const float Ki = 0.00; //9 is pretty good
     const float Kd = 0;
     const int maxErr = 10;
     const int windupUpperLimit = 8;
@@ -161,6 +161,9 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
+    float startTime = pros::millis();;
+    float endTime = 3000;
+
     const float Kp = 500;
     const float Ki = 0;
     const float Kd = 0;
@@ -199,6 +202,10 @@ void Drivetrain::faceHeading(int heading){
         }
         else {
             prevTime = pros::millis();
+        }
+
+        if (pros::millis(); - startTime > endTime){
+            return;
         }
     }
     prevError = error;

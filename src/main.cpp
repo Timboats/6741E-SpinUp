@@ -15,7 +15,7 @@
 #include "launcher.h"
 
 #define NORTHMOTORPORT 10
-#define SOUTHMOTORPORT 13
+#define SOUTHMOTORPORT 11
 #define EASTMOTORPORT 20
 #define WESTMOTORPORT 1
 #define GPS1PORT 15
@@ -104,9 +104,11 @@ void autonomous() {
 
 
 void opcontrol() {
-  //train.goToPos((-200), (-200));
+  pros::Gps gps1(GPS1PORT);
+  train.faceHeading(45);
 
-  autoAim(1, train);
+
+  autoAim(0, train);
 	/*
   while (true) {
     controllerInput();
