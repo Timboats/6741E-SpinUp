@@ -105,7 +105,10 @@ void autonomous() {
 
 void opcontrol() {
   pros::Gps gps1(GPS1PORT);
-  train.faceHeading(45);
+
+  pros::delay(3000);
+
+  //train.faceHeading(45);
 
 
   autoAim(0, train);

@@ -161,7 +161,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    float startTime = pros::millis();;
+    float startTime = pros::millis();
     float endTime = 3000;
 
     const float Kp = 500;
@@ -178,7 +178,7 @@ void Drivetrain::faceHeading(int heading){
 
 
     while(true){
-        angleFromSet = ((Simpler::degreeToStdPos(gps1.get_heading()) - heading) + 360) % 360;
+        angleFromSet = ((Simpler::degreeToStdPos(gps1.get_heading() + 90) - heading) + 360) % 360;
 
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));
@@ -203,8 +203,7 @@ void Drivetrain::faceHeading(int heading){
         else {
             prevTime = pros::millis();
         }
-
-        if (pros::millis(); - startTime > endTime){
+        if(pros::millis() - startTime > endTime){
             return;
         }
     }

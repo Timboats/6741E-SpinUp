@@ -158,11 +158,12 @@ void autoAim(bool isBlueGoal, Drivetrain train){
 
     //this is for debugging feel free to remove it.
     float robotHeading = gps1.get_heading();
-    con.print(0, 1, "%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
+    printf("%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
+    printf("%f \n", runFlightSim(1000, goalZPos));
     /////////////////////////////
 
     while(true){
-        printf("p \n");
+        //printf("p \n");
     } //Just to stop the code from reutrning for debugging
 
     //insert launch code when launching system is complete
