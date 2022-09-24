@@ -12,7 +12,7 @@
 
 #define GRAVITY -9810 //in mm/s/s
 #define DISCMASS 0.065 //in kg
-#define DISCAREA 15328 //in mm^2
+#define DISCAREA 15000 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
 #define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
@@ -25,10 +25,10 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("flight sim start \n");
     float RHO = 1.225 * pow(10, -9); //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
-    float CL0 = 0.0001; //The lift coefficient indepedent of angle of attack
-    float CLA = 0.0014; //The lift coefficient dependent on angle of attack
-    float CD0 = 0.00008; //The drag coefficient indepedent of angle of attack
-    float CDA = 0.00272; //The drag coefficient dependent on angle of attack
+    float CL0 = 0.1; //The lift coefficient indepedent of angle of attack
+    float CLA = 1.4; //The lift coefficient dependent on angle of attack
+    float CD0 = 0.08; //The drag coefficient indepedent of angle of attack
+    float CDA = 0.08; //The drag coefficient dependent on angle of attack
     float ALPHA0 = 0; //The angle of attack at which lift in 0 & drag is at a minimum
     float maxError = 1; //in mm
     float Kp = 1.8; //A constant value
@@ -64,7 +64,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
         while(curDisplacement < desiredDisplacement){
             //printf("D offset: %f, Z offset: %f, D velocity: %f, Z velocity: %f, Current Time: %f \n", curDisplacement, curZ, curVelocityD, curVelocityZ, curTime);
         
-            ALPHA = discAngle - atan2(curVelocityZ, curVelocityD);
+            ALPHA = discAngle - ((atan2(curVelocityZ, curVelocityD)) * (180/M_PI));
 
             CL = CL0 + CLA*ALPHA*(M_PI/180);
             CD = CD0 + CDA*pow((ALPHA - ALPHA0) * (M_PI/180), 2);
