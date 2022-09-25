@@ -22,13 +22,17 @@
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
-    printf("flight sim start \n");
-    float RHO = 1.225 * pow(10, -9); //in kg/mm/mm/mm
+    
+    long double RHO = 1.23 * pow(10, -9); //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
-    float CL0 = 0.1; //The lift coefficient indepedent of angle of attack
-    float CLA = 1.4; //The lift coefficient dependent on angle of attack
-    float CD0 = 0.08; //The drag coefficient indepedent of angle of attack
-    float CDA = 0.08; //The drag coefficient dependent on angle of attack
+    float CL0 = 0.1;
+    //the coefficient of lift independent of the angle of attack
+    float CLA = 1.4;
+    //the coefficient of lift dependent on the angle of attack
+    float CD0 = 0.08;
+    //the coefficient of drag independent of the angle of attack
+    float CDA = 2.72;
+    //the coefficient of drag dependent on the angle of attack
     float ALPHA0 = 0; //The angle of attack at which lift in 0 & drag is at a minimum
     float maxError = 1; //in mm
     float Kp = 1.8; //A constant value
@@ -52,18 +56,16 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     int iterations = 0;
     int curIterations = 0;
     
-    printf("external loop for sim started \n");
-    printf("init d vel: %f \n", curVelocityD);
+    
     while(Simpler::abs(curZ - desiredHeight) > maxError){
-        printf("external loop for sim iterated \n");
+        
         curDisplacement = initDisplacement;
         curZ = zInit;
         curTime = 0;
 
-        printf("sim started \n");
-        while(curDisplacement < desiredDisplacement){
-            //printf("D offset: %f, Z offset: %f, D velocity: %f, Z velocity: %f, Current Time: %f \n", curDisplacement, curZ, curVelocityD, curVelocityZ, curTime);
         
+        while(curDisplacement < desiredDisplacement){
+            
             ALPHA = discAngle - ((atan2(curVelocityZ, curVelocityD)) * (180/M_PI));
 
             CL = CL0 + CLA*ALPHA*(M_PI/180);
@@ -81,19 +83,21 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
             curTime = curTime + deltaTime;
 
         }
-        printf("sim ended \n");
+       
 
         curVelocity = curVelocity - Kp*(curZ - desiredHeight);
-        printf("current velocity %f \n", curVelocity);
+        
 
         curVelocityD = curVelocity*cos(initVelocityAngle*(M_PI/180)); 
         curVelocityZ = curVelocity*sin(initVelocityAngle*(M_PI/180));
 
         iterations = iterations + 1; 
     }
-    printf("external loop for sim ended \n");
-    printf("final velocity %f \n", curVelocity);
 
+    printf("iterations after completion: %d \n", iterations);
+
+    printf("z value after termination: %f, x value after termination: %f, desired z value: %f, desired x value: %f,  velocity after termination: %f \n", curZ, curDisplacement, desiredHeight, desiredDisplacement, curVelocity);
+    
     return curVelocity;
 }
 
@@ -105,7 +109,7 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
     printf("displacement from goal: %f \n", displacementFromGoal);
 
     float requiredVelocity = (runFlightSim(displacementFromGoal, goalZPos));
-    printf("flight sim end");  
+    printf("flight sim end \n");  
 
     //con.print(0, 0, "flywheel RPM: %f \n", (requiredVelocity/VELOCITYTORPMCONST));
     return (requiredVelocity/VELOCITYTORPMCONST); //input is in mm/sec, output is in RPM 
@@ -131,7 +135,7 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     printf("robot y pos: %f \n", robotYPos);
     ////////////////////////////////////////////////////////
 
-    float goalZPos = 30;
+    float goalZPos = 762;
     float goalXPos = 0;
     float goalYPos = 0;
 
@@ -159,7 +163,6 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     //this is for debugging feel free to remove it.
     float robotHeading = gps1.get_heading();
     printf("%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
-    printf("%f \n", runFlightSim(1000, goalZPos));
     /////////////////////////////
 
     while(true){
