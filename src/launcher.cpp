@@ -15,7 +15,7 @@
 #define DISCAREA 15000 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
-#define VELOCITYTORPMCONST 24.13 //divide to convert from mm/sec to RPM
+#define VELOCITYTORPMCONST 12 //divide to convert from mm/sec to RPM
 #define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 2
 #define GPS1PORT 15
