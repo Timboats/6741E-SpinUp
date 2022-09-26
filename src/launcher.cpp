@@ -22,6 +22,7 @@
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
+    printf("disc flight sim start \n");
     
     long double RHO = 1.23 * pow(10, -9); //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
@@ -96,7 +97,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
 
     printf("iterations after completion: %d \n", iterations);
 
-    printf("z value after termination: %f, x value after termination: %f, desired z value: %f, desired x value: %f,  velocity after termination: %f \n", curZ, curDisplacement, desiredHeight, desiredDisplacement, curVelocity);
+    printf("z value after termination: %f, d value after termination: %f, desired z value: %f, desired d value: %f,  velocity after termination: %f \n", curZ, curDisplacement, desiredHeight, desiredDisplacement, curVelocity);
     
     return curVelocity;
 }
@@ -105,13 +106,13 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
 
 float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robotXPos, float robotYPos){
     printf("findRequiredRPM start \n");
+
     float displacementFromGoal = ( Simpler::abs((Formula::twoCoordDistance(goalXPos, goalYPos, robotXPos, robotYPos))));
     printf("displacement from goal: %f \n", displacementFromGoal);
 
     float requiredVelocity = (runFlightSim(displacementFromGoal, goalZPos));
-    printf("flight sim end \n");  
+    printf("disc flight sim end \n");  
 
-    //con.print(0, 0, "flywheel RPM: %f \n", (requiredVelocity/VELOCITYTORPMCONST));
     return (requiredVelocity/VELOCITYTORPMCONST); //input is in mm/sec, output is in RPM 
 
 }
@@ -121,10 +122,6 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
     pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
-    
-    //printf("before \n");
-    //runFlightSim(1000, 0);
-    //printf("after \n");
     
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
     float robotXPos = gps1.get_status().x * 1000;
@@ -149,13 +146,13 @@ void autoAim(bool isBlueGoal, Drivetrain train){
 
     float targetRPM = findRequiredRPM(goalXPos, goalYPos, goalZPos, robotXPos, robotYPos);
     printf("vel to RPM complete \n");
+    printf("findRequiredRPM complete");
 
     launcherMotorRight.move_velocity(targetRPM);
     launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
     printf("motor vel set complete \n");
 
     float angleFromGoal = (int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360; //in degrees & simplified to 0 to 360
-    //con.print(1, 0, "des heading: %f \n", angleFromGoal);
     
     train.faceHeading(angleFromGoal);
     printf("position facing complete \n");
