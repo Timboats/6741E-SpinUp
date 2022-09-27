@@ -12,10 +12,10 @@
 
 #define GRAVITY -9810 //in mm/s/s
 #define DISCMASS 0.065 //in kg
-#define DISCAREA 15000 //in mm^2
+#define DISCAREA 15383 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
-#define VELOCITYTORPMCONST 12 //divide to convert from mm/sec to RPM
+#define VELOCITYTORPMCONST 12.5 //divide to convert from mm/sec to RPM
 #define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 2
 #define GPS1PORT 15
@@ -26,13 +26,13 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     
     long double RHO = 1.23 * pow(10, -9); //in kg/mm/mm/mm
     //eventually this needs to change based on ambient air temp, humidity, & elevation
-    float CL0 = 0.1;
+    float CL0 = 0;
     //the coefficient of lift independent of the angle of attack
-    float CLA = 1.4;
+    float CLA = 1.75;
     //the coefficient of lift dependent on the angle of attack
-    float CD0 = 0.08;
+    float CD0 = 0.2;
     //the coefficient of drag independent of the angle of attack
-    float CDA = 2.72;
+    float CDA = 2.5;
     //the coefficient of drag dependent on the angle of attack
     float ALPHA0 = 0; //The angle of attack at which lift in 0 & drag is at a minimum
     float maxError = 1; //in mm
@@ -148,19 +148,23 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     printf("vel to RPM complete \n");
     printf("findRequiredRPM complete");
 
-    launcherMotorRight.move_velocity(targetRPM);
-    launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
-    printf("motor vel set complete \n");
-
-    float angleFromGoal = (int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360; //in degrees & simplified to 0 to 360
+    float angleAdjustment = 5; //a positive value aims the robot more to the left, a negative value more to the right.
+    float angleFromGoal = ((int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360) + angleAdjustment; //in degrees & simplified to 0 to 360
+    
     
     train.faceHeading(angleFromGoal);
     printf("position facing complete \n");
+
+    
 
     //this is for debugging feel free to remove it.
     float robotHeading = gps1.get_heading();
     printf("%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
     /////////////////////////////
+
+    launcherMotorRight.move_velocity(targetRPM);
+    launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
+    printf("motor vel set complete \n");
 
     while(true){
         //printf("p \n");

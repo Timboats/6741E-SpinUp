@@ -77,9 +77,9 @@ void Drivetrain::goToPos(int x, int y){
     pros::Gps gps1(gps1Port);
 
     const float Kp = 54.96; //was 61
-    const float Ki = 0.00; //9 is pretty good
+    const float Ki = 0.02; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 10;
+    const int maxErr = 30;
     const int windupUpperLimit = 8;
 
     float integral = 0;
@@ -161,10 +161,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
 
-    float startTime = pros::millis();
-    float endTime = 3000;
-
-    const float Kp = 500;
+    const float Kp = 600;
     const float Ki = 0;
     const float Kd = 0;
 
@@ -173,7 +170,9 @@ void Drivetrain::faceHeading(int heading){
     float error = 0;
     float prevError = 0;
 
-    int angleFromSet = 0; //Difference between current heading and desired heading from 0-360
+    float maxError = 1;
+
+    float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
 
 
@@ -193,7 +192,7 @@ void Drivetrain::faceHeading(int heading){
         southMotor.move_voltage(totalVoltage);
         westMotor.move_voltage(totalVoltage);
 
-        if(Simpler::abs(error) <= 1){
+        if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
             if(deltaTime > 500){
                 stopAllDrive();
@@ -202,9 +201,6 @@ void Drivetrain::faceHeading(int heading){
         }
         else {
             prevTime = pros::millis();
-        }
-        if(pros::millis() - startTime > endTime){
-            return;
         }
     }
     prevError = error;

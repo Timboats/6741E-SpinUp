@@ -75,7 +75,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, -0.03);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
 
   pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
@@ -110,7 +110,7 @@ void opcontrol() {
 
   //train.faceHeading(45);
 
-
+  //train.goToPos(0, 0);
   autoAim(0, train);
 	/*
   while (true) {
