@@ -13,14 +13,15 @@
 #include "vexfs.h"
 #include "inertialpos.h"
 
-#define NORTHMOTORPORT 10
-#define SOUTHMOTORPORT 11
-#define EASTMOTORPORT 20
-#define WESTMOTORPORT 1
+#define NORTHMOTORPORT 1 // old 10
+#define SOUTHMOTORPORT 20 //old 11
+#define EASTMOTORPORT 10 //old 20
+#define WESTMOTORPORT 11 //old 1
 #define GPS1PORT 15
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
 #define INERTIALSENSORPORT 8
+#define GPSOFFSETFROMFRONT 90
 
 
 bool buttonAState = 0;
@@ -44,7 +45,6 @@ void initialize() {
   fileSysInit(); //Checks if all needed files exist. If not it creates them
   //TODO replace the below line with the custom init
   lvglInitEx();
-  
 
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
@@ -55,13 +55,13 @@ void initialize() {
 
   Inertial.reset();
 
-  
-  
+  while(Inertial.is_calibrating())
+  {
+  }
+
+  Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, GPS1PORT);
-
-
-	//Controller1.ButtonA.pressed(toggleButtonA);
 
 }
 
@@ -185,23 +185,11 @@ void autonomous() {
 void opcontrol() {
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Gps GpsPrimaryInit(GPS1PORT);
-  float prevTime = 0;
-  float prevVelocity = 0;
-  while(Inertial.is_calibrating())
-  {
-
-  }
-  float deltaTime = 0;
+ 
 	while (true) {
-    // deltaTime = pros::millis() - prevTime;
-    // float velocity = updateXVelocity(deltaTime, prevVelocity, INERTIALSENSORPORT);
-    // prevVelocity = velocity;
-    // prevTime = pros::millis();
-
-    // printf("X velocity: %f\n ", velocity); 
     controllerButtonCalls();
     train.steeringControl(master, 0, driveDirection);
-    
+    // printf("Gps: %f, Imu: %f\n", GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT, Inertial.get_heading());
     
 		pros::delay(20);
 	}

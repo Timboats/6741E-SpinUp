@@ -78,11 +78,12 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
     pros::Gps gps1(gps1Port);
+    pros::Imu inertial(inertialPort);
 
     const float Kp = 54.96; //was 61
-    const float Ki = 0.03; //9 is pretty good
+    const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 10;
+    const int maxErr = 20;
     const int windupUpperLimit = 8;
 
     float integral = 0;
@@ -94,7 +95,7 @@ void Drivetrain::goToPos(int x, int y){
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
-    int heading = gps1.get_heading();
+    int heading = inertial.get_heading();
     int initHeading = heading; //Might have to be removed later
 
     float northVoltage = 0;
@@ -102,12 +103,11 @@ void Drivetrain::goToPos(int x, int y){
 
     int currentX = 0;
     int currentY = 0;
-    
 
     while(true){
         currentX = gps1.get_status().x * 1000;
         currentY = gps1.get_status().y * 1000;
-        heading = gps1.get_heading();
+        heading = inertial.get_heading();
 
 
         
@@ -135,11 +135,11 @@ void Drivetrain::goToPos(int x, int y){
 
 
         
-        northMotor.move_voltage(northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
-        eastMotor.move_voltage(eastVoltage+poopityScoop);
-        southMotor.move_voltage(-northVoltage+poopityScoop);
-        westMotor.move_voltage(-eastVoltage+poopityScoop);
-        
+        northMotor.move_voltage(-northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
+        eastMotor.move_voltage(-eastVoltage+poopityScoop);
+        southMotor.move_voltage(northVoltage+poopityScoop);
+        westMotor.move_voltage(eastVoltage+poopityScoop);
+
         
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
@@ -162,9 +162,9 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
-    pros::Gps gps1(gps1Port);
+    pros::Imu inertial(inertialPort);
 
-    const float Kp = 500;
+    const float Kp = 570;
     const float Ki = 0;
     const float Kd = 0;
 
@@ -178,7 +178,7 @@ void Drivetrain::faceHeading(int heading){
 
 
     while(true){
-        angleFromSet = ((Simpler::degreeToStdPos(gps1.get_heading()) - heading) + 360) % 360;
+        angleFromSet = ((Simpler::degreeToStdPos(inertial.get_heading()) - heading) + 360) % 360;
 
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));

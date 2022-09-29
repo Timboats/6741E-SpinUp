@@ -307,8 +307,9 @@
       }
     },
     "upload_options": {
-      "slot": 2,
-      "icon": "clawbot"
+      "slot": 1,
+      "icon": "pizza",
+      "description": "inert"
     }
   }
 }
