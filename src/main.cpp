@@ -5,6 +5,7 @@
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
 #include "pros/misc.hpp"
+#include "pros/motors.h"
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
 #include <cstddef>
@@ -22,24 +23,18 @@
 #define LAUNCHERMOTORRIGHTPORT 2
 #define INERTIALSENSORPORT 8
 #define GPSOFFSETFROMFRONT 90
+#define ROLLERPORT 17
 
 
 bool buttonAState = 0;
 int driveDirection = 1;
+int rollerVoltage = 0;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
 
 //TODO button callbacks still might not work problem-digital_new could be helpful tho
 
-void toggleButtonA(){
-  if (buttonAState == 0){
-    buttonAState = 1;
-  } else {
-    buttonAState = 0;
-  }
-  return;
-}
 
 void initialize() {
   fileSysInit(); //Checks if all needed files exist. If not it creates them
@@ -50,6 +45,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
   pros::Imu Inertial(INERTIALSENSORPORT);
 
@@ -66,8 +62,18 @@ void initialize() {
 }
 
 void controllerButtonCalls(){
+  pros::Motor roller(ROLLERPORT);
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1) == true){
+    if(rollerVoltage != 0){
+      rollerVoltage = 0;
+    }
+    else{
+      rollerVoltage = 10000;
+    }
+    roller.move_voltage(rollerVoltage);
   }
 
 }
