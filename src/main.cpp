@@ -12,7 +12,6 @@
 #include <string>
 #include "braingui.h"
 #include "vexfs.h"
-#include "inertialpos.h"
 
 #define NORTHMOTORPORT 1 // old 10
 #define SOUTHMOTORPORT 20 //old 11
@@ -33,8 +32,6 @@ int rollerVoltage = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
 
-//TODO button callbacks still might not work problem-digital_new could be helpful tho
-
 
 void initialize() {
   fileSysInit(); //Checks if all needed files exist. If not it creates them
@@ -49,11 +46,11 @@ void initialize() {
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
   pros::Imu Inertial(INERTIALSENSORPORT);
 
-  Inertial.reset();
+  // Inertial.reset();
 
-  while(Inertial.is_calibrating())
-  {
-  }
+  // while(Inertial.is_calibrating())
+  // {
+  // }
 
   Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
 
@@ -176,26 +173,13 @@ void competition_initialize() {}
 
 
 void autonomous() {
-  pros::Gps GpsPrimary(GPS1PORT);
-
-
-  // train.goToPos(0, 0, master);
-  testGoToMethod();
-  
-  // master.set_text(1, 1, std::to_string(GpsPrimary.get_heading()));
-  // pros::delay(100);
-
 }
 
 
 void opcontrol() {
-  pros::Imu Inertial(INERTIALSENSORPORT);
-  pros::Gps GpsPrimaryInit(GPS1PORT);
- 
 	while (true) {
     controllerButtonCalls();
     train.steeringControl(master, 0, driveDirection);
-    // printf("Gps: %f, Imu: %f\n", GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT, Inertial.get_heading());
     
 		pros::delay(20);
 	}

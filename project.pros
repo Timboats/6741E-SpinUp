@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "inertialBranch",
+    "project_name": "MainBranch",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -308,8 +308,8 @@
     },
     "upload_options": {
       "slot": 1,
-      "icon": "pizza",
-      "description": "inert"
+      "icon": "X",
+      "description": "The main code for botimous"
     }
   }
 }
