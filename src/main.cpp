@@ -1,6 +1,7 @@
 #include "main.h"
 #include "drivetrain.h"
 #include "mathlib.h"
+#include "pros/adi.hpp"
 #include "pros/gps.hpp"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -25,9 +26,13 @@
 #define ROLLERPORT 17
 
 
-bool buttonAState = 0;
+
 int driveDirection = 1;
 int rollerVoltage = 0;
+bool indexState = LOW;
+const float leftMotorVelocity = 300;
+const float rightMotorVelocity = 500;
+
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
@@ -45,6 +50,9 @@ void initialize() {
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
   pros::Imu Inertial(INERTIALSENSORPORT);
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
+
 
   // Inertial.reset();
 
@@ -59,7 +67,10 @@ void initialize() {
 }
 
 void controllerButtonCalls(){
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor roller(ROLLERPORT);
+
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
@@ -72,7 +83,25 @@ void controllerButtonCalls(){
     }
     roller.move_voltage(rollerVoltage);
   }
-
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2) == true){
+    if(indexState == HIGH){
+      indexState = LOW;
+    }
+    else{
+      indexState = HIGH;
+    }
+    roller.move_voltage(rollerVoltage);
+    pros::ADIDigitalOut indexer(1, indexState);
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
+    launcherMotorLeft.move_velocity(leftMotorVelocity);
+    launcherMotorRight.move_velocity(rightMotorVelocity);
+    
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
+    launcherMotorLeft.move_velocity(0);
+    launcherMotorRight.move_velocity(0);
+  }
 }
 
 int errorTTP = 0;
@@ -177,6 +206,7 @@ void autonomous() {
 
 
 void opcontrol() {
+  train.goToPos(500, 500);
 	while (true) {
     controllerButtonCalls();
     train.steeringControl(master, 0, driveDirection);
