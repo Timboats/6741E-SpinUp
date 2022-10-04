@@ -104,10 +104,17 @@ void Drivetrain::goToPos(int x, int y){
 
     int currentX = 0;
     int currentY = 0;
+    
 
     while(true){
         currentX = gps1.get_status().x * 1000;
         currentY = gps1.get_status().y * 1000;
+
+        if(gps1.get_heading() == INFINITY){
+            return;
+        }
+
+
         heading = Simpler::coterminalToStdPos(gps1.get_heading()+90);
 
 
@@ -180,6 +187,10 @@ void Drivetrain::faceHeading(int heading){
 
 
     while(true){
+        if(gps1.get_heading() == INFINITY){
+            return;
+        }
+        
         angleFromSet = ((Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90)) - heading) + 360) % 360;
 
         if(angleFromSet > 180){
