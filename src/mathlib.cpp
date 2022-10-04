@@ -25,3 +25,12 @@ float Formula::findComponentVector(float magnitudeOne, float angleOne, float ang
   float magnitudeTwo = magnitudeOne * cos(angleOne - angleTwo);
   return magnitudeTwo;
 }
+float Simpler::coterminalToStdPos(float degree){
+  if(degree > 360){
+    return degree - 360;
+  }
+  if(degree < 0){
+    return degree + 360;
+  }
+  return degree;
+}
