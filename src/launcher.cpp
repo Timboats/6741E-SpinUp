@@ -6,6 +6,7 @@
 #include "pros/gps.hpp"
 #include "pros/misc.h"
 #include "pros/misc.hpp"
+#include "pros/rtos.hpp"
 #include <cstddef>
 #include <cstdio>
 
@@ -15,7 +16,7 @@
 #define DISCAREA 15383 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
-#define VELOCITYTORPMCONST 12.5 //divide to convert from mm/sec to RPM
+#define VELOCITYTORPMCONST 12.1 //divide to convert from mm/sec to RPM
 #define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
 #define launcherMotorRightPort 2
 #define GPS1PORT 15
@@ -28,7 +29,7 @@ float runFlightSim(float desiredDisplacement, float desiredHeight){
     //eventually this needs to change based on ambient air temp, humidity, & elevation
     float CL0 = 0;
     //the coefficient of lift independent of the angle of attack
-    float CLA = 1.75;
+    float CLA = 2;
     //the coefficient of lift dependent on the angle of attack
     float CD0 = 0.2;
     //the coefficient of drag independent of the angle of attack
@@ -148,7 +149,7 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     printf("vel to RPM complete \n");
     printf("findRequiredRPM complete");
 
-    float angleAdjustment = 5; //a positive value aims the robot more to the left, a negative value more to the right.
+    float angleAdjustment = 0; //a positive value aims the robot more to the left, a negative value more to the right.
     float angleFromGoal = ((int)(((std::atan2(goalYPos - robotYPos, goalXPos - robotXPos)) * (180/M_PI)) + 360) % 360) + angleAdjustment; //in degrees & simplified to 0 to 360
     
     
@@ -165,10 +166,19 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     launcherMotorRight.move_velocity(targetRPM);
     launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
     printf("motor vel set complete \n");
+    pros::delay(3000);
+    pros::ADIDigitalOut indexer(1, HIGH);
+    pros::delay(1000);
+    pros::ADIDigitalOut i(1, LOW);
+    pros::delay(2000);
 
-    while(true){
-        //printf("p \n");
-    } //Just to stop the code from reutrning for debugging
+
+
+    launcherMotorRight.move_velocity(0);
+    launcherMotorLeft.move_velocity(0);
+
+
+    
 
     //insert launch code when launching system is complete
 }

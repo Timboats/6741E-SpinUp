@@ -53,6 +53,7 @@ void initialize() {
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
+  pros::ADIDigitalOut indexer(1, LOW);
 
 
   // Inertial.reset();
@@ -102,6 +103,9 @@ void controllerButtonCalls(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     launcherMotorLeft.move_velocity(0);
     launcherMotorRight.move_velocity(0);
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
+    autoAim(0, train);
   }
 }
 
@@ -249,7 +253,10 @@ void opcontrol() {
   //train.faceHeading(45);
 
   //train.goToPos(0, 0);
-  autoAim(0, train);
+  while(true){
+    controllerButtonCalls();
+  }
+  
 	/*
   while (true) {
     controllerInput();
