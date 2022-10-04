@@ -200,13 +200,47 @@ void disabled() {}
 
 void competition_initialize() {}
 
+void redSideAuton(){
+  pros::Motor roller(ROLLERPORT);
+  
+  roller.move_relative(-450, 100);
+  
+
+}
+void blueSideAuton(){
+  pros::Motor roller(ROLLERPORT);
+  train.goToPos(1800, -1200);
+  roller.move_relative(-450, 100);
+
+}
+
 
 void autonomous() {
+  // redSideAuton();
+  // blueSideAuton();
+
+  pros::Motor EastMotor(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor NorthMotor(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor SouthMotor(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor WestMotor(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor roller(ROLLERPORT);
+
+  EastMotor.move_voltage(12000);
+
+  WestMotor.move_voltage(-12000); //These stay
+  NorthMotor.move_voltage(12000); //These stay 
+
+  SouthMotor.move_voltage(-12000);
+
+  train.stopAllDrive();
+
+  pros::delay(3000);
+
+  roller.move_relative(-450, 100);
 }
 
 
 void opcontrol() {
-  train.goToPos(500, 500);
 	while (true) {
     controllerButtonCalls();
     train.steeringControl(master, 0, driveDirection);
