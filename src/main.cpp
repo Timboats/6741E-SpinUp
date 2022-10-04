@@ -241,6 +241,10 @@ void autonomous() {
 
 
 void opcontrol() {
+  train.moveVelocity(0, 50, 0);
+  pros::delay(5000);
+  train.stopAllDrive();
+
 	while (true) {
     controllerButtonCalls();
     train.steeringControl(master, 0, driveDirection);

@@ -190,7 +190,7 @@ void Drivetrain::faceHeading(int heading){
         if(gps1.get_heading() == INFINITY){
             return;
         }
-        
+
         angleFromSet = ((Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90)) - heading) + 360) % 360;
 
         if(angleFromSet > 180){
@@ -218,6 +218,36 @@ void Drivetrain::faceHeading(int heading){
         }
     }
     prevError = error;
+}
+void Drivetrain::moveVelocity(int xVelocity, int yVelocity, unsigned int heading){
+    pros::Motor northMotor(northMotorPort);
+    pros::Motor southMotor(southMotorPort);
+    pros::Motor eastMotor(eastMotorPort);
+    pros::Motor westMotor(westMotorPort);
+    pros::Gps gps1(gps1Port); 
+
+    double desiredAngle = 0;
+    double desiredMagnitude = 0;
+
+    desiredAngle = atan2(yVelocity, xVelocity) * (180/M_PI); 
+    desiredMagnitude = sqrt(pow(yVelocity, 2) + pow(xVelocity, 2));
+
+    // float headingControl = driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    
+
+    float northComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - northWheelAngle) * (M_PI/180)))) + heading;
+    float southComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - southWheelAngle) * (M_PI/180)))) + heading;
+    float eastComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - eastWheelAngle) * (M_PI/180)))) + heading;
+    float westComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - westWheelAngle) * (M_PI/180)))) + heading;
+
+    northMotor.move(northComponent);
+    southMotor.move(southComponent);
+    eastMotor.move(eastComponent);
+    westMotor.move(westComponent);
+
+
+
+
 }
 float Drivetrain::turnToPoint(int x, int y){
     pros::Gps gps1(gps1Port);
