@@ -130,7 +130,7 @@ void Drivetrain::goToPos(int x, int y){
         }
 
         
-        float poopityScoop = turnToPoint(cos(initHeading)+currentX, sin(initHeading)+currentY); //Might have to be removed later
+        
 
         totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
 
@@ -143,10 +143,10 @@ void Drivetrain::goToPos(int x, int y){
 
 
         
-        northMotor.move_voltage(-northVoltage+poopityScoop); //and obv remove these poopityScoops when the ones above are removed
-        eastMotor.move_voltage(-eastVoltage+poopityScoop);
-        southMotor.move_voltage(northVoltage+poopityScoop);
-        westMotor.move_voltage(eastVoltage+poopityScoop);
+        northMotor.move_voltage(-northVoltage); 
+        eastMotor.move_voltage(-eastVoltage);
+        southMotor.move_voltage(northVoltage);
+        westMotor.move_voltage(eastVoltage);
 
         
         if (Simpler::abs(error) <= maxErr){
