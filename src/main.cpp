@@ -248,14 +248,23 @@ void autonomous() {
 void opcontrol() {
   pros::Gps gps1(GPS1PORT);
 
-  pros::delay(3000);
+  pros::delay(2000);
+
+  train.goToPos(0, 0);
+
+  autoAim(0, train);
+  pros::delay(1000);
+
+  autoAim(0, train);
+  pros::delay(1000);
+
+  autoAim(0, train);
+  pros::delay(1000);
 
   //train.faceHeading(45);
 
   //train.goToPos(0, 0);
-  while(true){
-    controllerButtonCalls();
-  }
+ 
   
 	/*
   while (true) {

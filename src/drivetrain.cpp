@@ -84,7 +84,7 @@ void Drivetrain::goToPos(int x, int y){
     const float Kp = 54.96; //was 61
     const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 20;
+    const int maxErr = 40;
     const int windupUpperLimit = 8;
 
     float integral = 0;
