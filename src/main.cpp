@@ -113,7 +113,7 @@ int prevErrorTTP = 0;
 float turnTowardsPoint(int x, int y){
   pros::Gps GpsPrimary(GPS1PORT);
   float motorPercentage = 0;
-  const float Kp = 1;
+  const float Kp = 100;
   const float Ki = 0.01;
   const float Kd = 0.3;
   const int windupUpperLimit = 15;
@@ -123,7 +123,7 @@ float turnTowardsPoint(int x, int y){
 
   desiredAngle = atan2(y - (GpsPrimary.get_status().y * 1000), x - (GpsPrimary.get_status().x * 1000)) * (180/M_PI); //in mm prolly gonna break
 
-  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(GpsPrimary.get_heading())) + 360) % 360);
+  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
   //finds the difference in the current angle and the desired angle from 0 to 360 degrees
 
   if (angleFromDesired > 180){
@@ -149,6 +149,46 @@ float turnTowardsPoint(int x, int y){
     
   return(motorPercentage);
   //Value is fed into motor to facilitate desired action
+}
+float faceHeadingValue(int heading){
+  pros::Gps GpsPrimary(GPS1PORT);
+  float motorPercentage = 0;
+  const float Kp = 127;
+  const float Ki = 0;
+  const float Kd = 0;
+  const int windupUpperLimit = 15;
+  float integral = 0;
+  int angleFromDesired = 0;
+  int desiredAngle = 0;
+
+  desiredAngle = heading; //in mm prolly gonna break
+
+  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
+  //finds the difference in the current angle and the desired angle from 0 to 360 degrees
+
+  if (angleFromDesired > 180){
+    errorTTP = -(180 - (angleFromDesired - 180));
+  } else {
+    errorTTP = angleFromDesired;
+  }
+  //translates angleFromDesired to -180 to 180 degrees
+
+  integral = integral + errorTTP;
+  //Adds up the area of the error versus time graph from a specified time until the current time
+
+  if (errorTTP > windupUpperLimit){
+    integral = 0;
+  }
+  //Defines the lower limit of the integral
+
+  motorPercentage = -(Kp * errorTTP) + (Ki*integral) + (Kd*(errorTTP - prevErrorTTP));
+  //calculates the desired voltage of the motors
+
+  prevErrorTTP = errorTTP; 
+  //Used to calculate integral
+    
+  return(motorPercentage);
+
 }
 
 void testGoToMethod(){
@@ -241,13 +281,15 @@ void autonomous() {
 
 
 void opcontrol() {
-  train.moveVelocity(0, 50, 0);
-  pros::delay(5000);
-  train.stopAllDrive();
-
+  // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
+  // pros::delay(5000);
+  // train.stopAllDrive();
 	while (true) {
-    controllerButtonCalls();
-    train.steeringControl(master, 0, driveDirection);
+    // controllerButtonCalls();
+    // train.steeringControl(master, 0, driveDirection);
+    // train.moveVelocity(0, 50, faceHeadingValue(270));
+    // if(delt)
+
     
 		pros::delay(20);
 	}
