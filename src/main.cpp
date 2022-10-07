@@ -10,6 +10,7 @@
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
 #include <cstddef>
+#include <cstdio>
 #include <string>
 #include "braingui.h"
 #include "vexfs.h"
@@ -284,13 +285,12 @@ void opcontrol() {
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
   // train.stopAllDrive();
+  
 	while (true) {
-    // controllerButtonCalls();
-    // train.steeringControl(master, 0, driveDirection);
+    controllerButtonCalls();
+    train.steeringControl(master, 0, driveDirection);
     // train.moveVelocity(0, 50, faceHeadingValue(270));
     // if(delt)
-
-    
 		pros::delay(20);
 	}
 }
