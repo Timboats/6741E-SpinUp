@@ -285,6 +285,7 @@ void opcontrol() {
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
   // train.stopAllDrive();
+  // printf("value: %f\n", getSettings().goToPos_kp);
   
 	while (true) {
     controllerButtonCalls();

@@ -3,6 +3,9 @@
 #include "unistd.h"
 #include <cstdio>
 #include <string>
+#include "jsonhpp/json.h"
+
+
 
 
 #define SETTINGSPATH "/usd/code_settings.txt"
@@ -21,7 +24,9 @@ void fileSysInit(){
     printf("building code_settings.txt file ...\n");
 
     settings defaultSettings;
-    
+    Json::Value convertedSettings;
+    Json::FastWriter writer;
+    //Sets the default settings in the settings struct
     defaultSettings.faceHeading_kp = 50;
     defaultSettings.faceHeading_ki = 0;
     defaultSettings.faceHeading_kd = 0;
@@ -30,15 +35,33 @@ void fileSysInit(){
     defaultSettings.goToPos_ki = 0;
     defaultSettings.goToPos_kd = 0;
 
+    convertedSettings["faceHeading_kp"] = defaultSettings.faceHeading_kp;
+    convertedSettings["faceHeading_ki"] = defaultSettings.faceHeading_ki;
+    convertedSettings["faceHeading_kd"] = defaultSettings.faceHeading_kd;
+    convertedSettings["goToPos_kp"] = defaultSettings.goToPos_kp;
+    convertedSettings["goToPos_ki"] = defaultSettings.goToPos_ki;
+    convertedSettings["goToPos_kd"] = defaultSettings.goToPos_kd;
+
+    const std::string jsonFile = writer.write(convertedSettings);
+
+
+    
+
+    //Saves writes the json settings and closes the file
     file = fopen(SETTINGSPATH, "w");
-    fprintf(file, "ayee it created me\n");
+    fprintf(file, "%s", jsonFile.c_str());
     fclose(file);
     printf("code_settings.txt was built succesfully :)\n");
 }
 settings getSettings(){
     settings settingsContents;
+    char* formattedData;
+    Json::Value parsedData;
     FILE* file = fopen(SETTINGSPATH, "r");
-    
+
+    fscanf(file, "%s", formattedData);
+    parsedData = formattedData;
+    printf("%s", parsedData.asCString());
 
     // fscanf(file, "%s", num);
 
