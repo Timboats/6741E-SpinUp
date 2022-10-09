@@ -2,26 +2,27 @@
 #include "errno.h"
 #include "unistd.h"
 #include <cstdio>
+#include <cstdlib>
 #include <string>
 #include "jsonhpp/json.h"
 
 
 
 
-#define SETTINGSPATH "/usd/code_settings.txt"
+#define SETTINGSPATH "/usd/code_settings.json"
 
 
 
 void fileSysInit(){
     FILE* file = fopen(SETTINGSPATH, "r");
     if(file != NULL){
-        printf("code_settings.txt file is present :)\n");
+        printf("code_settings.json file is present :)\n");
         fclose(file);
         return;
     }
     // perror("access error");
-    printf("code_settings.txt does not exist :(\n");
-    printf("building code_settings.txt file ...\n");
+    printf("code_settings.json does not exist :(\n");
+    printf("building code_settings.json file ...\n");
 
     settings defaultSettings;
     Json::Value convertedSettings;
@@ -51,23 +52,30 @@ void fileSysInit(){
     file = fopen(SETTINGSPATH, "w");
     fprintf(file, "%s", jsonFile.c_str());
     fclose(file);
-    printf("code_settings.txt was built succesfully :)\n");
+    printf("code_settings.json was built succesfully :)\n");
 }
 settings getSettings(){
     settings settingsContents;
-    char* formattedData;
+    char* fileData = (char*)std::malloc(5000); //Allocates 5kb of memory to char* which would also the maximum json file size the method can read
     Json::Value parsedData;
     FILE* file = fopen(SETTINGSPATH, "r");
 
-    fscanf(file, "%s", formattedData);
-    parsedData = formattedData;
-    printf("%s", parsedData.asCString());
-
-    // fscanf(file, "%s", num);
-
-    // printf("%s", num);
-
+    fscanf(file, "%s", fileData);
     fclose(file);
+
+    Json::Reader reader;
+    
+    reader.parse(fileData, parsedData);
+    free(fileData);
+    
+    settingsContents.faceHeading_kp = parsedData["faceHeading_kp"].asFloat();
+    settingsContents.faceHeading_ki = parsedData["faceHeading_ki"].asFloat();
+    settingsContents.faceHeading_kd = parsedData["faceHeading_kd"].asFloat();
+    settingsContents.goToPos_kp = parsedData["goToPos_kp"].asFloat();
+    settingsContents.goToPos_ki = parsedData["goToPos_ki"].asFloat();
+    settingsContents.goToPos_kd = parsedData["goToPos_kd"].asFloat();
+    
+    
     
     return settingsContents;
 }
