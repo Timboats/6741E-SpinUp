@@ -83,9 +83,23 @@ settings getSettings(){
 
 
 void writeSettings(settings tempSettings){
+    Json::Value convertedSettings;
+    Json::FastWriter writer;
+
+    convertedSettings["faceHeading_kp"] = tempSettings.faceHeading_kp;
+    convertedSettings["faceHeading_ki"] = tempSettings.faceHeading_ki;
+    convertedSettings["faceHeading_kd"] = tempSettings.faceHeading_kd;
+    convertedSettings["goToPos_kp"] = tempSettings.goToPos_kp;
+    convertedSettings["goToPos_ki"] = tempSettings.goToPos_ki;
+    convertedSettings["goToPos_kd"] = tempSettings.goToPos_kd;
+
+    const std::string jsonFile = writer.write(convertedSettings);
+
     FILE* file = fopen(SETTINGSPATH, "w");
-    fprintf(file, "%f\n%f\n%f\n%f\n%f\n%f", tempSettings.goToPos_kp, tempSettings.goToPos_ki, tempSettings.goToPos_kd, tempSettings.faceHeading_kp, tempSettings.faceHeading_ki, tempSettings.faceHeading_kd);
+
+    fprintf(file, "%s", jsonFile.c_str());
+
+    fclose(file);
 
     printf("Settings have been saved succesfully! :)\n");
-    fclose(file);
 }

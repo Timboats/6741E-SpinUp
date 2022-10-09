@@ -286,6 +286,7 @@ void opcontrol() {
   // pros::delay(5000);
   // train.stopAllDrive();
   printf("value: %f\n", getSettings().goToPos_kp);
+  printf("value: %f\n", getSettings().faceHeading_kp);
   
 	while (true) {
     controllerButtonCalls();
