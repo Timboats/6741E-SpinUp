@@ -36,12 +36,17 @@ void fileSysInit(){
     defaultSettings.goToPos_ki = 0;
     defaultSettings.goToPos_kd = 0;
 
+    defaultSettings.isGpsAvaiable = true;
+    defaultSettings.isOnBlueSide = true;
+
     convertedSettings["faceHeading_kp"] = defaultSettings.faceHeading_kp;
     convertedSettings["faceHeading_ki"] = defaultSettings.faceHeading_ki;
     convertedSettings["faceHeading_kd"] = defaultSettings.faceHeading_kd;
     convertedSettings["goToPos_kp"] = defaultSettings.goToPos_kp;
     convertedSettings["goToPos_ki"] = defaultSettings.goToPos_ki;
     convertedSettings["goToPos_kd"] = defaultSettings.goToPos_kd;
+    convertedSettings["isGpsAvaiable"] = defaultSettings.isGpsAvaiable;
+    convertedSettings["isOnBlueSide"] = defaultSettings.isOnBlueSide;
 
     const std::string jsonFile = writer.write(convertedSettings);
 
@@ -74,6 +79,8 @@ settings getSettings(){
     settingsContents.goToPos_kp = parsedData["goToPos_kp"].asFloat();
     settingsContents.goToPos_ki = parsedData["goToPos_ki"].asFloat();
     settingsContents.goToPos_kd = parsedData["goToPos_kd"].asFloat();
+    settingsContents.isGpsAvaiable = parsedData["isGpsAvaiable"].asBool();
+    settingsContents.isOnBlueSide = parsedData["isOnBlueSide"].asBool();
     
     
     
@@ -92,6 +99,8 @@ void writeSettings(settings tempSettings){
     convertedSettings["goToPos_kp"] = tempSettings.goToPos_kp;
     convertedSettings["goToPos_ki"] = tempSettings.goToPos_ki;
     convertedSettings["goToPos_kd"] = tempSettings.goToPos_kd;
+    convertedSettings["isGpsAvaiable"] = tempSettings.isGpsAvaiable;
+    convertedSettings["isOnBlueSide"] = tempSettings.isOnBlueSide;
 
     const std::string jsonFile = writer.write(convertedSettings);
 

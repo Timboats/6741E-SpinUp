@@ -11,6 +11,9 @@ struct settings{
     float goToPos_ki = 0;
     float goToPos_kd = 0;
 
+    bool isGpsAvaiable = true;
+    bool isOnBlueSide = true;
+
 };
 
 settings getSettings(); //gets the settings stored in the settings files and returns a struct with all of its values
