@@ -280,19 +280,77 @@ void autonomous() {
   roller.move_relative(-450, 100);
 }
 
+void customLauncherPidTest(){
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+
+  const int rpmSetPoint = 200;
+  const double Kp = 350; //200 too high 175 too low //185 almost perfect or 250 for the left //around 95 for right
+  const double Ki = 0; 
+  const double Kd = 0;
+  const int maxErr = 3;
+  const int windupUpperLimit = 8;
+
+  double integral = 0;
+  double error = 0;
+  double launcherVoltage = 0;
+  double startTime = pros::millis();
+  double prevVolt = 0;
+  double prevError = 0;
+  
+	while (true) {
+    // controllerButtonCalls();
+    // train.steeringControl(master, 0, driveDirection);
+    // train.moveVelocity(0, 50, faceHeadingValue(270));
+
+    double currentRpm = launcherMotorLeft.get_actual_velocity();
+
+    error = rpmSetPoint - currentRpm;
+    
+
+    integral = integral + error;
+
+    if(error > windupUpperLimit){
+      integral = 0;
+    }
+
+    launcherVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
+
+
+    launcherMotorLeft.move(launcherVoltage+prevVolt);
+    prevVolt = launcherVoltage;
+    double time = pros::millis() - startTime;
+
+    printf("%f, %f\n", time/1000, currentRpm);
+
+    
+    prevError = error;
+		pros::delay(20);
+	}
+  
+}
+
+float idleLauncher(float temp){
+  return 6000*(1/(1+exp(0.05*(temp - 50))));
+}
+
 
 void opcontrol() {
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
   // train.stopAllDrive();
-  printf("value: %f\n", getSettings().goToPos_kp);
-  printf("value: %f\n", getSettings().faceHeading_kp);
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  
   
 	while (true) {
-    controllerButtonCalls();
-    train.steeringControl(master, 0, driveDirection);
+    launcherMotorLeft.move(idleLauncher(launcherMotorLeft.get_temperature()));
+    launcherMotorRight.move(idleLauncher(launcherMotorRight.get_temperature()));
+
+    // controllerButtonCalls();
+    // train.steeringControl(master, 0, driveDirection);
     // train.moveVelocity(0, 50, faceHeadingValue(270));
-    // if(delt)
+
+    
 		pros::delay(20);
 	}
 }
