@@ -39,14 +39,34 @@ void fileSysInit(){
     defaultSettings.isGpsAvaiable = true;
     defaultSettings.isOnBlueSide = true;
 
+    defaultSettings.isInertial = false;
+
+    defaultSettings.rpmOptionOne = 200;
+    defaultSettings.rpmOptionTwo = 300;
+    defaultSettings.rpmOptionThree = 400;
+
+    defaultSettings.RHO = 0;
+
     convertedSettings["faceHeading_kp"] = defaultSettings.faceHeading_kp;
     convertedSettings["faceHeading_ki"] = defaultSettings.faceHeading_ki;
     convertedSettings["faceHeading_kd"] = defaultSettings.faceHeading_kd;
+
     convertedSettings["goToPos_kp"] = defaultSettings.goToPos_kp;
     convertedSettings["goToPos_ki"] = defaultSettings.goToPos_ki;
     convertedSettings["goToPos_kd"] = defaultSettings.goToPos_kd;
+
     convertedSettings["isGpsAvaiable"] = defaultSettings.isGpsAvaiable;
     convertedSettings["isOnBlueSide"] = defaultSettings.isOnBlueSide;
+    
+    convertedSettings["isInertial"] = defaultSettings.isInertial;
+
+    convertedSettings["rpmOptionOne"] = defaultSettings.rpmOptionOne;
+    convertedSettings["rpmOptionTwo"] = defaultSettings.rpmOptionTwo;
+    convertedSettings["rpmOptionThree"] = defaultSettings.rpmOptionThree;
+    convertedSettings["RHO"] = defaultSettings.RHO;
+
+
+
 
     const std::string jsonFile = writer.write(convertedSettings);
 
@@ -81,6 +101,11 @@ settings getSettings(){
     settingsContents.goToPos_kd = parsedData["goToPos_kd"].asFloat();
     settingsContents.isGpsAvaiable = parsedData["isGpsAvaiable"].asBool();
     settingsContents.isOnBlueSide = parsedData["isOnBlueSide"].asBool();
+    settingsContents.isInertial = parsedData["isInertial"].asBool();
+    settingsContents.rpmOptionOne = parsedData["rpmOptionOne"].asInt();
+    settingsContents.rpmOptionTwo = parsedData["rpmOptionTwo"].asInt();
+    settingsContents.rpmOptionThree = parsedData["rpmOptionThree"].asInt();
+    settingsContents.RHO = parsedData["RHO"].asDouble();
     
     
     
@@ -101,6 +126,13 @@ void writeSettings(settings tempSettings){
     convertedSettings["goToPos_kd"] = tempSettings.goToPos_kd;
     convertedSettings["isGpsAvaiable"] = tempSettings.isGpsAvaiable;
     convertedSettings["isOnBlueSide"] = tempSettings.isOnBlueSide;
+
+    convertedSettings["isInertial"] = tempSettings.isInertial;
+
+    convertedSettings["rpmOptionOne"] = tempSettings.rpmOptionOne;
+    convertedSettings["rpmOptionTwo"] = tempSettings.rpmOptionTwo;
+    convertedSettings["rpmOptionThree"] = tempSettings.rpmOptionThree;
+    convertedSettings["RHO"] = tempSettings.RHO;
 
     const std::string jsonFile = writer.write(convertedSettings);
 

@@ -14,6 +14,14 @@ struct settings{
     bool isGpsAvaiable = true;
     bool isOnBlueSide = true;
 
+    bool isInertial =  false;
+
+    int rpmOptionOne = 200;
+    int rpmOptionTwo = 300;
+    int rpmOptionThree = 400;
+
+    double RHO = 0;
+
 };
 
 settings getSettings(); //gets the settings stored in the settings files and returns a struct with all of its values
