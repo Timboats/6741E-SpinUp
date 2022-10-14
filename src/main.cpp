@@ -11,14 +11,15 @@
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <cstdio>
+#include <memory>
 #include <string>
 #include "braingui.h"
 #include "vexfs.h"
 
-#define NORTHMOTORPORT 1 // old 10
-#define SOUTHMOTORPORT 20 //old 11
-#define EASTMOTORPORT 10 //old 20
-#define WESTMOTORPORT 11 //old 1
+#define NORTHMOTORPORT 20 // old 10
+#define SOUTHMOTORPORT 1 //old 11
+#define EASTMOTORPORT 11 //old 20
+#define WESTMOTORPORT 10 //old 1
 #define GPS1PORT 15
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
@@ -49,10 +50,15 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.23);
+  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
+
+  NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  EastMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  WestMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
 
   // Inertial.reset();
@@ -105,8 +111,8 @@ void controllerButtonCalls(){
   }
 }
 
-int errorTTP = 0;
-int prevErrorTTP = 0;
+float errorTTP = 0;
+float prevErrorTTP = 0;
 //There is no loop inside the turnTowardsPoint function
 //So, these variables needed to be global
 //They have TTP at the end to indicate this (Turn Towards Point)
@@ -115,8 +121,8 @@ float turnTowardsPoint(int x, int y){
   pros::Gps GpsPrimary(GPS1PORT);
   float motorPercentage = 0;
   const float Kp = 100;
-  const float Ki = 0.01;
-  const float Kd = 0.3;
+  const float Ki = 0;
+  const float Kd = 0;
   const int windupUpperLimit = 15;
   float integral = 0;
   int angleFromDesired = 0;
@@ -154,7 +160,7 @@ float turnTowardsPoint(int x, int y){
 float faceHeadingValue(int heading){
   pros::Gps GpsPrimary(GPS1PORT);
   float motorPercentage = 0;
-  const float Kp = 127;
+  const float Kp = 3;
   const float Ki = 0;
   const float Kd = 0;
   const int windupUpperLimit = 15;
@@ -186,6 +192,7 @@ float faceHeadingValue(int heading){
   //calculates the desired voltage of the motors
 
   prevErrorTTP = errorTTP; 
+  printf("mv: %f, head: %d\n",motorPercentage, Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90)));
   //Used to calculate integral
     
   return(motorPercentage);
@@ -335,22 +342,21 @@ float idleLauncher(float temp){
 
 
 void opcontrol() {
+  // pros::Gps GpsPrimaryInit(GPS1PORT);
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  
+
+  // train.goToPos(0, 0);
   
 	while (true) {
     launcherMotorLeft.move(idleLauncher(launcherMotorLeft.get_temperature()));
     launcherMotorRight.move(idleLauncher(launcherMotorRight.get_temperature()));
-
+    // train.moveVelocity(1, 10, faceHeadingValue(270)); 
     // controllerButtonCalls();
     // train.steeringControl(master, 0, driveDirection);
-    // train.moveVelocity(0, 50, faceHeadingValue(270));
-
-    
 		pros::delay(20);
 	}
 }
