@@ -84,7 +84,7 @@ void Drivetrain::goToPos(int x, int y){
     const float Kp = 54.96; //was 61
     const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 20;
+    const int maxErr = 40;
     const int windupUpperLimit = 8;
 
     float integral = 0;
@@ -182,7 +182,9 @@ void Drivetrain::faceHeading(int heading){
     float error = 0;
     float prevError = 0;
 
-    int angleFromSet = 0; //Difference between current heading and desired heading from 0-360
+    float maxError = 1;
+
+    float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
 
 
@@ -206,7 +208,7 @@ void Drivetrain::faceHeading(int heading){
         southMotor.move_voltage(totalVoltage);
         westMotor.move_voltage(totalVoltage);
 
-        if(Simpler::abs(error) <= 1){
+        if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
             if(deltaTime > 500){
                 stopAllDrive();

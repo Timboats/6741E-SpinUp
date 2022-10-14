@@ -15,6 +15,7 @@
 #include <string>
 #include "braingui.h"
 #include "vexfs.h"
+#include "launcher.h"
 
 #define NORTHMOTORPORT 20 // old 10
 #define SOUTHMOTORPORT 1 //old 11
@@ -41,7 +42,7 @@ Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOT
 
 
 void initialize() {
-  fileSysInit(); //Checks if all needed files exist. If not it creates them
+  // fileSysInit(); //Checks if all needed files exist. If not it creates them
   //TODO replace the below line with the custom init
   lvglInitEx();
 
@@ -54,6 +55,12 @@ void initialize() {
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
+  pros::ADIDigitalOut indexer(1, LOW);
+
+  NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  EastMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  WestMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -108,6 +115,9 @@ void controllerButtonCalls(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     launcherMotorLeft.move_velocity(0);
     launcherMotorRight.move_velocity(0);
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
+    autoAim(0, train);
   }
 }
 
@@ -359,4 +369,5 @@ void opcontrol() {
     // train.steeringControl(master, 0, driveDirection);
 		pros::delay(20);
 	}
+  */
 }
