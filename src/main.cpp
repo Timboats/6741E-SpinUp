@@ -42,8 +42,7 @@ Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOT
 
 
 void initialize() {
-  // fileSysInit(); //Checks if all needed files exist. If not it creates them
-  //TODO replace the below line with the custom init
+  fileSysInit();
   lvglInitEx();
 
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
@@ -56,11 +55,6 @@ void initialize() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
   pros::ADIDigitalOut indexer(1, LOW);
-
-  NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  EastMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  WestMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -369,5 +363,5 @@ void opcontrol() {
     // train.steeringControl(master, 0, driveDirection);
 		pros::delay(20);
 	}
-  */
+  
 }

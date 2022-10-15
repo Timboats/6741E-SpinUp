@@ -84,7 +84,7 @@ void Drivetrain::goToPos(int x, int y){
     const float Kp = 54.96; //was 61
     const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 40;
+    const int maxErr = 20;
     const int windupUpperLimit = 8;
 
     float integral = 0;
@@ -181,7 +181,7 @@ void Drivetrain::faceHeading(int heading){
     float prevTime = 0;
     float error = 0;
     float prevError = 0;
-
+    
     float maxError = 1;
 
     float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
