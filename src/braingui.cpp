@@ -5,6 +5,7 @@
 #include "display/lv_objx/lv_btn.h"
 #include "display/lv_objx/lv_btnm.h"
 #include "display/lv_objx/lv_cont.h"
+#include "display/lv_objx/lv_label.h"
 #include "display/lv_objx/lv_page.h"
 #include "display/lv_objx/lv_win.h"
 #include "vexfs.h"
@@ -59,6 +60,15 @@ void funcWindow(const char* title){
     lv_btn_set_state(sideBtn, storedSettings.isOnBlueSide);
     lv_btn_set_state(inertialBtn, storedSettings.isInertial);
     lv_btn_set_state(gpsBtn, storedSettings.isGpsAvaiable);
+
+    lv_obj_t* sideBtnLabel = lv_label_create(sideBtn, NULL);
+    lv_label_set_text(sideBtnLabel, btnMap[0]);
+
+    lv_obj_t* inertialBtnLabel = lv_label_create(inertialBtn, NULL);
+    lv_label_set_text(inertialBtnLabel, btnMap[1]);
+
+    lv_obj_t* gpsBtnLabel = lv_label_create(gpsBtn, NULL);
+    lv_label_set_text(gpsBtnLabel, btnMap[2]);
 }
 
 static lv_res_t menuBtnsEventHandler(lv_obj_t* btnMatrix, const char* txt){
