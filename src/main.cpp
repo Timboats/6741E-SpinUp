@@ -33,8 +33,10 @@
 int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
-const float leftMotorVelocity = 300;
-const float rightMotorVelocity = 500;
+bool isIdle = true;
+int launcherRpmOptions[3] = {200, 300, 400};
+unsigned int currentRpmIndex = 0;
+
 
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
@@ -102,16 +104,33 @@ void controllerButtonCalls(){
     pros::ADIDigitalOut indexer(1, indexState);
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
-    launcherMotorLeft.move_velocity(leftMotorVelocity);
-    launcherMotorRight.move_velocity(rightMotorVelocity);
-    
+    isIdle = false;
+    launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75);
+    launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
-    launcherMotorLeft.move_velocity(0);
-    launcherMotorRight.move_velocity(0);
+    isIdle = true;
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
+    isIdle = false;
     autoAim(0, train);
+    isIdle = true;
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
+    if(currentRpmIndex != 2){
+      currentRpmIndex++;
+    } 
+    else{
+      currentRpmIndex = 0;
+    }
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
+    if(currentRpmIndex != 0){
+      currentRpmIndex--;
+    } 
+    else{
+      currentRpmIndex = 2;
+    }
   }
 }
 
@@ -352,10 +371,11 @@ void opcontrol() {
   // train.goToPos(0, 0);
   
 	while (true) {
-    idleLauncher();
-    // train.moveVelocity(1, 10, faceHeadingValue(270)); 
-    // controllerButtonCalls();
-    // train.steeringControl(master, 0, driveDirection);
+    if(isIdle){
+      idleLauncher();
+    }
+    controllerButtonCalls();
+    train.steeringControl(master, 0, driveDirection);
 		pros::delay(20);
 	}
   
