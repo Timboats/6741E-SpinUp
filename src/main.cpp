@@ -34,7 +34,7 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[3] = {200, 300, 400};
+int launcherRpmOptions[3] = {350, 500, 600};
 unsigned int currentRpmIndex = 0;
 
 
@@ -42,10 +42,21 @@ unsigned int currentRpmIndex = 0;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
 
+void variableFsUpdate(){
+  settings storedSettings = getSettings();
+  if(storedSettings.isOnBlueSide){
+    driveDirection = -1;
+  } 
+  if(!storedSettings.isOnBlueSide){
+    driveDirection = 1;
+  }
 
+}
 void initialize() {
   fileSysInit();
   lvglInitEx();
+  variableFsUpdate();
+  
 
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
