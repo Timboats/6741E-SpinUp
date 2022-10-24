@@ -340,10 +340,6 @@ void customLauncherPidTest(){
   
 }
 
-float idleLauncher(float temp){
-  return 6000*(1/(1+exp(0.05*(temp - 50))));
-}
-
 
 void opcontrol() {
   // pros::Gps GpsPrimaryInit(GPS1PORT);
@@ -356,8 +352,7 @@ void opcontrol() {
   // train.goToPos(0, 0);
   
 	while (true) {
-    launcherMotorLeft.move(idleLauncher(launcherMotorLeft.get_temperature()));
-    launcherMotorRight.move(idleLauncher(launcherMotorRight.get_temperature()));
+    idleLauncher();
     // train.moveVelocity(1, 10, faceHeadingValue(270)); 
     // controllerButtonCalls();
     // train.steeringControl(master, 0, driveDirection);

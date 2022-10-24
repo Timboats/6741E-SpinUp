@@ -182,3 +182,13 @@ void autoAim(bool isBlueGoal, Drivetrain train){
 
     //insert launch code when launching system is complete
 }
+float calcIdleSpeed(float temp){
+    return 6000*(1/(1+exp(0.05*(temp - 50))));
+}
+void idleLauncher(){
+    pros::Motor launcherMotorLeft(launcherMotorLeftPort);
+    pros::Motor launcherMotorRight(launcherMotorRightPort);
+
+    launcherMotorLeft.move(calcIdleSpeed(launcherMotorLeft.get_temperature()));
+    launcherMotorRight.move(calcIdleSpeed(launcherMotorRight.get_temperature()));
+}
