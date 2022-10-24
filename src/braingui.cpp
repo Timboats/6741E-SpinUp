@@ -31,12 +31,10 @@ void funcWindow(const char* title){
     lv_win_add_btn(window, SYMBOL_CLOSE, lv_win_close_action);
     lv_win_set_layout(window, LV_LAYOUT_GRID);
     lv_win_set_sb_mode(window, LV_SB_MODE_DRAG);
-    // static lv_style_t btnStyle;
+    
     
     lv_obj_t* funcBtnsTemplate = lv_btn_create(window, NULL);
-    // lv_style_copy(&btnStyle, lv_btn_get_style(funcBtnsTemplate, LV_BTN_STYLE_TGL_REL));
-
-    // btnStyle.body.border.color = LV_COLOR_AQUA;
+    
 
     lv_obj_set_size(funcBtnsTemplate, 85, 40);
     
@@ -55,7 +53,7 @@ void funcWindow(const char* title){
     lv_btn_set_action(inertialBtn, LV_BTN_ACTION_CLICK, inertialBtnCallback);
     lv_btn_set_action(gpsBtn, LV_BTN_ACTION_CLICK, gpsBtnCallback);
 
-    // lv_btn_set_style(sideBtn, LV_BTN_STYLE_TGL_PR, &btnStyle);
+    
     
     lv_btn_set_state(sideBtn, storedSettings.isOnBlueSide);
     lv_btn_set_state(inertialBtn, storedSettings.isInertial);
@@ -69,6 +67,16 @@ void funcWindow(const char* title){
 
     lv_obj_t* gpsBtnLabel = lv_label_create(gpsBtn, NULL);
     lv_label_set_text(gpsBtnLabel, btnMap[2]);
+
+    static lv_style_t sideBtnStylePR;
+    lv_style_copy(&sideBtnStylePR, lv_btn_get_style(funcBtnsTemplate, LV_BTN_STYLE_PR));
+    sideBtnStylePR.body.main_color = LV_COLOR_BLUE;
+    lv_btn_set_style(sideBtn, LV_BTN_STYLE_PR, &sideBtnStylePR); //find a way to copy the contents of a pointer into another unique pointer
+
+    static lv_style_t sideBtnStyleREL;
+    lv_style_copy(&sideBtnStyleREL, &sideBtnStylePR);
+    sideBtnStyleREL.body.main_color = LV_COLOR_RED;
+    lv_btn_set_style(sideBtn, LV_BTN_STYLE_REL, &sideBtnStyleREL);
 }
 
 static lv_res_t menuBtnsEventHandler(lv_obj_t* btnMatrix, const char* txt){
