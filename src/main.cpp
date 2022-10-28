@@ -17,11 +17,11 @@
 #include "vexfs.h"
 #include "launcher.h"
 
-#define NORTHMOTORPORT 20 // old 10
-#define SOUTHMOTORPORT 1 //old 11
-#define EASTMOTORPORT 11 //old 20
-#define WESTMOTORPORT 10 //old 1
-#define GPS1PORT 15
+#define NORTHMOTORPORT 10 
+#define SOUTHMOTORPORT 19 
+#define EASTMOTORPORT 9 
+#define WESTMOTORPORT 20 
+#define GPS1PORT 18
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
 #define INERTIALSENSORPORT 8
@@ -37,6 +37,8 @@ bool isIdle = true;
 int launcherRpmOptions[3] = {350, 500, 600};
 unsigned int currentRpmIndex = 0;
 bool isGpsAvailable = false;
+
+
 
 
 
