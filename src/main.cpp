@@ -36,6 +36,7 @@ bool indexState = LOW;
 bool isIdle = true;
 int launcherRpmOptions[3] = {350, 500, 600};
 unsigned int currentRpmIndex = 0;
+bool isGpsAvailable = false;
 
 
 
@@ -49,6 +50,12 @@ void variableFsUpdate(){
   } 
   if(!storedSettings.isOnBlueSide){
     driveDirection = 1;
+  }
+  if(storedSettings.isGpsAvaiable){
+    isGpsAvailable = true;
+  }
+  if(!storedSettings.isGpsAvaiable){
+    isGpsAvailable = false;
   }
 
 }
@@ -386,7 +393,12 @@ void opcontrol() {
       idleLauncher();
     }
     controllerButtonCalls();
-    train.steeringControl(master, 0, driveDirection);
+    if(isGpsAvailable){
+      train.fieldCentricSteeringControl(master, 0, driveDirection);
+    }
+    else{
+      train.driverCentricSteeringControl(master);
+    }
 		pros::delay(20);
 	}
   

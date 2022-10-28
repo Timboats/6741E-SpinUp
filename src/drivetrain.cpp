@@ -48,7 +48,26 @@ void Drivetrain::stopAllDrive(){
     eastMotor.brake();
     westMotor.brake();
 }
-void Drivetrain::steeringControl(pros::Controller driveController, int storedPercent, int direction){
+void Drivetrain::driverCentricSteeringControl(pros::Controller driveController){
+    pros::Motor northMotor(northMotorPort);
+    pros::Motor southMotor(southMotorPort);
+    pros::Motor eastMotor(eastMotorPort);
+    pros::Motor westMotor(westMotorPort);
+
+    double desiredAngle = atan2(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X)) * (180/M_PI); 
+    double desiredMagnitude = sqrt(pow(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), 2) + pow(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X), 2));
+
+    float northComponent = -(desiredMagnitude * (cos((desiredAngle - northWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float southComponent = -(desiredMagnitude * (cos((desiredAngle - southWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float eastComponent = (desiredMagnitude * (cos((desiredAngle - eastWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    float westComponent = (desiredMagnitude * (cos((desiredAngle - westWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+    northMotor.move(northComponent);
+    southMotor.move(southComponent);
+    eastMotor.move(eastComponent);
+    westMotor.move(westComponent);
+}
+void Drivetrain::fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
