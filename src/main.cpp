@@ -313,7 +313,7 @@ void skills(){
   // pros::Motor NorthMotor(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   // pros::Motor SouthMotor(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   // pros::Motor WestMotor(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  // pros::Motor roller(ROLLERPORT);
+  pros::Motor roller(ROLLERPORT);
 
   // EastMotor.move_voltage(12000);
 
@@ -326,7 +326,7 @@ void skills(){
 
   // pros::delay(3000);
 
-  // roller.move_relative(-450, 100);
+  
   // while(){
   //   train.moveVelocity(0, 100, 0);
 
@@ -334,16 +334,23 @@ void skills(){
 
   train.goToPos(900, -1790);
   train.faceHeading(90);
-  //roller
+  //move back
+  roller.move_relative(-450, 100);
+
   train.goToPos(1790, -900);
   train.faceHeading(180);
-  //roller
+  //move back
+  roller.move_relative(-450, 100);
+
   train.goToPos(-1790, 1050);
   train.faceHeading(0);
-  //roller
+  //move back
+  roller.move_relative(-450, 100);
+
   train.goToPos(-900, 1790);
   train.faceHeading(270);
-  //roller
+  //move back
+  roller.move_relative(-450, 100);
 
   
 
