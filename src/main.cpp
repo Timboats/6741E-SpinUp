@@ -395,9 +395,9 @@ void opcontrol() {
   // train.goToPos(0, 0);
   
 	while (true) {
-    if(isIdle){
-      idleLauncher();
-    }
+    // if(isIdle){
+    //   idleLauncher();
+    // }
     controllerButtonCalls();
     if(isGpsAvailable){
       train.fieldCentricSteeringControl(master, 0, driveDirection);
