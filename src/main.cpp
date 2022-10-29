@@ -25,7 +25,7 @@
 #define LAUNCHERMOTORLEFTPORT 9
 #define LAUNCHERMOTORRIGHTPORT 2
 #define INERTIALSENSORPORT 8
-#define GPSOFFSETFROMFRONT 90
+#define GPSOFFSETFROMFRONT 180
 #define ROLLERPORT 17
 
 
@@ -72,7 +72,7 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
+  pros::Gps GpsPrimaryInit(GPS1PORT, -0.1, 0.19);
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
@@ -332,25 +332,25 @@ void skills(){
 
   // }
 
-  train.goToPos(900, -1790);
+  train.goToPos(900, -1400);
   train.faceHeading(90);
   //move back
-  roller.move_relative(-450, 100);
+  // roller.move_relative(-450, 100);
 
-  train.goToPos(1790, -900);
+  train.goToPos(1400, -900);
   train.faceHeading(180);
   //move back
-  roller.move_relative(-450, 100);
+  // roller.move_relative(-450, 100);
 
-  train.goToPos(-1790, 1050);
+  train.goToPos(-1400, 1050);
   train.faceHeading(0);
   //move back
-  roller.move_relative(-450, 100);
+  // roller.move_relative(-450, 100);
 
-  train.goToPos(-900, 1790);
+  train.goToPos(-900, 1400);
   train.faceHeading(270);
   //move back
-  roller.move_relative(-450, 100);
+  // roller.move_relative(-450, 100);
 
   
 
@@ -358,9 +358,33 @@ void skills(){
 
 
 void autonomous() {
+    pros::Motor roller(ROLLERPORT);
+
   // redSideAuton();
   // blueSideAuton();
-  skills();
+  // skills();
+  // train.goToPos(0, 0);
+  // train.faceHeading(0);
+  float deltaTime = pros::millis();
+  // float deltaTime = 0;
+  while(pros::millis() < 5000){
+    train.moveVelocity(0, -100, 0);
+  }
+  roller.move_relative(-900, 100);
+  pros::delay(1000);
+
+  train.stopAllDrive();
+
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1500);
+  train.stopAllDrive();
+  pros::delay(900);
+
+  train.goToPos(0, 0);
+  train.faceHeading(0);
+
+
+  
 
   
 }
@@ -424,19 +448,24 @@ void opcontrol() {
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
   // train.goToPos(0, 0);
+  // skills();
+  // train.goToPos(0, 1400);
+  // train.goToPos(1400, 0);
+
+  // train.faceHeading(180);
   
-	while (true) {
-    // if(isIdle){
-    //   idleLauncher();
-    // }
-    controllerButtonCalls();
-    if(isGpsAvailable){
-      train.fieldCentricSteeringControl(master, 0, driveDirection);
-    }
-    else{
-      train.driverCentricSteeringControl(master);
-    }
-		pros::delay(20);
-	}
+	// while (true) {
+  //   // if(isIdle){
+  //   //   idleLauncher();
+  //   // }
+  //   controllerButtonCalls();
+  //   if(isGpsAvailable){
+  //     train.fieldCentricSteeringControl(master, 0, driveDirection);
+  //   }
+  //   else{
+  //     train.driverCentricSteeringControl(master);
+  //   }
+	// 	pros::delay(20);
+	// }
   
 }

@@ -100,10 +100,10 @@ void Drivetrain::goToPos(int x, int y){
     pros::Gps gps1(gps1Port);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 54.96; //was 61
+    const float Kp = 50; //was 61
     const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 20;
+    const int maxErr = 30;
     const int windupUpperLimit = 8;
 
     float integral = 0;
@@ -115,7 +115,7 @@ void Drivetrain::goToPos(int x, int y){
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
-    int heading = Simpler::coterminalToStdPos(gps1.get_heading()+90);
+    int heading = Simpler::coterminalToStdPos(gps1.get_heading()+180);
     int initHeading = heading; //Might have to be removed later
 
     float northVoltage = 0;
@@ -134,7 +134,7 @@ void Drivetrain::goToPos(int x, int y){
         }
 
 
-        heading = Simpler::coterminalToStdPos(gps1.get_heading()+90);
+        heading = Simpler::coterminalToStdPos(gps1.get_heading()+180);
 
 
         
@@ -156,16 +156,16 @@ void Drivetrain::goToPos(int x, int y){
         angleToSetPos = atan2(y - currentY, x - currentX);
 
 
-        northVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
+        northVoltage = ((int)(totalVoltage * cos((double)((angleToSetPos - (Simpler::degreeToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
 
-        eastVoltage = ((int)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::degreeToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
+        eastVoltage = ((int)(totalVoltage * cos((double)((angleToSetPos - (Simpler::degreeToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
 
 
         
-        northMotor.move_voltage(-northVoltage); 
-        eastMotor.move_voltage(-eastVoltage);
-        southMotor.move_voltage(northVoltage);
-        westMotor.move_voltage(eastVoltage);
+        northMotor.move_voltage(-eastVoltage); //was negative
+        southMotor.move_voltage(eastVoltage);
+        eastMotor.move_voltage(northVoltage); //was negative
+        westMotor.move_voltage(-northVoltage);
 
         
         if (Simpler::abs(error) <= maxErr){
@@ -192,7 +192,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Gps gps1(gps1Port);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 570;
+    const float Kp = 340;
     const float Ki = 0;
     const float Kd = 0;
 
@@ -212,7 +212,7 @@ void Drivetrain::faceHeading(int heading){
             return;
         }
 
-        angleFromSet = ((Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90)) - heading) + 360) % 360;
+        angleFromSet = ((Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+180)) - heading) + 360) % 360;
 
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));
@@ -256,10 +256,10 @@ void Drivetrain::moveVelocity(int xVelocity, int yVelocity, unsigned int heading
     // float headingControl = driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
     
 
-    float northComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - northWheelAngle) * (M_PI/180)))) + heading;
-    float southComponent = -(desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - southWheelAngle) * (M_PI/180)))) + heading;
-    float eastComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - eastWheelAngle) * (M_PI/180)))) + heading;
-    float westComponent = (desiredMagnitude * (cos((desiredAngle - (Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gps1.get_heading()+90))) - westWheelAngle) * (M_PI/180)))) + heading;
+    float northComponent = -(desiredMagnitude * (cos((desiredAngle - 90 - northWheelAngle) * (M_PI/180)))) + heading;
+    float southComponent = -(desiredMagnitude * (cos((desiredAngle - 90 - southWheelAngle) * (M_PI/180)))) + heading;
+    float eastComponent = (desiredMagnitude * (cos((desiredAngle - 90 - eastWheelAngle) * (M_PI/180)))) + heading;
+    float westComponent = (desiredMagnitude * (cos((desiredAngle - 90 - westWheelAngle) * (M_PI/180)))) + heading;
 
     northMotor.move(northComponent);
     southMotor.move(southComponent);
