@@ -133,7 +133,7 @@ void controllerButtonCalls(){
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
     isIdle = false;
-    autoAim(0, train);
+    // autoAim(0, train);
     isIdle = true;
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
@@ -152,6 +152,10 @@ void controllerButtonCalls(){
       currentRpmIndex = 2;
     }
   }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
+    isGpsAvailable = !isGpsAvailable;
+  }
+  
 }
 
 float errorTTP = 0;
