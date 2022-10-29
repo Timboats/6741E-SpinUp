@@ -308,30 +308,54 @@ void blueSideAuton(){
   roller.move_relative(-450, 100);
 
 }
+void skills(){
+  // pros::Motor EastMotor(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor NorthMotor(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor SouthMotor(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor WestMotor(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor roller(ROLLERPORT);
+
+  // EastMotor.move_voltage(12000);
+
+  // WestMotor.move_voltage(-12000); //These stay
+  // NorthMotor.move_voltage(12000); //These stay 
+
+  // SouthMotor.move_voltage(-12000);
+
+  // train.stopAllDrive();
+
+  // pros::delay(3000);
+
+  // roller.move_relative(-450, 100);
+  // while(){
+  //   train.moveVelocity(0, 100, 0);
+
+  // }
+
+  train.goToPos(900, -1790);
+  train.faceHeading(90);
+  //roller
+  train.goToPos(1790, -900);
+  train.faceHeading(180);
+  //roller
+  train.goToPos(-1790, 1050);
+  train.faceHeading(0);
+  //roller
+  train.goToPos(-900, 1790);
+  train.faceHeading(270);
+  //roller
+
+  
+
+}
 
 
 void autonomous() {
   // redSideAuton();
   // blueSideAuton();
+  skills();
 
-  pros::Motor EastMotor(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor NorthMotor(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor SouthMotor(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor WestMotor(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor roller(ROLLERPORT);
-
-  EastMotor.move_voltage(12000);
-
-  WestMotor.move_voltage(-12000); //These stay
-  NorthMotor.move_voltage(12000); //These stay 
-
-  SouthMotor.move_voltage(-12000);
-
-  train.stopAllDrive();
-
-  pros::delay(3000);
-
-  roller.move_relative(-450, 100);
+  
 }
 
 void customLauncherPidTest(){
