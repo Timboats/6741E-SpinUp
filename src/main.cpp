@@ -71,7 +71,7 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36);
+  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
   pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
@@ -109,7 +109,7 @@ void controllerButtonCalls(){
       rollerVoltage = 0;
     }
     else{
-      rollerVoltage = 10000;
+      rollerVoltage = 9000;
     }
     roller.move_voltage(rollerVoltage);
   }
@@ -152,9 +152,9 @@ void controllerButtonCalls(){
       currentRpmIndex = 2;
     }
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
-    isGpsAvailable = !isGpsAvailable;
-  }
+  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
+  //   isGpsAvailable = !isGpsAvailable;
+  // }
   
 }
 
