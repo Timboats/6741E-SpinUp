@@ -1,3 +1,12 @@
-#include "pros/misc.hpp"
+#include "main.h"
 // extern pros::Controller controller;
-// #define constant 6
+#define NORTHMOTORPORT 10 
+#define SOUTHMOTORPORT 19 
+#define EASTMOTORPORT 9 
+#define WESTMOTORPORT 20 
+#define GPS1PORT 18
+#define LAUNCHERMOTORLEFTPORT 9
+#define LAUNCHERMOTORRIGHTPORT 2
+#define INERTIALSENSORPORT 8
+#define GPSOFFSETFROMFRONT 90
+#define ROLLERPORT 17

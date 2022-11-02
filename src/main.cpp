@@ -16,17 +16,7 @@
 #include "braingui.h"
 #include "vexfs.h"
 #include "launcher.h"
-
-#define NORTHMOTORPORT 10 
-#define SOUTHMOTORPORT 19 
-#define EASTMOTORPORT 9 
-#define WESTMOTORPORT 20 
-#define GPS1PORT 18
-#define LAUNCHERMOTORLEFTPORT 9
-#define LAUNCHERMOTORRIGHTPORT 2
-#define INERTIALSENSORPORT 8
-#define GPSOFFSETFROMFRONT 90
-#define ROLLERPORT 17
+#include "globals.hpp"
 
 
 
@@ -37,6 +27,7 @@ bool isIdle = true;
 int launcherRpmOptions[3] = {350, 500, 600};
 unsigned int currentRpmIndex = 0;
 bool isGpsAvailable = false;
+bool isOnBlue = false;
 
 
 
@@ -58,6 +49,12 @@ void variableFsUpdate(){
   }
   if(!storedSettings.isGpsAvaiable){
     isGpsAvailable = false;
+  }
+  if(storedSettings.isOnBlueSide){
+    isOnBlue = true;
+  }
+  if(!storedSettings.isOnBlueSide){
+    isOnBlue = false;
   }
 
 }
@@ -314,24 +311,29 @@ void autonomous() {
   // redSideAuton();
   // blueSideAuton();
 
-  pros::Motor EastMotor(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor NorthMotor(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor SouthMotor(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor WestMotor(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor roller(ROLLERPORT);
 
-  EastMotor.move_voltage(12000);
-
-  WestMotor.move_voltage(-12000); //These stay
-  NorthMotor.move_voltage(12000); //These stay 
-
-  SouthMotor.move_voltage(-12000);
-
-  train.stopAllDrive();
-
-  pros::delay(3000);
-
-  roller.move_relative(-450, 100);
+  if(!isOnBlue){
+    train.moveVelocity(0, -100, 0);
+    pros::delay(2000);
+    roller.move_relative(-200, 100);
+    pros::delay(500);
+    train.stopAllDrive();
+    train.moveVelocity(0, 100, 0);
+    pros::delay(250);
+    train.stopAllDrive();
+  }
+  if(isOnBlue){
+    train.moveVelocity(0, -100, 0);
+    pros::delay(2000);
+    roller.move_relative(-800, 100);
+    pros::delay(500);
+    train.stopAllDrive();
+    train.moveVelocity(0, 100, 0);
+    pros::delay(250);
+    train.stopAllDrive();
+  }
+  
 }
 
 void customLauncherPidTest(){
