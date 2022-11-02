@@ -9,17 +9,11 @@
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <cstdio>
+#include "globals.hpp"
 
 
-#define GRAVITY -9810 //in mm/s/s
-#define DISCMASS 0.065 //in kg
-#define DISCAREA 15383 //in mm^2
-#define LAUNCHERHEIGHT 300 //in mm
-#define LAUNCHERMOTORRATIO 3/4 
-#define VELOCITYTORPMCONST 15 //divide to convert from mm/sec to RPM
-#define launcherMotorLeftPort 9 //POV from entrance/intake of launcher
-#define launcherMotorRightPort 2
-#define GPS1PORT 15
+
+
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
@@ -120,8 +114,8 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
 
 void autoAim(bool isBlueGoal, Drivetrain train){
     con.clear();
-    pros::Motor launcherMotorLeft(launcherMotorLeftPort, pros::E_MOTOR_GEARSET_06, true);
-    pros::Motor launcherMotorRight(launcherMotorRightPort, pros::E_MOTOR_GEARSET_06);
+    pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
+    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
     
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
@@ -186,8 +180,8 @@ float calcIdleSpeed(float temp){
     return 6000*(1/(1+exp(0.05*(temp - 50))));
 }
 void idleLauncher(){
-    pros::Motor launcherMotorLeft(launcherMotorLeftPort);
-    pros::Motor launcherMotorRight(launcherMotorRightPort);
+    pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
     launcherMotorLeft.move(calcIdleSpeed(launcherMotorLeft.get_temperature()));
     launcherMotorRight.move(calcIdleSpeed(launcherMotorRight.get_temperature()));

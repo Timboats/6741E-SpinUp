@@ -3,7 +3,7 @@
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include <string>
-#define _USE_MATH_DEFINES
+#include "globals.hpp"
 #include <cmath>
 #include "drivetrain.h"
 #include "iostream"

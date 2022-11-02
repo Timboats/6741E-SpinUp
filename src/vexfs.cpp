@@ -9,7 +9,7 @@
 
 
 
-#define SETTINGSPATH "/usd/code_settings.json"
+
 
 
 

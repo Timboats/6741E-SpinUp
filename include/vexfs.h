@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <cwchar>
 #include <sys/unistd.h>
+#include "globals.hpp"
+
 struct settings{
     float faceHeading_kp = 0;
     float faceHeading_ki = 0;
