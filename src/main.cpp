@@ -423,7 +423,7 @@ void opcontrol() {
 
     
 
-    //0 on the field is 90 normally
+    //0 on the field is 90 on a unit circle
 
 		pros::delay(20);
 	}
