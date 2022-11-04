@@ -399,6 +399,8 @@ void opcontrol() {
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  train.faceHeading(0);
+  
   
   
   
@@ -406,18 +408,18 @@ void opcontrol() {
   // train.goToPos(0, 0);
 	while (true) {
     
-    printf("Head: %f\n", gpsPointer->getHeading());
+    
     // if(isIdle){
     //   idleLauncher();
     // }
 
-    // controllerButtonCalls();
-    // if(isGpsAvailable){
-    //   train.fieldCentricSteeringControl(master, 0, driveDirection);
-    // }
-    // else{
-    //   train.driverCentricSteeringControl(master);
-    // }
+    controllerButtonCalls();
+    if(isGpsAvailable){
+      train.fieldCentricSteeringControl(master, 0, driveDirection);
+    }
+    else{
+      train.driverCentricSteeringControl(master);
+    }
 
     
 
