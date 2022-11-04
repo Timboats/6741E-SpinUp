@@ -1,5 +1,6 @@
 #include "main.h"
 #include "drivetrain.h"
+#include "gps_wrapper.h"
 #include "mathlib.h"
 #include "pros/adi.hpp"
 #include "pros/gps.hpp"
@@ -28,13 +29,11 @@ int launcherRpmOptions[3] = {350, 500, 600};
 unsigned int currentRpmIndex = 0;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
-
-
-
-
-
+GpsWrapper gps(GPS1PORT, 0, 0.175);
+GpsWrapper* gpsPointer = nullptr;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, GPS1PORT);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsPointer);
+
 
 void variableFsUpdate(){
   settings storedSettings = getSettings();
@@ -69,7 +68,14 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
+
+  gps = GpsWrapper(GPS1PORT, 0, 0.175, GPSOFFSETFROMFRONT);
+  gpsPointer = &gps;
+
+  // pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
+  
+
+
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
@@ -87,9 +93,9 @@ void initialize() {
   // {
   // }
 
-  Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
+  // Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, GPS1PORT);
+  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsPointer);
 
 }
 
@@ -393,20 +399,30 @@ void opcontrol() {
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  
+  
+  
 
   // train.goToPos(0, 0);
-  
 	while (true) {
+    
+    printf("Head: %f\n", gpsPointer->getHeading());
     // if(isIdle){
     //   idleLauncher();
     // }
-    controllerButtonCalls();
-    if(isGpsAvailable){
-      train.fieldCentricSteeringControl(master, 0, driveDirection);
-    }
-    else{
-      train.driverCentricSteeringControl(master);
-    }
+
+    // controllerButtonCalls();
+    // if(isGpsAvailable){
+    //   train.fieldCentricSteeringControl(master, 0, driveDirection);
+    // }
+    // else{
+    //   train.driverCentricSteeringControl(master);
+    // }
+
+    
+
+    //0 on the field is 90 normally
+
 		pros::delay(20);
 	}
   

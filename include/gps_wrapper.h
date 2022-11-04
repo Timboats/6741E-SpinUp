@@ -13,7 +13,7 @@ class GpsWrapper{
     unsigned int gpsDevicePort;
     float headingOffset;
     public:
-    GpsWrapper(unsigned int gpsDevicePort, float xOffset, float yOffset, float headingOffset);
+    GpsWrapper(unsigned int gpsDevicePort, float xOffset, float yOffset, float headingOffset = 0);
     float getHeading();
     wrapper_position getPositions();
 
