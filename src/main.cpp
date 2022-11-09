@@ -23,6 +23,7 @@
 
 int driveDirection = 1;
 int rollerVoltage = 0;
+int intakeVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
 int launcherRpmOptions[3] = {350, 500, 600};
@@ -68,6 +69,7 @@ void initialize() {
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
+  pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_18, true);
 
   gps = GpsWrapper(GPS1PORT, 0.089, 0.2, GPSOFFSETFROMFRONT);
   gpsPointer = &gps;
@@ -77,8 +79,8 @@ void initialize() {
 
 
   pros::Imu Inertial(INERTIALSENSORPORT);
-  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06, true);
   pros::ADIDigitalOut indexer(1, LOW);
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -103,11 +105,12 @@ void controllerButtonCalls(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor roller(ROLLERPORT);
+  pros::Motor intake(INTAKEPORT);
 
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1) == true){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     if(rollerVoltage != 0){
       rollerVoltage = 0;
     }
@@ -116,23 +119,36 @@ void controllerButtonCalls(){
     }
     roller.move_voltage(rollerVoltage);
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2) == true){
-    if(indexState == HIGH){
-      indexState = LOW;
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1) == true){
+    if(intakeVoltage != 0){
+      intakeVoltage = 0;
     }
     else{
-      indexState = HIGH;
+      intakeVoltage = 6000;
     }
-    roller.move_voltage(rollerVoltage);
-    pros::ADIDigitalOut indexer(1, indexState);
+    intake.move_voltage(intakeVoltage);
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
-    isIdle = false;
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2) == true){
+    if(intakeVoltage != 0){
+      intakeVoltage = 0;
+    }
+    else{
+      intakeVoltage = -6000;
+    }
+    intake.move_voltage(intakeVoltage);
+    
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){ 
+    //L1 roller L2 launcher r's intake
+
+    if(!isIdle){
+      isIdle = true;
+    }
+    else{
+      isIdle = false;
+    }
     launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75);
     launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
-  }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
-    isIdle = true;
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
     isIdle = false;
@@ -424,9 +440,9 @@ void opcontrol() {
 	while (true) {
     
     
-    // if(isIdle){
-    //   idleLauncher();
-    // }
+    if(isIdle){
+      idleLauncher();
+    }
 
     controllerButtonCalls();
     if(isGpsAvailable){

@@ -183,6 +183,6 @@ void idleLauncher(){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
     pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
-    launcherMotorLeft.move(calcIdleSpeed(launcherMotorLeft.get_temperature()));
-    launcherMotorRight.move(calcIdleSpeed(launcherMotorRight.get_temperature()));
+    launcherMotorLeft.move_voltage(calcIdleSpeed(launcherMotorLeft.get_temperature()));
+    launcherMotorRight.move_voltage(calcIdleSpeed(launcherMotorRight.get_temperature()));
 }
