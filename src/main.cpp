@@ -27,7 +27,7 @@ int intakeVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
 int launcherRpmOptions[3] = {350, 500, 600};
-unsigned int currentRpmIndex = 0;
+int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
 GpsWrapper gps(GPS1PORT, 0, 0.175);
@@ -110,7 +110,7 @@ void controllerButtonCalls(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
     if(rollerVoltage != 0){
       rollerVoltage = 0;
     }
@@ -119,58 +119,69 @@ void controllerButtonCalls(){
     }
     roller.move_voltage(rollerVoltage);
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1) == true){
+  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == true){
     if(intakeVoltage != 0){
       intakeVoltage = 0;
     }
     else{
-      intakeVoltage = 6000;
+      intakeVoltage = 9000;
     }
     intake.move_voltage(intakeVoltage);
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2) == true){
+  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) == true){
     if(intakeVoltage != 0){
       intakeVoltage = 0;
     }
     else{
-      intakeVoltage = -6000;
+      intakeVoltage = -9000;
     }
     intake.move_voltage(intakeVoltage);
     
-  }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){ 
-    //L1 roller L2 launcher r's intake
-
-    if(!isIdle){
-      isIdle = true;
-    }
-    else{
-      isIdle = false;
-    }
-    launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75);
-    launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
     isIdle = false;
     // autoAim(0, train);
     isIdle = true;
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
+    isIdle = false;
     if(currentRpmIndex != 2){
       currentRpmIndex++;
     } 
     else{
-      currentRpmIndex = 0;
+      currentRpmIndex = -1;
+    }
+    
+    if(currentRpmIndex == -1){
+      isIdle = true;
+    }
+    else{
+      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75); //add a multiplier by zero or one if the change isnt quick enough on isIdle
+      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
     }
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) == true){
-    if(currentRpmIndex != 0){
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
+    isIdle = false;
+    if(currentRpmIndex != -1){
       currentRpmIndex--;
     } 
     else{
       currentRpmIndex = 2;
     }
+    if(currentRpmIndex == -1){
+      isIdle = true;
+    }
+    else{
+      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75); //add a multiplier by zero or one if the change isnt quick enough on isIdle
+      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
+      
+    }
+    
   }
+  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == false && master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) == false){
+    intake.move_voltage(0);
+  }
+  
   // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
   //   isGpsAvailable = !isGpsAvailable;
   // }
