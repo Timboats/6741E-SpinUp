@@ -13,7 +13,7 @@
 #define INERTIALSENSORPORT 8
 #define ROLLERPORT 17
 
-#define GPSOFFSETFROMFRONT 90
+#define GPSOFFSETFROMFRONT 0
 #define SETTINGSPATH "/usd/code_settings.json"
 #define _USE_MATH_DEFINES
 

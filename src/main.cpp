@@ -69,7 +69,7 @@ void initialize() {
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
 
-  gps = GpsWrapper(GPS1PORT, 0, 0.175, GPSOFFSETFROMFRONT);
+  gps = GpsWrapper(GPS1PORT, 0.089, 0.2, GPSOFFSETFROMFRONT);
   gpsPointer = &gps;
 
   // pros::Gps GpsPrimaryInit(GPS1PORT, 0.00, 0.175);
@@ -112,7 +112,7 @@ void controllerButtonCalls(){
       rollerVoltage = 0;
     }
     else{
-      rollerVoltage = 9000;
+      rollerVoltage = 7000;
     }
     roller.move_voltage(rollerVoltage);
   }
@@ -317,28 +317,28 @@ void autonomous() {
   // redSideAuton();
   // blueSideAuton();
 
-  pros::Motor roller(ROLLERPORT);
+  // pros::Motor roller(ROLLERPORT);
 
-  if(!isOnBlue){
-    train.moveVelocity(0, -100, 0);
-    pros::delay(2000);
-    roller.move_relative(-200, 100);
-    pros::delay(500);
-    train.stopAllDrive();
-    train.moveVelocity(0, 100, 0);
-    pros::delay(250);
-    train.stopAllDrive();
-  }
-  if(isOnBlue){
-    train.moveVelocity(0, -100, 0);
-    pros::delay(2000);
-    roller.move_relative(-800, 100);
-    pros::delay(500);
-    train.stopAllDrive();
-    train.moveVelocity(0, 100, 0);
-    pros::delay(250);
-    train.stopAllDrive();
-  }
+  // if(!isOnBlue){
+  //   train.moveVelocity(0, -100, 0);
+  //   pros::delay(2000);
+  //   roller.move_relative(-200, 100);
+  //   pros::delay(500);
+  //   train.stopAllDrive();
+  //   train.moveVelocity(0, 100, 0);
+  //   pros::delay(250);
+  //   train.stopAllDrive();
+  // }
+  // if(isOnBlue){
+  //   train.moveVelocity(0, -100, 0);
+  //   pros::delay(2000);
+  //   roller.move_relative(-800, 100);
+  //   pros::delay(500);
+  //   train.stopAllDrive();
+  //   train.moveVelocity(0, 100, 0);
+  //   pros::delay(250);
+  //   train.stopAllDrive();
+  // }
   
 }
 
@@ -399,7 +399,22 @@ void opcontrol() {
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  train.faceHeading(0);
+  // train.faceHeading(0);
+  // train.faceHeading(90);
+  // train.faceHeading(180);
+  // train.faceHeading(270);
+
+
+  // train.goToPos(0, 0);
+  // train.goToPos(0, 900);
+  // train.goToPos(0, -900);
+  // train.goToPos(900, 0);
+  // train.goToPos(-900, 0);
+  // train.goToPos(900, 900);
+  // train.goToPos(-900, -900);
+  // train.goToPos(900, -900);
+  // train.goToPos(-900, 900);
+
   
   
   
