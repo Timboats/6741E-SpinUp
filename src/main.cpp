@@ -23,10 +23,9 @@
 
 int driveDirection = 1;
 int rollerVoltage = 0;
-int intakeVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[3] = {350, 500, 600};
+int launcherRpmOptions[3] = {600, 700, 800};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -68,8 +67,8 @@ void initialize() {
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
+  pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
   gps = GpsWrapper(GPS1PORT, -0.1, -0.2, GPSOFFSETFROMFRONT);
   gpsPointer = &gps;
@@ -115,27 +114,15 @@ void controllerButtonCalls(){
       rollerVoltage = 0;
     }
     else{
-      rollerVoltage = 7000;
+      rollerVoltage = 10000;
     }
     roller.move_voltage(rollerVoltage);
   }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == true){
-    if(intakeVoltage != 0){
-      intakeVoltage = 0;
-    }
-    else{
-      intakeVoltage = 9000;
-    }
-    intake.move_voltage(intakeVoltage);
+    intake.move_voltage(12000);
   }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) == true){
-    if(intakeVoltage != 0){
-      intakeVoltage = 0;
-    }
-    else{
-      intakeVoltage = -9000;
-    }
-    intake.move_voltage(intakeVoltage);
+    intake.move_voltage(-12000);
     
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
@@ -433,14 +420,14 @@ void opcontrol() {
 
 
   // train.goToPos(0, 0);
-  // train.goToPos(0, 900);
-  // train.goToPos(0, -900);
-  // train.goToPos(900, 0);
-  // train.goToPos(-900, 0);
-  // train.goToPos(900, 900);
-  // train.goToPos(-900, -900);
-  // train.goToPos(900, -900);
-  // train.goToPos(-900, 900);
+  // train.goToPos(0, 600);
+  // train.goToPos(0, -600);
+  // train.goToPos(600, 0);
+  // train.goToPos(-600, 0);
+  // train.goToPos(600, 600);
+  // train.goToPos(-600, -600);
+  // train.goToPos(600, -600);
+  // train.goToPos(-600, 600);
 
   
   
