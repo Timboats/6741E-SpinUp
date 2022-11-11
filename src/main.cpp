@@ -12,6 +12,7 @@
 #include "pros/rtos.hpp"
 #include <cstddef>
 #include <cstdio>
+#include <exception>
 #include <memory>
 #include <string>
 #include "braingui.h"
@@ -25,7 +26,7 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[3] = {600, 700, 800};
+int launcherRpmOptions[3] = {700};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -132,7 +133,7 @@ void controllerButtonCalls(){
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     isIdle = false;
-    if(currentRpmIndex != 2){
+    if(currentRpmIndex != (sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1){
       currentRpmIndex++;
     } 
     else{
@@ -153,7 +154,7 @@ void controllerButtonCalls(){
       currentRpmIndex--;
     } 
     else{
-      currentRpmIndex = 2;
+      currentRpmIndex = (sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1;
     }
     if(currentRpmIndex == -1){
       isIdle = true;
@@ -169,9 +170,9 @@ void controllerButtonCalls(){
     intake.move_voltage(0);
   }
   
-  // if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
-  //   isGpsAvailable = !isGpsAvailable;
-  // }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
+    isGpsAvailable = !isGpsAvailable;
+  }
   
 }
 
@@ -419,7 +420,7 @@ void opcontrol() {
   // train.faceHeading(270);
 
 
-  // train.goToPos(0, 0);
+  train.goToPos(0, 0);
   // train.goToPos(0, 600);
   // train.goToPos(0, -600);
   // train.goToPos(600, 0);
