@@ -322,7 +322,7 @@ void redLeftSideAuton(){
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
-  pros::delay(250);
+  pros::delay(789);
   train.stopAllDrive();
 }
 void blueLeftSideAuton(){
@@ -370,8 +370,8 @@ void autonomous() {
 
   //sides pov of lower goal
   redLeftSideAuton();
-  train.goToPos(0, 0);
-  train.faceHeading(0);
+  
+  
   // blueLeftSideAuton();
 
   

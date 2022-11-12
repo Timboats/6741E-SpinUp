@@ -160,9 +160,9 @@ void Drivetrain::goToPos(int x, int y){
 
 
         
-        northMotor.move_voltage(-northVoltage); 
+        northMotor.move_voltage(northVoltage); 
         eastMotor.move_voltage(eastVoltage);
-        southMotor.move_voltage(northVoltage);
+        southMotor.move_voltage(-northVoltage);
         westMotor.move_voltage(-eastVoltage);
 
         
