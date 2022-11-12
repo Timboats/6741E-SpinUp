@@ -313,26 +313,39 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void redSideAuton(){
+void blueLeftSideAuton(){
   pros::Motor roller(ROLLERPORT);
-  
-  roller.move_relative(-450, 100);
-  
 
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(-800, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(250);
+  train.stopAllDrive();
 }
-void blueSideAuton(){
+void redLeftSideAuton(){
   pros::Motor roller(ROLLERPORT);
-  train.goToPos(1800, -1200);
-  roller.move_relative(-450, 100);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(400, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(250);
+  train.stopAllDrive();
 
 }
 
 
 void autonomous() {
+
   // redSideAuton();
   // blueSideAuton();
 
-  // pros::Motor roller(ROLLERPORT);
+  pros::Motor roller(ROLLERPORT);
 
   // if(!isOnBlue){
   //   train.moveVelocity(0, -100, 0);
@@ -354,6 +367,15 @@ void autonomous() {
   //   pros::delay(250);
   //   train.stopAllDrive();
   // }
+
+  //sides pov of goal
+  blueLeftSideAuton();
+  redLeftSideAuton();
+
+  
+
+
+  
   
 }
 
