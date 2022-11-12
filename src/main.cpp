@@ -313,19 +313,19 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void blueLeftSideAuton(){
+void redLeftSideAuton(){
   pros::Motor roller(ROLLERPORT);
 
   train.moveVelocity(0, -100, 0);
   pros::delay(1500);
-  roller.move_relative(-800, 100);
+  roller.move_relative(400, 100);
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
   pros::delay(250);
   train.stopAllDrive();
 }
-void redLeftSideAuton(){
+void blueLeftSideAuton(){
   pros::Motor roller(ROLLERPORT);
 
   train.moveVelocity(0, -100, 0);
@@ -368,9 +368,9 @@ void autonomous() {
   //   train.stopAllDrive();
   // }
 
-  //sides pov of goal
-  blueLeftSideAuton();
+  //sides pov of lower goal
   redLeftSideAuton();
+  // blueLeftSideAuton();
 
   
 
