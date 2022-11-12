@@ -237,6 +237,28 @@ void Drivetrain::faceHeading(int heading){
     }
     prevError = error;
 }
+void Drivetrain::moveVelocity(int xVelocity, int yVelocity, unsigned int heading){
+    pros::Motor northMotor(northMotorPort);
+    pros::Motor southMotor(southMotorPort);
+    pros::Motor eastMotor(eastMotorPort);
+    pros::Motor westMotor(westMotorPort);
+
+    double desiredAngle = 0;
+    double desiredMagnitude = 0;
+
+    desiredAngle = atan2(yVelocity, xVelocity) * (180/M_PI); 
+    desiredMagnitude = sqrt(pow(yVelocity, 2) + pow(xVelocity, 2));
+
+    float northComponent = -(desiredMagnitude * (cos((desiredAngle - 90 - northWheelAngle) * (M_PI/180)))) + heading;
+    float southComponent = -(desiredMagnitude * (cos((desiredAngle - 90 - southWheelAngle) * (M_PI/180)))) + heading;
+    float eastComponent = (desiredMagnitude * (cos((desiredAngle - 90 - eastWheelAngle) * (M_PI/180)))) + heading;
+    float westComponent = (desiredMagnitude * (cos((desiredAngle - 90 - westWheelAngle) * (M_PI/180)))) + heading;
+
+    northMotor.move(northComponent);
+    southMotor.move(southComponent);
+    eastMotor.move(eastComponent);
+    westMotor.move(westComponent);
+}
 void Drivetrain::moveVelocityFieldCentric(int xVelocity, int yVelocity, unsigned int heading){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
