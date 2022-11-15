@@ -444,14 +444,14 @@ void autonomous() {
   
 }
 
-void customLauncherPidTest(){
-  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+void customLauncherPidTest(int setPoint, int motor){
+  pros::Motor launcherMotorLeft(motor);
 
-  const int rpmSetPoint = 200;
-  const double Kp = 350; //200 too high 175 too low //185 almost perfect or 250 for the left //around 95 for right
-  const double Ki = 0; 
+  const int rpmSetPoint = setPoint;
+  const double Kp = 24; // 28.6 is decent
+  const double Ki = 0; //1 is decent
   const double Kd = 0;
-  const int maxErr = 3;
+  const int maxErr = 10;
   const int windupUpperLimit = 8;
 
   double integral = 0;
@@ -461,11 +461,8 @@ void customLauncherPidTest(){
   double prevVolt = 0;
   double prevError = 0;
   
-	while (true) {
-    // controllerButtonCalls();
-    // train.steeringControl(master, 0, driveDirection);
-    // train.moveVelocity(0, 50, faceHeadingValue(270));
-
+	
+  while (true){
     double currentRpm = launcherMotorLeft.get_actual_velocity();
 
     error = rpmSetPoint - currentRpm;
@@ -479,22 +476,31 @@ void customLauncherPidTest(){
 
     launcherVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
 
+    float appliedVoltage = launcherVoltage+prevVolt;
 
-    launcherMotorLeft.move(launcherVoltage+prevVolt);
-    prevVolt = launcherVoltage;
-    double time = pros::millis() - startTime;
+    
+    if(appliedVoltage < 0){
+        appliedVoltage = 0;
+    }
+    launcherMotorLeft.move_voltage(appliedVoltage);
 
-    printf("%f, %f\n", time/1000, currentRpm);
+    prevVolt = appliedVoltage;
+
+    // printf("%f, %f\n", time/1000, currentRpm);
+    
 
     
     prevError = error;
-		pros::delay(20);
-	}
+    pros::delay(20);
+    
+  }
+	
   
 }
 
 
 void opcontrol() {
+  
   // pros::Gps GpsPrimaryInit(GPS1PORT);
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
@@ -524,7 +530,6 @@ void opcontrol() {
 
   // train.goToPos(0, 0);
 	while (true) {
-    
     
     if(isIdle){
       idleLauncher();
