@@ -492,7 +492,7 @@ void customLauncherPidTest(int setPoint, int motor){
     
     prevError = error;
     pros::delay(20);
-    
+
   }
 	
   
@@ -507,6 +507,7 @@ void opcontrol() {
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  train.goToPos(0, 0);
   // train.faceHeading(0);
   // train.faceHeading(90);
   // train.faceHeading(180);

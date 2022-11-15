@@ -113,14 +113,13 @@ void Drivetrain::goToPos(int x, int y){
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
-    int heading = gps1->getHeading();
-    int initHeading = heading; //Might have to be removed later
+    float heading = gps1->getHeading();
 
     float northVoltage = 0;
     float eastVoltage = 0;
 
-    int currentX = 0;
-    int currentY = 0;
+    double currentX = 0;
+    double currentY = 0;
     
 
     while(true){
@@ -155,15 +154,15 @@ void Drivetrain::goToPos(int x, int y){
         angleToSetPos = atan2(y - currentY, x - currentX);
 
 
-        northVoltage = ((float)(totalVoltage * cos((double)((angleToSetPos - (Simpler::degreeToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
+        northVoltage = ((double)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::coterminalToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
 
-        eastVoltage = ((float)(totalVoltage * cos((double)((angleToSetPos - (Simpler::degreeToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
+        eastVoltage = ((double)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::coterminalToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
 
 
         
-        northMotor.move_voltage(-northVoltage); 
+        northMotor.move_voltage(northVoltage); //NE, NW, SW
         eastMotor.move_voltage(-eastVoltage);
-        southMotor.move_voltage(northVoltage);
+        southMotor.move_voltage(-northVoltage);
         westMotor.move_voltage(eastVoltage);
 
         
