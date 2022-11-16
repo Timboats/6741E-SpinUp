@@ -313,94 +313,22 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void redLeftSideAuton(){
+void redLeftSideSkills(){
   pros::Motor roller(ROLLERPORT);
 
   train.moveVelocity(0, -100, 0);
   pros::delay(1500);
-  roller.move_relative(400, 100);
+  roller.move_relative(700, 100);
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
-  pros::delay(250);
-  train.stopAllDrive();
-}
-void blueLeftSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-
-  train.moveVelocity(0, -100, 0);
-  pros::delay(1500);
-  roller.move_relative(400, 100);
-  pros::delay(250);
-  train.stopAllDrive();
-  train.moveVelocity(0, 100, 0);
-  pros::delay(250);
+  pros::delay(789);
   train.stopAllDrive();
 
-}
-void blueRightSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-
-  train.moveVelocity(0, 100, 0);
-  pros::delay(650);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(700);
-  train.stopAllDrive();
-
-  train.moveVelocity(0, -100, 0);
-  pros::delay(500);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(600);
-  train.stopAllDrive();
-
-  blueLeftSideAuton();
-
-
-
-  // roller.move_relative(400, 100);
-  // pros::delay(250);
-  // train.stopAllDrive();
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(250);
-  // train.stopAllDrive();
-
+  
 }
 
-void redRightSideAuton(){
-  pros::Motor roller(ROLLERPORT);
 
-  train.moveVelocity(0, 100, 0);
-  pros::delay(650);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(700);
-  train.stopAllDrive();
-
-  train.moveVelocity(0, -100, 0);
-  pros::delay(500);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(600);
-  train.stopAllDrive();
-
-  redLeftSideAuton();
-
-
-
-  // roller.move_relative(400, 100);
-  // pros::delay(250);
-  // train.stopAllDrive();
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(250);
-  // train.stopAllDrive();
-
-}
 
 
 void autonomous() {
@@ -432,10 +360,7 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  // redLeftSideAuton();
-  // blueLeftSideAuton();
-  blueRightSideAuton();
-  // redRightSideAuton();
+  redLeftSideSkills();
 
   
 
