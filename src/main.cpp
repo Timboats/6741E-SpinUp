@@ -507,7 +507,6 @@ void opcontrol() {
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  train.goToPos(0, 0);
   // train.faceHeading(0);
   // train.faceHeading(90);
   // train.faceHeading(180);
@@ -515,14 +514,14 @@ void opcontrol() {
 
 
   // train.goToPos(0, 0);
-  // train.goToPos(0, 600);
-  // train.goToPos(0, -600);
-  // train.goToPos(600, 0);
-  // train.goToPos(-600, 0);
-  // train.goToPos(600, 600);
-  // train.goToPos(-600, -600);
-  // train.goToPos(600, -600);
-  // train.goToPos(-600, 600);
+  // train.goToPos(0, 300);
+  // train.goToPos(0, -300);
+  // train.goToPos(300, 0);
+  // train.goToPos(-300, 0);
+  // train.goToPos(300, 300);
+  // train.goToPos(-300, -300);
+  // train.goToPos(300, -300);
+  // train.goToPos(-300, 300);
 
   
   

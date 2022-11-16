@@ -154,9 +154,9 @@ void Drivetrain::goToPos(int x, int y){
         angleToSetPos = atan2(y - currentY, x - currentX);
 
 
-        northVoltage = ((double)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::coterminalToStdPos(heading - eastWheelAngle)) * (M_PI/180))))));
+        northVoltage = ((double)(totalVoltage * cos((double)(angleToSetPos - (Simpler::coterminalToStdPos(heading - eastWheelAngle)) * (M_PI/180)))));
 
-        eastVoltage = ((double)(totalVoltage * cos((double)(Simpler::abs(angleToSetPos - (Simpler::coterminalToStdPos(heading - northWheelAngle)) * (M_PI/180))))));
+        eastVoltage = ((double)(totalVoltage * cos((double)(angleToSetPos - (Simpler::coterminalToStdPos(heading - northWheelAngle)) * (M_PI/180)))));
 
 
         
