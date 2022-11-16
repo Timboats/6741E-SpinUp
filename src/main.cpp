@@ -315,17 +315,21 @@ void competition_initialize() {}
 
 void redLeftSideSkills(){
   pros::Motor roller(ROLLERPORT);
-
+  //roller getter mode
   train.moveVelocity(0, -100, 0);
   pros::delay(1500);
-  roller.move_relative(700, 100);
+  roller.move_relative(600, 100);
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
-  pros::delay(789);
+  pros::delay(1100);
   train.stopAllDrive();
+  //end of roller getter mode
+  //roller 2 pos
+  train.goToPos(-995, 1430);
+  train.faceHeading(270);
 
-  
+
 }
 
 

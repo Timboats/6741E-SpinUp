@@ -98,11 +98,11 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 66; //65 doesnt work
-    const float Ki = 0; //9 is pretty good
+    const float Kp = 68; //65 doesnt work
+    const float Ki = 0.38; //9 is pretty good
     const float Kd = 0;
     const int maxErr = 10;
-    const int windupUpperLimit = 8;
+    const int windupUpperLimit = 8; //8 might be too low
 
     float integral = 0;
     
@@ -189,7 +189,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 560; //560 works but oscillates a bit too
+    const float Kp = 550; //550 is too high
     const float Ki = 0;
     const float Kd = 0;
 

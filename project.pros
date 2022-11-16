@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "MainBranch",
+    "project_name": "MainSkills",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -307,9 +307,9 @@
       }
     },
     "upload_options": {
-      "slot": 1,
-      "icon": "X",
-      "description": "The main code for botimous"
+      "slot": 2,
+      "icon": "power",
+      "description": "skills"
     }
   }
 }
