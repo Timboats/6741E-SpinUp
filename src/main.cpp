@@ -329,6 +329,39 @@ void redLeftSideSkills(){
   train.goToPos(-995, 1430);
   train.faceHeading(270);
 
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+  //roller 3 pos
+  train.goToPos(1100, -1400);
+  train.faceHeading(90);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+  //roller 4 pos
+  train.goToPos(1400, -995);
+  train.faceHeading(180);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+
 
 }
 
@@ -429,6 +462,7 @@ void customLauncherPidTest(int setPoint, int motor){
 
 
 void opcontrol() {
+  redLeftSideSkills();
   
   // pros::Gps GpsPrimaryInit(GPS1PORT);
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));

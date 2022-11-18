@@ -98,11 +98,11 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 68; //65 doesnt work
-    const float Ki = 0.38; //9 is pretty good
+    const float Kp = 60; //65 doesnt work
+    const float Ki = 0; //0.28 is pretty good 0.32too high
     const float Kd = 0;
-    const int maxErr = 10;
-    const int windupUpperLimit = 8; //8 might be too low
+    const int maxErr = 30;
+    const int windupUpperLimit = 10; //15 might be too low 25 too high
 
     float integral = 0;
     
@@ -138,6 +138,7 @@ void Drivetrain::goToPos(int x, int y){
         
 
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
+        printf("error: %f\n", error);
 
 
         integral = integral + error;
@@ -189,7 +190,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 550; //550 is too high
+    const float Kp = 430; //480 is too high 430 pretty good
     const float Ki = 0;
     const float Kd = 0;
 
