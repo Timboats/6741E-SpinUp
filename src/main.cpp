@@ -350,7 +350,7 @@ void redLeftSideSkills(){
   pros::delay(1100);
   train.stopAllDrive();
   //roller 4 pos
-  train.goToPos(1400, -995);
+  train.goToPos(1400, -900);
   train.faceHeading(180);
 
   train.moveVelocity(0, -100, 0);
@@ -462,6 +462,7 @@ void customLauncherPidTest(int setPoint, int motor){
 
 
 void opcontrol() {
+  // train.goToPos(0, 0);
   redLeftSideSkills();
   
   // pros::Gps GpsPrimaryInit(GPS1PORT);
