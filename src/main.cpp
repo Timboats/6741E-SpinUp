@@ -144,8 +144,8 @@ void controllerButtonCalls(){
       isIdle = true;
     }
     else{
-      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75); //add a multiplier by zero or one if the change isnt quick enough on isIdle
-      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
+      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]); //add a multiplier by zero or one if the change isnt quick enough on isIdle
+      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]*LAUNCHERMOTORRATIO);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
@@ -160,8 +160,8 @@ void controllerButtonCalls(){
       isIdle = true;
     }
     else{
-      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]*0.75); //add a multiplier by zero or one if the change isnt quick enough on isIdle
-      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]);
+      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]); //add a multiplier by zero or one if the change isnt quick enough on isIdle
+      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]*LAUNCHERMOTORRATIO);
       
     }
     
@@ -444,53 +444,33 @@ void autonomous() {
   
 }
 
-void customLauncherPidTest(int setPoint, int motor){
+void customLauncherI(int setPoint, int motor){
   pros::Motor launcherMotorLeft(motor);
 
   const int rpmSetPoint = setPoint;
-  const double Kp = 24; // 28.6 is decent
-  const double Ki = 0; //1 is decent
-  const double Kd = 0;
-  const int maxErr = 10;
-  const int windupUpperLimit = 8;
+  const double Ki = 0.555; //0.555 best for right launcher
 
-  double integral = 0;
+  double tbh = 50; //good for right launcher
   double error = 0;
   double launcherVoltage = 0;
   double startTime = pros::millis();
-  double prevVolt = 0;
   double prevError = 0;
   
 	
   while (true){
     double currentRpm = launcherMotorLeft.get_actual_velocity();
-
     error = rpmSetPoint - currentRpm;
-    
+    launcherVoltage += Ki*error;
+    printf("Error: %f\n", error);
 
-    integral = integral + error;
-
-    if(error > windupUpperLimit){
-      integral = 0;
+    if (Simpler::sign(error) != Simpler::sign(prevError)){
+      launcherVoltage = 0.5 * (launcherVoltage + tbh);
+      tbh = launcherVoltage;
+      prevError = error;
     }
-
-    launcherVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
-
-    float appliedVoltage = launcherVoltage+prevVolt;
-
-    
-    if(appliedVoltage < 0){
-        appliedVoltage = 0;
-    }
-    launcherMotorLeft.move_voltage(appliedVoltage);
-
-    prevVolt = appliedVoltage;
-
-    // printf("%f, %f\n", time/1000, currentRpm);
-    
-
-    
-    prevError = error;
+  
+    launcherMotorLeft.move_voltage(launcherVoltage);
+  
     pros::delay(20);
 
   }
@@ -501,12 +481,16 @@ void customLauncherPidTest(int setPoint, int motor){
 
 void opcontrol() {
   
+
+  
   // pros::Gps GpsPrimaryInit(GPS1PORT);
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
   // pros::delay(5000);
   // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+
+  // customLauncherI(300, LAUNCHERMOTORRIGHTPORT);
   // train.faceHeading(0);
   // train.faceHeading(90);
   // train.faceHeading(180);
