@@ -12,8 +12,10 @@ GpsWrapper::GpsWrapper(unsigned int gpsDevicePort, float xOffset, float yOffset,
 float GpsWrapper::getHeading(){
     //returns gps heading in degrees in standard postion
 
-    //add checks for when the gps is disconnected
     pros::Gps gpsObj(gpsDevicePort);
+    if(gpsObj.get_heading() == INFINITY){
+            return INFINITY;
+        }
     return Simpler::degreeToStdPos(Simpler::coterminalToStdPos(gpsObj.get_heading()+headingOffset));
 }
 wrapper_position GpsWrapper::getPositions(){

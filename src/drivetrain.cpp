@@ -98,7 +98,7 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 52; //52 decent 49 might be too low but use with integral
+    const float Kp = 34; //34 is fine but tune integral
     const float Ki = 0; //0.28 is pretty good 0.32too high
     const float Kd = 100;
     const int maxErr = 50;

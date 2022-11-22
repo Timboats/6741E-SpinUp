@@ -71,7 +71,7 @@ void initialize() {
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
-  gps = GpsWrapper(GPS1PORT, 0.1, 0.2, GPSOFFSETFROMFRONT);
+  gps = GpsWrapper(GPS1PORT, 0.105, 0.137, GPSOFFSETFROMFRONT);
   gpsPointer = &gps;
 
   
@@ -338,7 +338,7 @@ void redLeftSideSkills(){
   pros::delay(1100);
   train.stopAllDrive();
   //roller 3 pos
-  train.goToPos(1100, -1400);
+  train.goToPos(990, -1400);
   train.faceHeading(90);
 
   train.moveVelocity(0, -100, 0);
@@ -350,7 +350,7 @@ void redLeftSideSkills(){
   pros::delay(1100);
   train.stopAllDrive();
   //roller 4 pos
-  train.goToPos(1400, -900);
+  train.goToPos(1400, -990);
   train.faceHeading(180);
 
   train.moveVelocity(0, -100, 0);

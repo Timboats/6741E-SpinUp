@@ -14,7 +14,7 @@
 #define ROLLERPORT 17
 #define INTAKEPORT 11
 
-#define GPSOFFSETFROMFRONT 180
+#define GPSOFFSETFROMFRONT 90
 #define SETTINGSPATH "/usd/code_settings.json"
 #define _USE_MATH_DEFINES
 
