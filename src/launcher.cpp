@@ -1,20 +1,20 @@
 #include "launcher.h"
-#include "main.h"
-#include "mathlib.h"
-#include "cmath"
-#include "drivetrain.h"
-#include "pros/gps.hpp"
-#include "pros/misc.h"
-#include "pros/misc.hpp"
-#include "pros/rtos.hpp"
-#include <cstddef>
-#include <cstdio>
-#include "globals.hpp"
+#include "controllers.hxx"
 
-
-
+TBHController<double> leftFlywheelController(50);
+TBHController<double> rightFlywheelController(50);
 
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
+void moveLauncher(int flywheelRPM){
+    pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+
+    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.555, flywheelRPM, launcherMotorLeft.get_actual_velocity()));
+    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.555, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
+    // printf("Error: %f\n", ((double)flywheelRPM*LAUNCHERMOTORRATIO) - launcherMotorRight.get_actual_velocity());
+
+
+}
 
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("disc flight sim start \n");

@@ -21,12 +21,11 @@
 #include "globals.hpp"
 
 
-
 int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[1] = {700};
+int launcherRpmOptions[1] = {300};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -144,8 +143,6 @@ void controllerButtonCalls(){
       isIdle = true;
     }
     else{
-      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]); //add a multiplier by zero or one if the change isnt quick enough on isIdle
-      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]*LAUNCHERMOTORRATIO);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
@@ -160,8 +157,6 @@ void controllerButtonCalls(){
       isIdle = true;
     }
     else{
-      launcherMotorLeft.move_velocity(launcherRpmOptions[currentRpmIndex]); //add a multiplier by zero or one if the change isnt quick enough on isIdle
-      launcherMotorRight.move_velocity(launcherRpmOptions[currentRpmIndex]*LAUNCHERMOTORRATIO);
       
     }
     
@@ -306,8 +301,6 @@ void testGoToMethod(){
   return;
 }
 
-
-
 void disabled() {}
 
 
@@ -444,79 +437,20 @@ void autonomous() {
   
 }
 
-void customLauncherI(int setPoint, int motor){
-  pros::Motor launcherMotorLeft(motor);
-
-  const int rpmSetPoint = setPoint;
-  const double Ki = 0.555; //0.555 best for right launcher
-
-  double tbh = 50; //good for right launcher
-  double error = 0;
-  double launcherVoltage = 0;
-  double startTime = pros::millis();
-  double prevError = 0;
-  
-	
-  while (true){
-    double currentRpm = launcherMotorLeft.get_actual_velocity();
-    error = rpmSetPoint - currentRpm;
-    launcherVoltage += Ki*error;
-    printf("Error: %f\n", error);
-
-    if (Simpler::sign(error) != Simpler::sign(prevError)){
-      launcherVoltage = 0.5 * (launcherVoltage + tbh);
-      tbh = launcherVoltage;
-      prevError = error;
-    }
-  
-    launcherMotorLeft.move_voltage(launcherVoltage);
-  
-    pros::delay(20);
-
-  }
-	
-  
-}
 
 
 void opcontrol() {
-  
-
-  
-  // pros::Gps GpsPrimaryInit(GPS1PORT);
-  // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
-  // pros::delay(5000);
-  // train.stopAllDrive();
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
-  // customLauncherI(300, LAUNCHERMOTORRIGHTPORT);
-  // train.faceHeading(0);
-  // train.faceHeading(90);
-  // train.faceHeading(180);
-  // train.faceHeading(270);
-
-
-  // train.goToPos(0, 0);
-  // train.goToPos(0, 300);
-  // train.goToPos(0, -300);
-  // train.goToPos(300, 0);
-  // train.goToPos(-300, 0);
-  // train.goToPos(300, 300);
-  // train.goToPos(-300, -300);
-  // train.goToPos(300, -300);
-  // train.goToPos(-300, 300);
-
-  
-  
-  
-  
-
-  // train.goToPos(0, 0);
 	while (true) {
+    
     
     if(isIdle){
       idleLauncher();
+    }
+    else{
+      moveLauncher(launcherRpmOptions[currentRpmIndex]);
     }
 
     controllerButtonCalls();
