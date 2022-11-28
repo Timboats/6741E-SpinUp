@@ -25,10 +25,11 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[1] = {300};
+int launcherRpmOptions[3] = {200, 300, 410};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
+char* rumblePattern = "-";
 GpsWrapper gps(GPS1PORT, 0, 0.175);
 GpsWrapper* gpsPointer = nullptr;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
@@ -134,6 +135,13 @@ void controllerButtonCalls(){
     isIdle = false;
     if(currentRpmIndex != (sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1){
       currentRpmIndex++;
+      if(((sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1) == currentRpmIndex){
+        rumblePattern = ".";
+
+      }
+      else {
+        rumblePattern = "-";
+      }
     } 
     else{
       currentRpmIndex = -1;
@@ -149,9 +157,11 @@ void controllerButtonCalls(){
     isIdle = false;
     if(currentRpmIndex != -1){
       currentRpmIndex--;
+      rumblePattern = "-";
     } 
     else{
       currentRpmIndex = (sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1;
+      rumblePattern = ".";
     }
     if(currentRpmIndex == -1){
       isIdle = true;
@@ -451,6 +461,7 @@ void opcontrol() {
     }
     else{
       moveLauncher(launcherRpmOptions[currentRpmIndex]);
+      master.rumble(rumblePattern);
     }
 
     controllerButtonCalls();
