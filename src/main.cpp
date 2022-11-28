@@ -25,7 +25,7 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[3] = {200, 300, 410};
+int launcherRpmOptions[3] = {300, 375, 410};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -398,7 +398,13 @@ void redRightSideAuton(){
   *high goal shot portion 
   */
 
-  
+  train.moveVelocity(-100, 0, 0);
+  pros::delay(1500);
+  train.stopAllDrive();
+
+  train.moveVelocity(0, 100, 0);
+  pros::delay(500);
+  train.stopAllDrive();
 
 
 
