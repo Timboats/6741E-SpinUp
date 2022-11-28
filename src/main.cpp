@@ -349,16 +349,16 @@ void blueRightSideAuton(){
   train.stopAllDrive();
 
   train.moveVelocity(100, 0, 0);
-  pros::delay(700);
+  pros::delay(1100);
   train.stopAllDrive();
 
   train.moveVelocity(0, -100, 0);
   pros::delay(500);
   train.stopAllDrive();
 
-  train.moveVelocity(100, 0, 0);
-  pros::delay(600);
-  train.stopAllDrive();
+  // train.moveVelocity(100, 0, 0);
+  // pros::delay(600);
+  // train.stopAllDrive();
 
   blueLeftSideAuton();
 
@@ -381,18 +381,24 @@ void redRightSideAuton(){
   train.stopAllDrive();
 
   train.moveVelocity(100, 0, 0);
-  pros::delay(700);
+  pros::delay(1100);
   train.stopAllDrive();
 
   train.moveVelocity(0, -100, 0);
   pros::delay(500);
   train.stopAllDrive();
 
-  train.moveVelocity(100, 0, 0);
-  pros::delay(600);
-  train.stopAllDrive();
+  // train.moveVelocity(100, 0, 0);
+  // pros::delay(600);
+  // train.stopAllDrive();
 
   redLeftSideAuton();
+
+  /*
+  *high goal shot portion 
+  */
+
+  
 
 
 
@@ -437,8 +443,8 @@ void autonomous() {
   //sides pov of lower goal
   // redLeftSideAuton();
   // blueLeftSideAuton();
-  blueRightSideAuton();
-  // redRightSideAuton();
+  // blueRightSideAuton();
+  redRightSideAuton();
 
   
 
