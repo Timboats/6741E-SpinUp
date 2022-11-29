@@ -237,7 +237,7 @@ void Drivetrain::faceHeading(int heading){
     }
     prevError = error;
 }
-void Drivetrain::moveVelocity(int xVelocity, int yVelocity, unsigned int heading){
+void Drivetrain::moveVelocity(int xVelocity, int yVelocity, int heading){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);

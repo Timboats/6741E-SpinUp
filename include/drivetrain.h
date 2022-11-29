@@ -37,7 +37,7 @@ void faceHeading(int heading);
 float turnToPoint(int x, int y);
 void driverCentricSteeringControl(pros::Controller driveController);
 void fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction);
-void moveVelocity(int xVelocity, int yVelocity, unsigned int heading);
+void moveVelocity(int xVelocity, int yVelocity, int heading);
 void moveVelocityFieldCentric(int xVelocity, int yVelocity, unsigned int heading);
 
   
