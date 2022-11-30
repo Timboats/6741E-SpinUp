@@ -345,11 +345,11 @@ void blueRightSideAuton(){
   pros::Motor roller(ROLLERPORT);
 
   train.moveVelocity(0, 100, 0);
-  pros::delay(650);
+  pros::delay(400);
   train.stopAllDrive();
 
   train.moveVelocity(100, 0, 0);
-  pros::delay(1100);
+  pros::delay(1000);
   train.stopAllDrive();
 
   train.moveVelocity(0, -100, 0);
@@ -377,14 +377,15 @@ void redRightSideAuton(){
   pros::Motor roller(ROLLERPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  int velocity = 375;
   
 
   train.moveVelocity(0, 100, 0);
-  pros::delay(650);
+  pros::delay(400);
   train.stopAllDrive();
 
   train.moveVelocity(100, 0, 0);
-  pros::delay(1100);
+  pros::delay(1000);
   train.stopAllDrive();
 
   train.moveVelocity(0, -100, 0);
@@ -395,12 +396,36 @@ void redRightSideAuton(){
   // pros::delay(600);
   // train.stopAllDrive();
 
-  // redLeftSideAuton();
-  blueLeftSideAuton();
+  redLeftSideAuton();
+
 
   /*
   *high goal shot portion 
   */
+
+  //start flywheel here
+  launcherMotorLeft.move_velocity(velocity);
+  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
+
+  train.moveVelocity(0, 0, 100);
+  pros::delay(215);
+  train.stopAllDrive();
+
+  train.moveVelocity(-100, -40, 0);
+  pros::delay(1800);
+  train.stopAllDrive();
+
+  train.moveVelocity(0, 0, -100);
+  pros::delay(100);
+  train.stopAllDrive();
+
+  train.moveVelocity(0, 100, 0);
+  pros::delay(150);
+  train.stopAllDrive();
+
+
+
+  
 
   
 
