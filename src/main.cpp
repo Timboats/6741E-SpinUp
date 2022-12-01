@@ -195,7 +195,8 @@ float turnTowardsPoint(int x, int y){
 
   desiredAngle = atan2(y - (GpsPrimary.get_status().y * 1000), x - (GpsPrimary.get_status().x * 1000)) * (180/M_PI); //in mm prolly gonna break
 
-  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
+  //TODO make below fmod
+  // angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
   //finds the difference in the current angle and the desired angle from 0 to 360 degrees
 
   if (angleFromDesired > 180){
@@ -235,7 +236,8 @@ float faceHeadingValue(int heading){
 
   desiredAngle = heading; //in mm prolly gonna break
 
-  angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
+  //TODO make fmod
+  // angleFromDesired = (((desiredAngle - Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90))) + 360) % 360);
   //finds the difference in the current angle and the desired angle from 0 to 360 degrees
 
   if (angleFromDesired > 180){
@@ -257,7 +259,7 @@ float faceHeadingValue(int heading){
   //calculates the desired voltage of the motors
 
   prevErrorTTP = errorTTP; 
-  printf("mv: %f, head: %d\n",motorPercentage, Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90)));
+  printf("mv: %f, head: %f\n",motorPercentage, Simpler::degreeToStdPos(Simpler::coterminalToStdPos(GpsPrimary.get_heading()+90)));
   //Used to calculate integral
     
   return(motorPercentage);

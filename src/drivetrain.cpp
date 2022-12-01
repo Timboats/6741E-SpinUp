@@ -113,7 +113,7 @@ void Drivetrain::goToPos(int x, int y){
     float totalVoltage = 0;
 
     double angleToSetPos = 0;
-    float heading = gps1->getHeading();
+    double heading = gps1->getHeading();
 
     float northVoltage = 0;
     float eastVoltage = 0;
@@ -201,7 +201,7 @@ void Drivetrain::faceHeading(int heading){
     
     float maxError = 1;
 
-    float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
+    double angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
 
 
@@ -210,7 +210,7 @@ void Drivetrain::faceHeading(int heading){
             return;
         }
 
-        angleFromSet = (((int)gps1->getHeading() - heading) + 360) % 360;
+        angleFromSet = fmod((gps1->getHeading() - heading) + 360 , 360);
 
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));

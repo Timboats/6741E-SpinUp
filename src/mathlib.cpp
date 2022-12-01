@@ -5,8 +5,8 @@
 float Formula::twoCoordDistance(float x1, float y1, float x2, float y2){
     return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
-int Simpler::degreeToStdPos(int angle){
-  return(((360 - angle) + 90) % 360);    
+double Simpler::degreeToStdPos(double angle){
+  return std::fmod((360 - angle) + 90, 360);    
 }
 float Simpler::abs(float val){
   if(val < 0){
@@ -25,7 +25,7 @@ float Formula::findComponentVector(float magnitudeOne, float angleOne, float ang
   float magnitudeTwo = magnitudeOne * cos(angleOne - angleTwo);
   return magnitudeTwo;
 }
-float Simpler::coterminalToStdPos(float degree){
+double Simpler::coterminalToStdPos(double degree){
   if(degree > 360){
     return degree - 360;
   }

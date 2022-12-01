@@ -8,9 +8,9 @@ class Formula{
 };
 class Simpler{
     public:
-    static int degreeToStdPos(int angle);
+    static double degreeToStdPos(double angle);
     static float abs(float val);
     static int sign(float val);
-    static float coterminalToStdPos(float degree);
+    static double coterminalToStdPos(double degree);
 
 };

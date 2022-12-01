@@ -9,7 +9,7 @@ GpsWrapper::GpsWrapper(unsigned int gpsDevicePort, float xOffset, float yOffset,
     pros::Gps initializer(gpsDevicePort, xOffset, yOffset);
 }
 
-float GpsWrapper::getHeading(){
+double GpsWrapper::getHeading(){
     //returns gps heading in degrees in standard postion
 
     pros::Gps gpsObj(gpsDevicePort);
