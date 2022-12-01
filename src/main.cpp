@@ -71,7 +71,7 @@ void initialize() {
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
-  gps = GpsWrapper(GPS1PORT, 0.105, 0.137, GPSOFFSETFROMFRONT);
+  gps = GpsWrapper(GPS1PORT, 0.105, 0.137, GPS1OFFSETFROMFRONT);
   gpsPointer = &gps;
 
   
