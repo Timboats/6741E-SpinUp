@@ -467,7 +467,7 @@ void customLauncherPidTest(int setPoint, int motor){
 
 void opcontrol() {
   // train.goToPos(0, 0);
-  redLeftSideSkills();
+  // redLeftSideSkills();
   
   // pros::Gps GpsPrimaryInit(GPS1PORT);
   // train.moveVelocity(0, 0, turnTowardsPoint(-1350, -1350));
@@ -498,6 +498,9 @@ void opcontrol() {
 
   // train.goToPos(0, 0);
 	while (true) {
+
+    printf("x: %f\n", gps.getPositions().x);
+
     
     if(isIdle){
       idleLauncher();
