@@ -100,8 +100,8 @@ void Drivetrain::goToPos(int x, int y){
 
     const float Kp = 34; //34 is fine but tune integral
     const float Ki = 0; //0.28 is pretty good 0.32too high
-    const float Kd = 100;
-    const int maxErr = 50;
+    const float Kd = 115;
+    const int maxErr = 55;
     const int windupUpperLimit = 10; //15 might be too low 25 too high
 
     float integral = 0;
@@ -169,7 +169,7 @@ void Drivetrain::goToPos(int x, int y){
         
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
-            if (deltaTime > 500){
+            if (deltaTime > 50){
                 stopAllDrive();
                 return;
             }
@@ -190,7 +190,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 420; //480 is too high 430 pretty good
+    const float Kp = 435; //480 is too high 430 pretty good
     const float Ki = 0;
     const float Kd = 0;
 
@@ -199,7 +199,7 @@ void Drivetrain::faceHeading(int heading){
     float error = 0;
     float prevError = 0;
     
-    float maxError = 1;
+    float maxError = 4;
 
     double angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
@@ -227,7 +227,7 @@ void Drivetrain::faceHeading(int heading){
 
         if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
-            if(deltaTime > 500){
+            if(deltaTime > 50){
                 stopAllDrive();
                 return;
             }
