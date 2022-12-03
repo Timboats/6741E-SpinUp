@@ -399,9 +399,9 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  // redLeftSideSkills();
+  redLeftSideSkills();
 
-  train.goToPos(0, 0);
+  // train.goToPos(0, 0);
 
   
 
