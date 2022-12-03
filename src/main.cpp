@@ -139,7 +139,8 @@ void controllerButtonCalls(){
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
     launcherGateVal = !launcherGateVal;
-    pros::ADIDigitalOut launcherGate(7, launcherGateVal);
+    pros::ADIDigitalOut launcherGate(7);
+    launcherGate.set_value(launcherGateVal);
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     isIdle = false;
@@ -190,7 +191,8 @@ void controllerButtonCalls(){
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
     endgame = !endgame;
-    pros::ADIDigitalOut endgameNutDropper(8, endgame);
+    pros::ADIDigitalOut endgameNutDropper(8);
+    endgameNutDropper.set_value(endgame);
   }
   
 }
