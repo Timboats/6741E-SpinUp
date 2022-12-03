@@ -190,7 +190,7 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 430; //480 is too high 430 pretty good
+    const float Kp = 420; //480 is too high 430 pretty good
     const float Ki = 0;
     const float Kd = 0;
 
