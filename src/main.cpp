@@ -29,6 +29,10 @@ int launcherRpmOptions[2] = {375, 410};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
+
+bool launcherGateVal = false;
+bool endgame = false;
+
 char* rumblePattern = "-";
 GpsWrapper gps(GPS1PORT, 0, 0.175);
 GpsWrapper* gpsPointer = nullptr;
@@ -81,7 +85,11 @@ void initialize() {
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06, true);
-  pros::ADIDigitalOut indexer(1, LOW);
+
+  pros::ADIDigitalOut endgameNutDropper(8);
+  pros::ADIDigitalOut launcherGate(7);
+
+  
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -107,6 +115,9 @@ void controllerButtonCalls(){
   pros::Motor roller(ROLLERPORT);
   pros::Motor intake(INTAKEPORT);
 
+  
+  
+
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
@@ -127,9 +138,8 @@ void controllerButtonCalls(){
     
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
-    isIdle = false;
-    // autoAim(0, train);
-    isIdle = true;
+    launcherGateVal = !launcherGateVal;
+    pros::ADIDigitalOut launcherGate(7, launcherGateVal);
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     isIdle = false;
@@ -177,6 +187,10 @@ void controllerButtonCalls(){
   
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
     isGpsAvailable = !isGpsAvailable;
+  }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
+    endgame = !endgame;
+    pros::ADIDigitalOut endgameNutDropper(8, endgame);
   }
   
 }
