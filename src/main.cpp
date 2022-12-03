@@ -62,6 +62,8 @@ void initialize() {
   fileSysInit();
   lvglInitEx();
   variableFsUpdate();
+
+  pros::ADIDigitalOut endgameNutDropper(8);
   
 
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
@@ -362,6 +364,14 @@ void redLeftSideSkills(){
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
   pros::delay(1100);
+  train.stopAllDrive();
+
+  pros::ADIDigitalOut endgameNutDropper(8);
+  endgameNutDropper.set_value(true);
+  pros::delay(500);
+
+  train.moveVelocity(100, 100, 0);
+  pros::delay(10000);
   train.stopAllDrive();
 
 
