@@ -17,11 +17,6 @@ class GpsWrapper{
     float getHeading();
     double getRMS();
     wrapper_position getPositions();
-
-    
-    
-    
-
 };
 class DualGps{
     private:
@@ -33,6 +28,4 @@ class DualGps{
     DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr, double rmsThreshold);
     double getHeading();
     wrapper_position getPositions();
-
-
 };
