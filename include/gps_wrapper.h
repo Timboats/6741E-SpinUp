@@ -15,10 +15,15 @@ class GpsWrapper{
     public:
     GpsWrapper(unsigned int gpsDevicePort, float xOffset, float yOffset, float headingOffset = 0);
     float getHeading();
+    double getRMS();
     wrapper_position getPositions();
 
     
     
     
+
+};
+class DualGps{
+
 
 };
