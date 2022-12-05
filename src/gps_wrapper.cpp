@@ -53,3 +53,26 @@ double DualGps::getHeading(){
     }
     return returnedHeading;
 }
+wrapper_position DualGps::getPositions(){
+    double gps1RMS = gps1ptr->getRMS();
+    double gps2RMS = gps2ptr->getRMS();
+    const double rmsThreshold = 0.1; //make a method to set this
+    wrapper_position returnedCoords;
+
+    if(gps1RMS < rmsThreshold && gps2RMS < rmsThreshold){
+        //average positions
+        returnedCoords.x = (gps1ptr->getPositions().x+gps2ptr->getPositions().x)/2;
+        returnedCoords.y = (gps1ptr->getPositions().y+gps2ptr->getPositions().y)/2;
+    }
+    else if (gps1RMS > gps2RMS){
+        //lesser positions
+        returnedCoords.x = gps2ptr->getPositions().x;
+        returnedCoords.y = gps2ptr->getPositions().y;
+    }
+    else{
+        returnedCoords.x = gps1ptr->getPositions().x;
+        returnedCoords.y = gps1ptr->getPositions().y;
+    }
+    return returnedCoords;
+
+}
