@@ -34,10 +34,13 @@ bool launcherGateVal = false;
 bool endgame = false;
 
 char* rumblePattern = "-";
-GpsWrapper gps(GPS1PORT, 0, 0.175);
-GpsWrapper* gpsPointer = nullptr;
+GpsWrapper gps1(GPS1PORT, 0, 0.175);
+GpsWrapper gps2(GPS2PORT, 0, 0.175);
+
+GpsWrapper* gps1Pointer = nullptr;
+GpsWrapper* gps2Pointer = nullptr;
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsPointer);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gps1Pointer);
 
 
 void variableFsUpdate(){
@@ -75,8 +78,10 @@ void initialize() {
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
-  gps = GpsWrapper(GPS1PORT, 0.1, 0.2, GPSOFFSETFROMFRONT);
-  gpsPointer = &gps;
+  gps1 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
+  gps2 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
+  gps1Pointer = &gps1;
+  gps2Pointer = &gps2;
 
   
   
@@ -105,7 +110,7 @@ void initialize() {
 
   // Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsPointer);
+  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gps1Pointer);
 
 }
 
