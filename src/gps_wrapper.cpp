@@ -30,14 +30,14 @@ wrapper_position GpsWrapper::getPositions(){
     return positions;
 }
 
-DualGps::DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr){
+DualGps::DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr, double rmsThreshold){
     this->gps1ptr = gps1ptr;
     this->gps2ptr = gps2ptr;
+    this->rmsThreshold = rmsThreshold;
 }
 double DualGps::getHeading(){
     double gps1RMS = gps1ptr->getRMS();
     double gps2RMS = gps2ptr->getRMS();
-    const double rmsThreshold = 0.1;
     double returnedHeading = INFINITY;
 
     if(gps1RMS < rmsThreshold && gps2RMS < rmsThreshold){
@@ -56,7 +56,6 @@ double DualGps::getHeading(){
 wrapper_position DualGps::getPositions(){
     double gps1RMS = gps1ptr->getRMS();
     double gps2RMS = gps2ptr->getRMS();
-    const double rmsThreshold = 0.1; //make a method to set this
     wrapper_position returnedCoords;
 
     if(gps1RMS < rmsThreshold && gps2RMS < rmsThreshold){

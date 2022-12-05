@@ -27,9 +27,10 @@ class DualGps{
     private:
     GpsWrapper* gps1ptr;
     GpsWrapper* gps2ptr;
+    double rmsThreshold = 0.1;
 
     public:
-    DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr);
+    DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr, double rmsThreshold);
     double getHeading();
     wrapper_position getPositions();
 
