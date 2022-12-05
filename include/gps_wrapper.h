@@ -24,6 +24,14 @@ class GpsWrapper{
 
 };
 class DualGps{
+    private:
+    GpsWrapper* gps1ptr;
+    GpsWrapper* gps2ptr;
+
+    public:
+    DualGps(GpsWrapper* gps1ptr, GpsWrapper* gps2ptr);
+    double getHeading();
+    wrapper_position getPositions();
 
 
 };
