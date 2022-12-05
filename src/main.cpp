@@ -39,8 +39,12 @@ GpsWrapper gps2(GPS2PORT, 0, 0.175);
 
 GpsWrapper* gps1Pointer = nullptr;
 GpsWrapper* gps2Pointer = nullptr;
+
+DualGps gpsSys(gps1Pointer, gps2Pointer, 0.1);
+DualGps* gpsSysPtr = nullptr;
+
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gps1Pointer);
+Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsSysPtr);
 
 
 void variableFsUpdate(){
@@ -70,7 +74,6 @@ void initialize() {
   lvglInitEx();
   variableFsUpdate();
   
-
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
@@ -80,12 +83,12 @@ void initialize() {
 
   gps1 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
   gps2 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
+
   gps1Pointer = &gps1;
   gps2Pointer = &gps2;
 
-  
-  
-
+  gpsSys = DualGps(gps1Pointer, gps2Pointer, 0.1);
+  gpsSysPtr = &gpsSys;
 
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
@@ -93,8 +96,6 @@ void initialize() {
 
   pros::ADIDigitalOut endgameNutDropper(8);
   pros::ADIDigitalOut launcherGate(7);
-
-  
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -110,8 +111,7 @@ void initialize() {
 
   // Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gps1Pointer);
-
+  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
 }
 
 void controllerButtonCalls(){
