@@ -34,8 +34,8 @@ bool launcherGateVal = false;
 bool endgame = false;
 
 char* rumblePattern = "-";
-GpsWrapper gps1(GPS1PORT, 0, 0.175);
-GpsWrapper gps2(GPS2PORT, 0, 0.175);
+GpsWrapper gps1(GPS1PORT, 0.0921, 0.159);
+GpsWrapper gps2(GPS2PORT, -0.1, -0.2);
 
 GpsWrapper* gps1Pointer = nullptr;
 GpsWrapper* gps2Pointer = nullptr;
@@ -81,8 +81,8 @@ void initialize() {
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
-  gps1 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
-  gps2 = GpsWrapper(GPS1PORT, 0.1, 0.2, GPS1OFFSETFROMFRONT);
+  gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
+  gps2 = GpsWrapper(GPS2PORT, -0.1, -0.2, GPS2OFFSETFROMFRONT);
 
   gps1Pointer = &gps1;
   gps2Pointer = &gps2;
@@ -547,6 +547,8 @@ void opcontrol() {
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
 	while (true) {
+    printf("x: %f, y: %f\n", gpsSysPtr->getPositions().x, gpsSys.getPositions().y);
+    // printf("head: %f, gps1: %f, gps2: %f\n", gpsSysPtr->getHeading(), gps1Pointer->getHeading(), gps2Pointer->getHeading());
     
     
     if(isIdle){
