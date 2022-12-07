@@ -499,6 +499,66 @@ void redRightSideAuton(){
 
 }
 
+void redLeftSideSkills(){
+  pros::Motor roller(ROLLERPORT);
+  //roller getter mode
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+  //end of roller getter mode
+  //roller 2 pos
+  train.goToPos(-995, 1430);
+  train.faceHeading(270);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+  //roller 3 pos
+  train.goToPos(990, -1400);
+  train.faceHeading(90);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+  //roller 4 pos
+  train.goToPos(1400, -990);
+  train.faceHeading(180);
+
+  train.moveVelocity(0, -100, 0);
+  pros::delay(1500);
+  roller.move_relative(600, 100);
+  pros::delay(250);
+  train.stopAllDrive();
+  train.moveVelocity(0, 100, 0);
+  pros::delay(1100);
+  train.stopAllDrive();
+
+  // pros::ADIDigitalOut endgameNutDropper(8);
+  // endgameNutDropper.set_value(true);
+  // pros::delay(500);
+
+  // train.moveVelocity(100, 100, 0);
+  // pros::delay(10000);
+  // train.stopAllDrive();
+
+
+}
+
 
 void autonomous() {
 
@@ -506,39 +566,7 @@ void autonomous() {
   // blueSideAuton();
 
   pros::Motor roller(ROLLERPORT);
-
-  // if(!isOnBlue){
-  //   train.moveVelocity(0, -100, 0);
-  //   pros::delay(2000);
-  //   roller.move_relative(-200, 100);
-  //   pros::delay(500);
-  //   train.stopAllDrive();
-  //   train.moveVelocity(0, 100, 0);
-  //   pros::delay(250);
-  //   train.stopAllDrive();
-  // }
-  // if(isOnBlue){
-  //   train.moveVelocity(0, -100, 0);
-  //   pros::delay(2000);
-  //   roller.move_relative(-800, 100);
-  //   pros::delay(500);
-  //   train.stopAllDrive();
-  //   train.moveVelocity(0, 100, 0);
-  //   pros::delay(250);
-  //   train.stopAllDrive();
-  // }
-
-  //sides pov of lower goal
-  // redLeftSideAuton();
-  // blueLeftSideAuton();
-  // blueRightSideAuton();
-  redRightSideAuton();
-
-  
-
-
-  
-  
+  redLeftSideSkills();
 }
 
 
