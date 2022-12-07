@@ -12,5 +12,6 @@ class Simpler{
     static float abs(float val);
     static int sign(float val);
     static float coterminalToStdPos(float degree);
+    static double degAvgTwoAngles(double angle1, double angle2);
 
 };

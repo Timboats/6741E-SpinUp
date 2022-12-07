@@ -34,3 +34,30 @@ float Simpler::coterminalToStdPos(float degree){
   }
   return degree;
 }
+double Simpler::degAvgTwoAngles(double angle1, double angle2){
+  //TODO method kind of works/works enough for its purpose... still needs to be fixed
+  double rad1 = angle1 * (M_PI/180);
+  double rad2 = angle2 * (M_PI/180);
+
+  double x = 0.5*(cos(rad1)+cos(rad2));
+  double y = 0.5*(sin(rad1)+sin(rad2));
+  double arcTan = atan2(y, x);
+  double finalRad;
+
+  if(x > 0 && y > 0){
+    finalRad = arcTan;
+  }
+  else if(x > 0 && y < 0){
+    finalRad = (2*M_PI) + arcTan; 
+  } 
+  else if(x < 0 && y > 0){
+    finalRad = arcTan; //c
+  }
+  else if(x < 0 && y < 0) {
+    finalRad =  (2*M_PI) + arcTan;
+  }
+
+  // finalRad = arcTan;
+
+  return finalRad*(180/M_PI);
+}

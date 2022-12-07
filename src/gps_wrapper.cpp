@@ -42,7 +42,7 @@ double DualGps::getHeading(){
 
     if(gps1RMS < rmsThreshold && gps2RMS < rmsThreshold){
         //average heading
-        returnedHeading = (gps1ptr->getHeading()+gps2ptr->getHeading())/2;
+        returnedHeading = Simpler::degAvgTwoAngles(gps1ptr->getHeading(), gps2ptr->getHeading());
     }
     else if (gps1RMS > gps2RMS){
         //lesser heading

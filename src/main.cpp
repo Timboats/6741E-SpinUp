@@ -10,6 +10,7 @@
 #include "pros/motors.h"
 #include "pros/motors.hpp"
 #include "pros/rtos.hpp"
+#include <cmath>
 #include <cstddef>
 #include <cstdio>
 #include <exception>
@@ -547,8 +548,9 @@ void opcontrol() {
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
 	while (true) {
-    printf("x: %f, y: %f\n", gpsSysPtr->getPositions().x, gpsSys.getPositions().y);
-    // printf("head: %f, gps1: %f, gps2: %f\n", gpsSysPtr->getHeading(), gps1Pointer->getHeading(), gps2Pointer->getHeading());
+    // printf("x: %f, y: %f\n", gpsSysPtr->getPositions().x, gpsSys.getPositions().y);
+
+    printf("head: %f, gps1: %f, gps2: %f\n", gpsSysPtr->getHeading(), gps1Pointer->getHeading(), gps2Pointer->getHeading());
     
     
     if(isIdle){
