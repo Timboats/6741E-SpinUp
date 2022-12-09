@@ -74,6 +74,7 @@ void initialize() {
   fileSysInit();
   lvglInitEx();
   variableFsUpdate();
+  // master.clear();
   
   pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
@@ -201,6 +202,24 @@ void controllerButtonCalls(){
     endgameNutDropper.set_value(endgame);
   }
   
+}
+void mainloopControllerUpdater(){
+  char* rpm = "";
+  
+  if(currentRpmIndex == -1){
+    rpm = "Idle";
+  } 
+  if(currentRpmIndex == 0){
+    rpm = "Low ";
+  }
+  if(currentRpmIndex == 1){
+    rpm = "High";
+  }
+
+  
+  master.print(0, 0, "RPM: %s", rpm);
+  
+
 }
 
 float errorTTP = 0;
@@ -548,6 +567,7 @@ void opcontrol() {
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
 	while (true) {
+    // mainloopControllerUpdater();
     if(isIdle){
       idleLauncher();
     }
