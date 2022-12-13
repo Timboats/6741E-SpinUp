@@ -83,7 +83,7 @@ void initialize() {
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
   gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
-  gps2 = GpsWrapper(GPS2PORT, -0.1, -0.2, GPS2OFFSETFROMFRONT);
+  gps2 = GpsWrapper(GPS2PORT, 0.1, 0.1, GPS2OFFSETFROMFRONT); 
 
   gps1Pointer = &gps1;
   gps2Pointer = &gps2;
@@ -524,7 +524,7 @@ void redLeftSideSkills(){
   pros::delay(1100);
   train.stopAllDrive();
   //roller 3 pos
-  train.goToPos(990, -1400);
+  train.goToPos(1200, -1200);
   train.faceHeading(90);
 
   train.moveVelocity(0, -100, 0);
@@ -574,6 +574,8 @@ void autonomous() {
 void opcontrol() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+
+  train.goToPos(0, 0);
 
 	while (true) {
     if(isIdle){
