@@ -419,7 +419,7 @@ void redRightSideAuton(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor intake(INTAKEPORT);
-  int velocity = 400;
+  int velocity = 450;
   
 
   train.moveVelocity(0, 100, 0);
