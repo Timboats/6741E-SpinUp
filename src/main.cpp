@@ -515,7 +515,7 @@ void redLeftSideSkills(){
   train.goToPos(-995, 1430);
   train.faceHeading(270);
 
-  train.moveVelocity(0, -100, 0);
+  /*train.moveVelocity(0, -100, 0);
   pros::delay(1500);
   roller.move_relative(600, 100);
   pros::delay(250);
@@ -523,30 +523,32 @@ void redLeftSideSkills(){
   train.moveVelocity(0, 100, 0);
   pros::delay(1100);
   train.stopAllDrive();
+  */
+
   //roller 3 pos
   train.goToPos(1200, -1200);
   train.faceHeading(90);
 
-  train.moveVelocity(0, -100, 0);
+  /*train.moveVelocity(0, -100, 0);
   pros::delay(1500);
   roller.move_relative(600, 100);
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
   pros::delay(1100);
-  train.stopAllDrive();
+  train.stopAllDrive();*/
   //roller 4 pos
   train.goToPos(1400, -990);
   train.faceHeading(180);
 
-  train.moveVelocity(0, -100, 0);
+  /*train.moveVelocity(0, -100, 0);
   pros::delay(1500);
   roller.move_relative(600, 100);
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(0, 100, 0);
   pros::delay(1100);
-  train.stopAllDrive();
+  train.stopAllDrive();*/
 
   // pros::ADIDigitalOut endgameNutDropper(8);
   // endgameNutDropper.set_value(true);
@@ -574,13 +576,18 @@ void autonomous() {
 void opcontrol() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  train.faceHeading(0);
+  train.faceHeading(90);
+  train.faceHeading(180);
+  train.faceHeading(270);
+  train.faceHeading(0);
 
-  train.goToPos(0, 0);
-  train.goToPos(-400, -400);
-  train.goToPos(400, 400);
-  train.goToPos(-400, 400);
-  train.goToPos(400, -400);
-  train.goToPos(0, 0);
+  // train.goToPos(0, 0);
+  // train.goToPos(-400, -400);
+  // train.goToPos(400, 400);
+  // train.goToPos(-400, 400);
+  // train.goToPos(400, -400);
+  // train.goToPos(0, 0);
 
 	while (true) {
     if(isIdle){

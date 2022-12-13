@@ -189,16 +189,19 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 560; //560 works but oscillates a bit too
-    const float Ki = 0;
-    const float Kd = 0;
+    const float Kp = 460; //480 or lower
+    const float Ki = 0.04; //0.03
+    const float Kd = 100;
+    const float windupUpperLimit = 2;
 
     float deltaTime = 0;
     float prevTime = 0;
     float error = 0;
     float prevError = 0;
     
-    float maxError = 1;
+    const float maxError = 1;
+
+    float integral = 0;
 
     float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
     float totalVoltage = 0;
@@ -211,13 +214,19 @@ void Drivetrain::faceHeading(int heading){
 
         angleFromSet = (((int)gpsSystem->getHeading() - heading) + 360) % 360;
 
+        integral = integral + error;
+
+        if (error > windupUpperLimit){
+            integral = 0;
+        }
+
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));
         } else {
             error = angleFromSet;
         }
 
-        totalVoltage = (Kp * error) + (Kd*(error - prevError));
+        totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
 
         northMotor.move_voltage(totalVoltage);
         eastMotor.move_voltage(totalVoltage);
