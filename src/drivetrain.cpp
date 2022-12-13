@@ -98,11 +98,11 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 70; 
-    const float Ki = 0; //9 is pretty good
-    const float Kd = 100;
-    const int maxErr = 1; //change back to 30
-    const int windupUpperLimit = 8;
+    const float Kp = 60; //65
+    const float Ki = 0.007; //0.005
+    const float Kd = 300;
+    const int maxErr = 20; //change back to 30
+    const int windupUpperLimit = 48;
 
     float integral = 0;
     
@@ -168,7 +168,7 @@ void Drivetrain::goToPos(int x, int y){
         
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
-            if (deltaTime > 500){
+            if (deltaTime > 250){
                 stopAllDrive();
                 return;
             }
@@ -226,7 +226,7 @@ void Drivetrain::faceHeading(int heading){
 
         if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
-            if(deltaTime > 500){
+            if(deltaTime > 250){
                 stopAllDrive();
                 return;
             }

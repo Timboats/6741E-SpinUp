@@ -576,6 +576,11 @@ void opcontrol() {
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
   train.goToPos(0, 0);
+  train.goToPos(-400, -400);
+  train.goToPos(400, 400);
+  train.goToPos(-400, 400);
+  train.goToPos(400, -400);
+  train.goToPos(0, 0);
 
 	while (true) {
     if(isIdle){
