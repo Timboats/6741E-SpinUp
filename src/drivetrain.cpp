@@ -98,8 +98,8 @@ void Drivetrain::goToPos(int x, int y){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 60; //65
-    const float Ki = 0.007; //0.005
+    const float Kp = 48; //50
+    const float Ki = 0.007; //0.007
     const float Kd = 300;
     const int maxErr = 20; //change back to 30
     const int windupUpperLimit = 48;
