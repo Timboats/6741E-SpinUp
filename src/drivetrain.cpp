@@ -189,17 +189,17 @@ void Drivetrain::faceHeading(int heading){
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
 
-    const float Kp = 460; //480 or lower
-    const float Ki = 0.04; //0.03
+    const float Kp = 155; //155 or lower
+    const float Ki = 0.01; //0.04
     const float Kd = 100;
-    const float windupUpperLimit = 2;
+    const float windupUpperLimit = 5;
 
     float deltaTime = 0;
     float prevTime = 0;
     float error = 0;
     float prevError = 0;
     
-    const float maxError = 1;
+    const float maxError = 2;
 
     float integral = 0;
 

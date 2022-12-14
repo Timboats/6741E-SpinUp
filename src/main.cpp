@@ -512,7 +512,7 @@ void redLeftSideSkills(){
   train.stopAllDrive();
   //end of roller getter mode
   //roller 2 pos
-  train.goToPos(-995, 1430);
+  train.goToPos(-995, 1200);
   train.faceHeading(270);
 
   /*train.moveVelocity(0, -100, 0);
@@ -576,12 +576,9 @@ void autonomous() {
 void opcontrol() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  train.faceHeading(0);
-  train.faceHeading(90);
-  train.faceHeading(180);
-  train.faceHeading(270);
-  train.faceHeading(0);
 
+  train.faceHeading(270);
+ 
   // train.goToPos(0, 0);
   // train.goToPos(-400, -400);
   // train.goToPos(400, 400);
