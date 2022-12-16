@@ -95,7 +95,8 @@ void initialize() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06, true);
 
-  pros::ADIDigitalOut endgameNutDropper(8);
+  pros::ADIDigitalOut endgameNutDropper1(1);
+  pros::ADIDigitalOut endgameNutDropper2(8);
   pros::ADIDigitalOut launcherGate(7);
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -506,10 +507,6 @@ void redLeftSideSkills(){
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   int velocity = 490;
 
-  launcherMotorLeft.move_velocity(velocity);
-  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
-
-  intake.move_voltage(5000);
   //roller getter mode
   train.moveVelocity(0, -100, 0);
   pros::delay(1500);
@@ -554,9 +551,15 @@ void redLeftSideSkills(){
   train.stopAllDrive();
   pros::delay(100);
 
+  launcherMotorLeft.move_velocity(velocity);
+  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
+
   //roller 4 pos
   train.goToPos(1100, -1175);
-  pros::delay(100);
+  train.moveVelocity(0, 0, 100);
+  pros::delay(1000);
+  train.stopAllDrive();
+  pros::delay(200);
   train.faceHeading(180);
   pros::delay(100);
 
@@ -569,31 +572,44 @@ void redLeftSideSkills(){
   pros::delay(1100);
   train.stopAllDrive();
   pros::delay(100);
+  
 
   //red high goal pos
-  train.goToPos(1400, 450);
+  train.goToPos(1365, 330);
   pros::delay(100);
   train.faceHeading(90);
-  pros::delay(1000);
+  
+  pros::delay(500);
   
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
-  pros::delay(750);
+  intake.move_voltage(10000);
+  pros::delay(2000);
+  intake.move_voltage(0);
   launcherGate.set_value(false);
-  pros::delay(2750);
+  pros::delay(1750);
+  intake.move_voltage(10000);
   launcherGate.set_value(true);
-  pros::delay(1000);
+  pros::delay(1500);
   launcherGate.set_value(false);
-  pros::delay(2500);
+  pros::delay(1000);
+
+  launcherMotorLeft.move_velocity(0);
+  launcherMotorRight.move_velocity(0);
+
+  intake.move_voltage(-7000);
 
   //endgame
-  train.goToPos(1000, -800);
+  train.goToPos(200, 200);
+  pros::delay(500);
+  train.faceHeading(225);
   pros::delay(1000);
-  //TODO faceheading here
-  //TODO delay here
-  pros::ADIDigitalOut endgameNutDropper(8);
-  endgameNutDropper.set_value(true);
-  // pros::delay(500);
+  pros::ADIDigitalOut endgameNutDropper1(1);
+  pros::ADIDigitalOut endgameNutDropper2(8);
+  endgameNutDropper1.set_value(true);
+  pros::delay(750);
+  endgameNutDropper2.set_value(true);
+  pros::delay(500);
 
   // train.moveVelocity(100, 100, 0);
   // pros::delay(10000);

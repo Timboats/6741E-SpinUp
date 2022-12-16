@@ -99,9 +99,9 @@ void Drivetrain::goToPos(int x, int y){
     // pros::Imu inertial(inertialPort);
 
     const float Kp = 48; //49
-    const float Ki = 0.011; //0.007
+    const float Ki = 0.013; //0.007
     const float Kd = 300;
-    const int maxErr = 30; //change back to 30
+    const int maxErr = 45; //change back to 30
     const int windupUpperLimit = 48;
 
     float integral = 0;
