@@ -32,7 +32,8 @@ bool isGpsAvailable = false;
 bool isOnBlue = false;
 
 bool launcherGateVal = false;
-bool endgame = false;
+bool endgame1 = false;
+bool endgame2 = false;
 
 char* rumblePattern = "-";
 GpsWrapper gps1(GPS1PORT, 0.0921, 0.159);
@@ -96,7 +97,8 @@ void initialize() {
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06, true);
 
-  pros::ADIDigitalOut endgameNutDropper(8);
+  pros::ADIDigitalOut endgameNutDropper1(1);
+  pros::ADIDigitalOut endgameNutDropper2(8);
   pros::ADIDigitalOut launcherGate(7);
 
   NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -196,10 +198,15 @@ void controllerButtonCalls(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
     isGpsAvailable = !isGpsAvailable;
   }
+  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true){
+    endgame1 = !endgame1;
+    pros::ADIDigitalOut endgameNutDropper1(1);
+    endgameNutDropper1.set_value(endgame1);
+  }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
-    endgame = !endgame;
-    pros::ADIDigitalOut endgameNutDropper(8);
-    endgameNutDropper.set_value(endgame);
+    endgame2 = !endgame2;
+    pros::ADIDigitalOut endgameNutDropper2(8);
+    endgameNutDropper2.set_value(endgame2);
   }
   
 }
