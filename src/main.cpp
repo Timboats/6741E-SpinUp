@@ -518,7 +518,7 @@ void redLeftSideSkills(){
   train.stopAllDrive();
   pros::delay(100);
   //end of roller getter mode
-  
+
   //roller 2 pos
   train.goToPos(-995, 1100);
   pros::delay(100);
@@ -542,9 +542,9 @@ void redLeftSideSkills(){
   train.moveVelocity(0, 0, 120);
   pros::delay(1000);
   train.stopAllDrive();
-  pros::delay(100);
+  pros::delay(1000);
   train.faceHeading(90);
-  pros::delay(100);
+  pros::delay(500);
 
   train.moveVelocity(0, -100, 0);
   pros::delay(1500);
@@ -582,7 +582,7 @@ void redLeftSideSkills(){
   
 
   //red high goal pos
-  train.goToPos(1365, 330);
+  train.goToPos(1387, 330, 60);
   pros::delay(100);
   train.faceHeading(90);
   
