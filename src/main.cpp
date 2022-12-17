@@ -26,7 +26,7 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[1] = {410};
+int launcherRpmOptions[1] = {390};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -381,22 +381,22 @@ void blueLeftSideAuton(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor intake(INTAKEPORT);
-  int velocity = 410;
+  int velocity = 365;
 
   launcherMotorLeft.move_velocity(velocity);
   launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
 
   basicRollerGetter();
 
-  train.moveVelocity(0, 0, -50);
-  pros::delay(175);
+  train.moveVelocity(0, 0, -20);
+  pros::delay(50);
   train.stopAllDrive();
 
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
   pros::delay(1000);
   intake.move_voltage(12000);
-  pros::delay(5000);
+  pros::delay(7000);
 
   intake.move_velocity(0);
 
@@ -603,8 +603,8 @@ void autonomous() {
   //sides pov of lower goal
   // redLeftSideAuton();
   // blueLeftSideAuton();
-  // blueRightSideAuton();
-  blueLeftSideAuton();
+  blueRightSideAuton();
+  // blueLeftSideAuton();
 
   
 
