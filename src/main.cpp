@@ -410,15 +410,15 @@ void redLeftSideAuton(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor intake(INTAKEPORT);
-  int velocity = 410;
+  int velocity = 369;
 
   launcherMotorLeft.move_velocity(velocity);
   launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
 
   basicRollerGetter();
 
-  train.moveVelocity(0, 0, -50);
-  pros::delay(175);
+  train.moveVelocity(0, 0, -20);
+  pros::delay(85);
   train.stopAllDrive();
 
   pros::ADIDigitalOut launcherGate(7);
@@ -601,9 +601,9 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  // redLeftSideAuton();
+  redLeftSideAuton();
   // blueLeftSideAuton();
-  blueRightSideAuton();
+  // blueRightSideAuton();
   // blueLeftSideAuton();
 
   
