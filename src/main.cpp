@@ -600,7 +600,7 @@ void redLeftSideSkills(){
   intake.move_voltage(-7000);
 
   //endgame
-  train.goToPos(200, 200);
+  train.goToPos(200, 200, 100);
   pros::delay(500);
   train.faceHeading(225);
   pros::delay(1000);
