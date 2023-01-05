@@ -128,13 +128,10 @@ void controllerButtonCalls(){
     driveDirection = -driveDirection;
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
-    if(rollerVoltage != 0){
-      rollerVoltage = 0;
-    }
-    else{
-      rollerVoltage = 10000;
-    }
-    roller.move_voltage(rollerVoltage);
+    roller.move_voltage(10000);
+  }
+  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) == false){
+    roller.move_voltage(0);
   }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == true){
     intake.move_voltage(12000);
