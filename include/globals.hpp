@@ -27,3 +27,5 @@
 #define LAUNCHERHEIGHT 300 //in mm
 #define LAUNCHERMOTORRATIO 3/4 
 #define VELOCITYTORPMCONST 15 //divide to convert from mm/sec to RPM
+
+#define DRIVERDURATION 105000

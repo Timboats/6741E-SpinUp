@@ -21,7 +21,7 @@
 #include "launcher.h"
 #include "globals.hpp"
 
-
+long matchStartTime = 0;
 int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
@@ -201,16 +201,33 @@ void controllerButtonCalls(){
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
     isGpsAvailable = !isGpsAvailable;
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true){
+
+  if((pros::millis() >= (matchStartTime+87000)) && pros::competition::is_connected() && !pros::competition::is_disabled()){
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
     endgame1 = !endgame1;
     pros::ADIDigitalOut endgameNutDropper1(1);
     endgameNutDropper1.set_value(endgame1);
-  }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true){
+    }
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true) {
     endgame2 = !endgame2;
     pros::ADIDigitalOut endgameNutDropper2(8);
     endgameNutDropper2.set_value(endgame2);
+    }
+
   }
+  else if(!pros::competition::is_connected()){
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
+    endgame1 = !endgame1;
+    pros::ADIDigitalOut endgameNutDropper1(1);
+    endgameNutDropper1.set_value(endgame1);
+    }
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true) {
+    endgame2 = !endgame2;
+    pros::ADIDigitalOut endgameNutDropper2(8);
+    endgameNutDropper2.set_value(endgame2);
+    }
+  }
+  
   
 }
 void mainloopControllerUpdater(){
@@ -619,6 +636,10 @@ void autonomous() {
 
 
 void opcontrol() {
+  if(pros::competition::is_connected() && !pros::competition::is_disabled()){
+    matchStartTime = pros::millis();
+  }
+  
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
