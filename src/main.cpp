@@ -124,9 +124,6 @@ void controllerButtonCalls(){
   pros::Motor roller(ROLLERPORT);
   pros::Motor intake(INTAKEPORT);
 
-  
-  
-
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
@@ -146,11 +143,6 @@ void controllerButtonCalls(){
     intake.move_voltage(-12000);
     
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == true){
-    launcherGateVal = !launcherGateVal;
-    pros::ADIDigitalOut launcherGate(7);
-    launcherGate.set_value(launcherGateVal);
-  }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
     isIdle = false;
     if(currentRpmIndex != (sizeof(launcherRpmOptions)/sizeof(launcherRpmOptions[0]))-1){
@@ -169,8 +161,14 @@ void controllerButtonCalls(){
     
     if(currentRpmIndex == -1){
       isIdle = true;
+      launcherGateVal = false;
+      pros::ADIDigitalOut launcherGate(7);
+      launcherGate.set_value(launcherGateVal);
     }
     else{
+      launcherGateVal = true;
+      pros::ADIDigitalOut launcherGate(7);
+      launcherGate.set_value(launcherGateVal);
     }
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) == true){
@@ -185,9 +183,14 @@ void controllerButtonCalls(){
     }
     if(currentRpmIndex == -1){
       isIdle = true;
+      launcherGateVal = false;
+      pros::ADIDigitalOut launcherGate(7);
+      launcherGate.set_value(launcherGateVal);
     }
     else{
-      
+      launcherGateVal = true;
+      pros::ADIDigitalOut launcherGate(7);
+      launcherGate.set_value(launcherGateVal);
     }
     
   }
