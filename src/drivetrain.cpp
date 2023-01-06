@@ -157,28 +157,27 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
   
     
 }
-void Drivetrain::faceHeading(int heading){
+void Drivetrain::faceHeading(int heading, int maxErrParam){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
+    PIDController<double> headPid(true);
 
-    const float Kp = 560; //560 works but oscillates a bit too
-    const float Ki = 0;
-    const float Kd = 0;
-    const float windupUpperLimit = 2;
+    const double Kp = 560; //560 works but oscillates a bit too
+    const double Ki = 0;
+    const double Kd = 0;
+    const double windupUpperLimit = 2;
 
-    float deltaTime = 0;
-    float prevTime = 0;
-    float error = 0;
-    float prevError = 0;
+    long deltaTime = 0;
+    long prevTime = 0;
+    double error = 0;
     
-    const float maxError = 1;
-    float integral = 0;
+    const double maxError = maxErrParam;
 
-    float angleFromSet = 0; //Difference between current heading and desired heading from 0-360
-    float totalVoltage = 0;
+    double angleFromSet = 0; //Difference between current heading and desired heading from 0-360
+    double totalVoltage = 0;
 
 
     while(true){
@@ -188,19 +187,14 @@ void Drivetrain::faceHeading(int heading){
 
         angleFromSet = (((int)gpsSystem->getHeading() - heading) + 360) % 360;
 
-        integral = integral + error;
-
-        if (error > windupUpperLimit){
-            integral = 0;
-        }
-
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));
         } else {
             error = angleFromSet;
         }
+        headPid.setError(error);
 
-        totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
+        totalVoltage = headPid.calculateOutput(Kp, Ki, Kd, windupUpperLimit, 0, 0);
         
         northMotor.move_voltage(totalVoltage);
         eastMotor.move_voltage(totalVoltage);
@@ -218,7 +212,6 @@ void Drivetrain::faceHeading(int heading){
             prevTime = pros::millis();
         }
     }
-    prevError = error;
 }
 void Drivetrain::moveVelocity(int xVelocity, int yVelocity, int heading){
     pros::Motor northMotor(northMotorPort);

@@ -32,7 +32,7 @@ public:
 Drivetrain(float wheelDiameter, float gearRatio, unsigned int northMotorPort, unsigned int southMotorPort, unsigned int eastMotorPort, unsigned int westMotorPort, unsigned int northWheelAngle, unsigned int southWheelAngle, unsigned int eastWheelAngle, unsigned int westWheelAngle, unsigned int inertialPort, DualGps* gpsSystem);
 void goToPos(int x, int y, int maxErrParam = 45);
 void stopAllDrive();
-void faceHeading(int heading);
+void faceHeading(int heading, int maxErrParam = 2);
 float turnToPoint(int x, int y);
 void driverCentricSteeringControl(pros::Controller driveController);
 void fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction);
