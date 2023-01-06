@@ -85,7 +85,7 @@ void initialize() {
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, true);
 
   gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
-  gps2 = GpsWrapper(GPS2PORT, -0.1, -0.2, GPS2OFFSETFROMFRONT);
+  gps2 = GpsWrapper(GPS2PORT, 0.1, 0.1, GPS2OFFSETFROMFRONT);
 
   gps1Pointer = &gps1;
   gps2Pointer = &gps2;
