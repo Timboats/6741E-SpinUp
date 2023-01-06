@@ -100,11 +100,11 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
     // pros::Imu inertial(inertialPort);
     PIDController<double> gtPid(true);
 
-    const double Kp = 66; //65 doesnt work
-    const double Ki = 0; //9 is pretty good
-    const double Kd = 0;
+    const double Kp = 48; //65 doesnt work
+    const double Ki = 0.013; //9 is pretty good
+    const double Kd = 300;
     const double maxErr = maxErrParam;
-    const double windupUpperLimit = 8;
+    const double windupUpperLimit = 48;
     
     long deltaTime = 0;
     long prevTime = 0;
@@ -165,10 +165,10 @@ void Drivetrain::faceHeading(int heading, int maxErrParam){
     // pros::Imu inertial(inertialPort);
     PIDController<double> headPid(true);
 
-    const double Kp = 560; //560 works but oscillates a bit too
-    const double Ki = 0;
-    const double Kd = 0;
-    const double windupUpperLimit = 2;
+    const double Kp = 155; //560 works but oscillates a bit too
+    const double Ki = 0.01;
+    const double Kd = 100;
+    const double windupUpperLimit = 5;
 
     long deltaTime = 0;
     long prevTime = 0;
