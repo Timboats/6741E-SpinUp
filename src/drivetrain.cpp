@@ -1,3 +1,4 @@
+#include "controllers.hxx"
 #include "pros/imu.hpp"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -97,26 +98,22 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
     // pros::Imu inertial(inertialPort);
+    PIDController<double> gtPid(true);
 
-    const float Kp = 66; //65 doesnt work
-    const float Ki = 0; //9 is pretty good
-    const float Kd = 0;
-    const int maxErr = maxErrParam;
-    const int windupUpperLimit = 8;
-
-    float integral = 0;
+    const double Kp = 66; //65 doesnt work
+    const double Ki = 0; //9 is pretty good
+    const double Kd = 0;
+    const double maxErr = maxErrParam;
+    const double windupUpperLimit = 8;
     
-    float deltaTime = 0;
-    float prevTime = 0;
-    float error = 0;
-    float prevError = 0;
-    float totalVoltage = 0;
-
+    long deltaTime = 0;
+    long prevTime = 0;
+    double error = 0;
+    double totalVoltage = 0;
     double angleToSetPos = 0;
-    float heading = gpsSystem->getHeading();
-
-    float northVoltage = 0;
-    float eastVoltage = 0;
+    double heading = gpsSystem->getHeading();
+    double northVoltage = 0;
+    double eastVoltage = 0;
 
     double currentX = 0;
     double currentY = 0;
@@ -130,42 +127,22 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
             return;
         }
 
-
         heading = gpsSystem->getHeading();
-        
-
-
-        
 
         error = Formula::twoCoordDistance(currentX, currentY, x, y);
+        gtPid.setError(error);
 
-
-        integral = integral + error;
-
-        if (error > windupUpperLimit){
-            integral = 0;
-        }
-
-        
-        
-
-        totalVoltage = (Kp * error) + (Ki*integral) + (Kd*(error - prevError));
-
+        totalVoltage = gtPid.calculateOutput(Kp, Ki, Kd, windupUpperLimit, 0, 0);
         angleToSetPos = atan2(y - currentY, x - currentX);
 
-
         northVoltage = ((double)(totalVoltage * cos((double)(angleToSetPos - (Simpler::coterminalToStdPos(heading - eastWheelAngle)) * (M_PI/180)))));
-
         eastVoltage = ((double)(totalVoltage * cos((double)(angleToSetPos - (Simpler::coterminalToStdPos(heading - northWheelAngle)) * (M_PI/180)))));
 
-
-        
-        northMotor.move_voltage(northVoltage); //NE, NW, SW
+        northMotor.move_voltage(northVoltage); 
         eastMotor.move_voltage(-eastVoltage);
         southMotor.move_voltage(-northVoltage);
         westMotor.move_voltage(eastVoltage);
 
-        
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
             if (deltaTime > 250){
@@ -176,8 +153,6 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
             prevTime = pros::millis();
 
         } 
-
-        prevError = error;
   }
   
     
