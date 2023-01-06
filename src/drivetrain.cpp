@@ -92,7 +92,7 @@ void Drivetrain::fieldCentricSteeringControl(pros::Controller driveController, i
     eastMotor.move(eastComponent + storedPercent);
     westMotor.move(westComponent + storedPercent);
 }
-void Drivetrain::goToPos(int x, int y, int maxErrParam){
+void Drivetrain::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold, long exitTimer){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
@@ -108,6 +108,7 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
     
     long deltaTime = 0;
     long prevTime = 0;
+    long startTime = -1;
     double error = 0;
     double totalVoltage = 0;
     double angleToSetPos = 0;
@@ -142,6 +143,14 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam){
         eastMotor.move_voltage(-eastVoltage);
         southMotor.move_voltage(-northVoltage);
         westMotor.move_voltage(eastVoltage);
+
+        if((Simpler::abs(error) <= errTimerEnableThreshold && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
+            startTime = pros::millis();
+        }
+        if((pros::millis() > startTime+exitTimer) && (exitTimer != -1)){
+            stopAllDrive();
+            return;
+        }
 
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
