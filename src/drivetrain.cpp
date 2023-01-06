@@ -91,7 +91,7 @@ void Drivetrain::fieldCentricSteeringControl(pros::Controller driveController, i
     eastMotor.move(eastComponent + storedPercent);
     westMotor.move(westComponent + storedPercent);
 }
-void Drivetrain::goToPos(int x, int y){
+void Drivetrain::goToPos(int x, int y, int maxErrParam){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
@@ -101,7 +101,7 @@ void Drivetrain::goToPos(int x, int y){
     const float Kp = 66; //65 doesnt work
     const float Ki = 0; //9 is pretty good
     const float Kd = 0;
-    const int maxErr = 10;
+    const int maxErr = maxErrParam;
     const int windupUpperLimit = 8;
 
     float integral = 0;
