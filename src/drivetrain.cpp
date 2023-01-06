@@ -168,7 +168,7 @@ void Drivetrain::goToPos(int x, int y){
         
         if (Simpler::abs(error) <= maxErr){
             deltaTime = pros::millis() - prevTime;
-            if (deltaTime > 500){
+            if (deltaTime > 250){
                 stopAllDrive();
                 return;
             }
@@ -226,7 +226,7 @@ void Drivetrain::faceHeading(int heading){
 
         if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
-            if(deltaTime > 500){
+            if(deltaTime > 250){
                 stopAllDrive();
                 return;
             }
