@@ -636,6 +636,7 @@ void opcontrol() {
   if(pros::competition::is_connected() && !pros::competition::is_disabled()){
     matchStartTime = pros::millis();
   }
+  // train.goToPos(0, 0, 45, INFINITY, -1);
   
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);

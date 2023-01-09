@@ -144,10 +144,11 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam, int errTimerEnableThresh
         southMotor.move_voltage(-northVoltage);
         westMotor.move_voltage(eastVoltage);
 
-        if((Simpler::abs(error) <= errTimerEnableThreshold && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
+        if(((Simpler::abs(error) <= errTimerEnableThreshold) && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
             startTime = pros::millis();
+            printf("started exittime\n");
         }
-        if((pros::millis() > startTime+exitTimer) && (exitTimer != -1)){
+        if((pros::millis() > startTime+exitTimer && exitTimer != -1) && startTime != -1){
             stopAllDrive();
             return;
         }
