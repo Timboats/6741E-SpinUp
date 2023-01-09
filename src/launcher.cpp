@@ -15,7 +15,13 @@ void moveLauncher(int flywheelRPM){
 
 
 }
-
+void flywheelTask(void* rpm){
+    while(true){
+        moveLauncher((int)rpm);
+        pros::Task::delay(50);
+    }
+    
+}
 float runFlightSim(float desiredDisplacement, float desiredHeight){
     printf("disc flight sim start \n");
     

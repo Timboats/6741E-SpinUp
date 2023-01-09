@@ -9,6 +9,7 @@
 #include "pros/misc.hpp"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
+#include "pros/rtos.h"
 #include "pros/rtos.hpp"
 #include <cmath>
 #include <cstddef>
@@ -590,11 +591,26 @@ void redRightSideAuton(){
 
 
 void autonomous() {
+  /*
+  //starts the flywheel
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  int* rpm = (int*)390;
+  pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
+  pros::delay(10000);
+  //suspends the flywheel
+  flywheel.suspend();
+  launcherMotorLeft.move_velocity(0);
+  launcherMotorRight.move_velocity(0);
+  //resumes the flywheel
+  pros::delay(2000);
+  flywheel.resume();
+  */
 
   // redSideAuton();
   // blueSideAuton();
 
-  pros::Motor roller(ROLLERPORT);
+  // pros::Motor roller(ROLLERPORT);
 
   // if(!isOnBlue){
   //   train.moveVelocity(0, -100, 0);
@@ -618,7 +634,7 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  redLeftSideAuton();
+  // redLeftSideAuton();
   // blueLeftSideAuton();
   // blueRightSideAuton();
   // blueLeftSideAuton();
@@ -627,7 +643,7 @@ void autonomous() {
 
 
   
-  
+  // flywheel.remove(); always put this at the end to end the task 
 }
 
 
@@ -636,7 +652,6 @@ void opcontrol() {
   if(pros::competition::is_connected() && !pros::competition::is_disabled()){
     matchStartTime = pros::millis();
   }
-  // train.goToPos(0, 0, 45, INFINITY, -1);
   
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);

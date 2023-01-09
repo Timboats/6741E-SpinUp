@@ -15,3 +15,4 @@
 void autoAim(bool isBlueGoal, Drivetrain train);
 void idleLauncher();
 void moveLauncher(int flywheelRPM);
+void flywheelTask(void* rpm); //run this method only once and change the rpm through the rpm pointer
