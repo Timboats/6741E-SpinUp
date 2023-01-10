@@ -100,9 +100,9 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam, int errTimerEnableThresh
     // pros::Imu inertial(inertialPort);
     PIDController<double> gtPid(true);
 
-    const double Kp = 48; //65 doesnt work
-    const double Ki = 0.013; //9 is pretty good
-    const double Kd = 300;
+    const double Kp = 48; //48 is mid
+    const double Ki = 0.04; //0.052 and 0.047 is pretty good
+    const double Kd = 0;
     const double maxErr = maxErrParam;
     const double windupUpperLimit = 48;
     
