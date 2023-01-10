@@ -177,7 +177,7 @@ void Drivetrain::faceHeading(int heading, int maxErrParam){
 
     const double Kp = 155; //560 works but oscillates a bit too
     const double Ki = 0.01;
-    const double Kd = 100;
+    const double Kd = 75;
     const double windupUpperLimit = 5;
 
     long deltaTime = 0;
