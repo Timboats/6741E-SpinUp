@@ -399,7 +399,7 @@ void blueLeftSideAuton(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor intake(INTAKEPORT);
-  int velocity = 365;
+  int velocity = 369;
 
   launcherMotorLeft.move_velocity(velocity);
   launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
@@ -490,7 +490,7 @@ void redRightSideAuton(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor intake(INTAKEPORT);
-  int velocity = 410;
+  int velocity = 0;
   
 
   train.moveVelocity(0, 100, 0);
@@ -517,36 +517,36 @@ void redRightSideAuton(){
   */
 
   //start flywheel here
-  launcherMotorLeft.move_velocity(velocity);
-  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
+  // launcherMotorLeft.move_velocity(velocity);
+  // launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
 
-  train.moveVelocity(0, 100, 0);
-  pros::delay(150);
-  train.stopAllDrive();
+  // train.moveVelocity(0, 100, 0);
+  // pros::delay(150);
+  // train.stopAllDrive();
 
-  train.moveVelocity(0, 0, 80);
-  pros::delay(70); //90
-  train.stopAllDrive();
+  // train.moveVelocity(0, 0, 80);
+  // pros::delay(70); //90
+  // train.stopAllDrive();
 
-  pros::delay(2500);
+  // pros::delay(2500);
 
-  pros::ADIDigitalOut launcherGate(7);
-  launcherGate.set_value(HIGH);
-  pros::delay(100);
+  // pros::ADIDigitalOut launcherGate(7);
+  // launcherGate.set_value(HIGH);
+  // pros::delay(100);
 
-  intake.move_voltage(12000);
+  // intake.move_voltage(12000);
 
-  pros::delay(600);
+  // pros::delay(600);
 
-  intake.move_voltage(0);
+  // intake.move_voltage(0);
 
-  pros::delay(6000);
+  // pros::delay(6000);
 
-  intake.move_voltage(12000);
+  // intake.move_voltage(12000);
 
-  pros::delay(2000);
+  // pros::delay(2000);
 
-  intake.move_voltage(0);
+  // intake.move_voltage(0);
 
 
   
@@ -635,9 +635,10 @@ void autonomous() {
 
   //sides pov of lower goal
   // redLeftSideAuton();
-  // blueLeftSideAuton();
+  blueLeftSideAuton();
   // blueRightSideAuton();
   // blueLeftSideAuton();
+  // redRightSideAuton();
 
   
 
