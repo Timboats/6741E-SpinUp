@@ -1,17 +1,18 @@
 #include "launcher.h"
 #include "controllers.hxx"
 
-TBHController<double> leftFlywheelController(50);
-TBHController<double> rightFlywheelController(50);
+TBHController<double> leftFlywheelController(55); //55
+TBHController<double> rightFlywheelController(55);
 
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 void moveLauncher(int flywheelRPM){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
     pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
-    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.555, flywheelRPM, launcherMotorLeft.get_actual_velocity()));
-    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.555, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
-    // printf("Error: %f\n", ((double)flywheelRPM*LAUNCHERMOTORRATIO) - launcherMotorRight.get_actual_velocity());
+    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.352, flywheelRPM, launcherMotorLeft.get_actual_velocity())); //0.352
+    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.58, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
+    // printf("Error R: %f\n", ((double)flywheelRPM*LAUNCHERMOTORRATIO) - launcherMotorRight.get_actual_velocity());
+    // printf("Error L: %f\n", ((double)flywheelRPM) - launcherMotorLeft.get_actual_velocity());
 
 
 }
