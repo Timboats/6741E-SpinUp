@@ -25,7 +25,7 @@
 #define DISCMASS 0.065 //in kg
 #define DISCAREA 15383 //in mm^2
 #define LAUNCHERHEIGHT 300 //in mm
-#define LAUNCHERMOTORRATIO 3/4 
+#define LAUNCHERMOTORRATIO 3/5 
 #define VELOCITYTORPMCONST 15 //divide to convert from mm/sec to RPM
 
 #define DRIVERDURATION 105000
