@@ -392,198 +392,11 @@ void basicRollerGetter(){
   pros::delay(250);
   train.stopAllDrive();
 }
-void blueLeftSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  pros::Motor intake(INTAKEPORT);
-  int velocity = 369;
-
-  launcherMotorLeft.move_velocity(velocity);
-  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
-
-  basicRollerGetter();
-
-  train.moveVelocity(0, 0, -20);
-  pros::delay(50);
-  train.stopAllDrive();
-
-  pros::ADIDigitalOut launcherGate(7);
-  launcherGate.set_value(true);
-  pros::delay(1000);
-  intake.move_voltage(12000);
-  pros::delay(7000);
-
-  intake.move_velocity(0);
-
-  launcherMotorLeft.move_velocity(0);
-  launcherMotorRight.move_velocity(0);
-
-  launcherGate.set_value(false);
-}
-void redLeftSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  pros::Motor intake(INTAKEPORT);
-  int velocity = 369;
-
-  launcherMotorLeft.move_velocity(velocity);
-  launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
-
-  basicRollerGetter();
-
-  train.moveVelocity(0, 0, -20);
-  pros::delay(85);
-  train.stopAllDrive();
-
-  pros::ADIDigitalOut launcherGate(7);
-  launcherGate.set_value(true);
-  pros::delay(1000);
-  intake.move_voltage(12000);
-  pros::delay(5000);
-
-  intake.move_velocity(0);
-
-  launcherMotorLeft.move_velocity(0);
-  launcherMotorRight.move_velocity(0);
-
-  launcherGate.set_value(false);
-
-}
-void blueRightSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-
-  train.moveVelocity(0, 100, 0);
-  pros::delay(400);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(1190);
-  train.stopAllDrive();
-
-  train.moveVelocity(0, -100, 0);
-  pros::delay(500);
-  train.stopAllDrive();
-
-  // train.moveVelocity(100, 0, 0);
-  // pros::delay(600);
-  // train.stopAllDrive();
-
-  basicRollerGetter();
-
-
-
-  // roller.move_relative(400, 100);
-  // pros::delay(250);
-  // train.stopAllDrive();
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(250);
-  // train.stopAllDrive();
+void leftSideAuton(){
 
 }
 
-void redRightSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  pros::Motor intake(INTAKEPORT);
-  int velocity = 0;
-  
-
-  train.moveVelocity(0, 100, 0);
-  pros::delay(400);
-  train.stopAllDrive();
-
-  train.moveVelocity(100, 0, 0);
-  pros::delay(1190);
-  train.stopAllDrive();
-
-  train.moveVelocity(0, -100, 0);
-  pros::delay(500);
-  train.stopAllDrive();
-
-  // train.moveVelocity(100, 0, 0);
-  // pros::delay(600);
-  // train.stopAllDrive();
-
-  basicRollerGetter();
-
-
-  /*
-  *high goal shot portion 
-  */
-
-  //start flywheel here
-  // launcherMotorLeft.move_velocity(velocity);
-  // launcherMotorRight.move_velocity(velocity*LAUNCHERMOTORRATIO);
-
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(150);
-  // train.stopAllDrive();
-
-  // train.moveVelocity(0, 0, 80);
-  // pros::delay(70); //90
-  // train.stopAllDrive();
-
-  // pros::delay(2500);
-
-  // pros::ADIDigitalOut launcherGate(7);
-  // launcherGate.set_value(HIGH);
-  // pros::delay(100);
-
-  // intake.move_voltage(12000);
-
-  // pros::delay(600);
-
-  // intake.move_voltage(0);
-
-  // pros::delay(6000);
-
-  // intake.move_voltage(12000);
-
-  // pros::delay(2000);
-
-  // intake.move_voltage(0);
-
-
-  
-
-  
-
-  // train.moveVelocity(0, 0, 100);
-  // pros::delay(215);
-  // train.stopAllDrive();
-
-  // train.moveVelocity(-100, -45, 0);
-  // pros::delay(2500);
-  // train.stopAllDrive();
-
-  // train.moveVelocity(0, 0, -100);
-  // pros::delay(100);
-  // train.stopAllDrive();
-
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(150);
-  // train.stopAllDrive();
-
-
-
-  
-
-  
-
-  
-  
-
-
-
-  // roller.move_relative(400, 100);
-  // pros::delay(250);
-  // train.stopAllDrive();
-  // train.moveVelocity(0, 100, 0);
-  // pros::delay(250);
-  // train.stopAllDrive();
+void rightSideAuton(){
 
 }
 
@@ -605,8 +418,7 @@ void autonomous() {
   flywheel.resume();
   */
 
-  // redSideAuton();
-  // blueSideAuton();
+  
 
   // pros::Motor roller(ROLLERPORT);
 
@@ -632,12 +444,7 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  // redLeftSideAuton();
-  // blueLeftSideAuton();
   
-  // blueRightSideAuton();
-  // blueLeftSideAuton();
-  // redRightSideAuton();
 
   
 
