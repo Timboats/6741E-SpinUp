@@ -628,7 +628,8 @@ void autonomous() {
 
   //sides pov of lower goal
   // redLeftSideAuton();
-  blueLeftSideAuton();
+  // blueLeftSideAuton();
+  
   // blueRightSideAuton();
   // blueLeftSideAuton();
   // redRightSideAuton();

@@ -192,11 +192,11 @@ void Drivetrain::faceHeading(int heading, int maxErrParam, long exitTimer, bool 
 
 
     while(true){
-        if(gpsSystem->getHeading() == INFINITY){
+        if(gpsSystem->getHeading() == INFINITY && !useInertial){
             return;
         }
 
-        angleFromSet = (((int)gpsSystem->getHeading() - heading) + 360) % 360;
+        angleFromSet = !useInertial?((((int)gpsSystem->getHeading() - heading) + 360) % 360):((((int)Simpler::degreeToStdPos(inertial.get_heading()) - heading) + 360) % 360);
 
         if(angleFromSet > 180){
             error = -(180 - (angleFromSet - 180));
