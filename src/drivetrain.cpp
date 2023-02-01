@@ -167,12 +167,12 @@ void Drivetrain::goToPos(int x, int y, int maxErrParam, int errTimerEnableThresh
   
     
 }
-void Drivetrain::faceHeading(int heading, int maxErrParam){
+void Drivetrain::faceHeading(int heading, int maxErrParam, long exitTimer, bool useInertial){
     pros::Motor northMotor(northMotorPort);
     pros::Motor southMotor(southMotorPort);
     pros::Motor eastMotor(eastMotorPort);
     pros::Motor westMotor(westMotorPort);
-    // pros::Imu inertial(inertialPort);
+    pros::Imu inertial(inertialPort);
     PIDController<double> headPid(true);
 
     const double Kp = 155; //560 works but oscillates a bit too
@@ -182,6 +182,7 @@ void Drivetrain::faceHeading(int heading, int maxErrParam){
 
     long deltaTime = 0;
     long prevTime = 0;
+    long startTime = -1;
     double error = 0;
     
     const double maxError = maxErrParam;
@@ -210,6 +211,16 @@ void Drivetrain::faceHeading(int heading, int maxErrParam){
         eastMotor.move_voltage(totalVoltage);
         southMotor.move_voltage(totalVoltage);
         westMotor.move_voltage(totalVoltage);
+
+        if(startTime == -1){
+            startTime = pros::millis();
+            printf("started exittime\n");
+        }
+
+        if((pros::millis() > startTime+exitTimer && exitTimer != -1) && startTime != -1){
+            stopAllDrive();
+            return;
+        }
 
         if(Simpler::abs(error) <= maxError){
             deltaTime = pros::millis() - prevTime;
