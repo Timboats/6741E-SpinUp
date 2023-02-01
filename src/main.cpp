@@ -107,14 +107,7 @@ void initialize() {
   EastMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   WestMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
-
-  // Inertial.reset();
-
-  // while(Inertial.is_calibrating())
-  // {
-  // }
-
-  // Inertial.set_heading(Simpler::coterminalToStdPos(GpsPrimaryInit.get_heading()+GPSOFFSETFROMFRONT));
+  bool isInertInit = Inertial.reset();
 
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
 }
