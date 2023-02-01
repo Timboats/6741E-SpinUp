@@ -184,7 +184,7 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     //insert launch code when launching system is complete
 }
 float calcIdleSpeed(float temp){
-    return 9750*(1/(1+exp(0.05*(temp - 50))));
+    return 8250*(1/(1+exp(0.05*(temp - 50))));
 }
 void idleLauncher(){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
