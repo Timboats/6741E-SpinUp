@@ -109,6 +109,11 @@ void initialize() {
 
   bool isInertInit = Inertial.reset();
 
+  while (Inertial.is_calibrating() && pros::millis() < 3000) {
+  }
+
+  Inertial.set_heading(90);
+
   train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
 }
 
