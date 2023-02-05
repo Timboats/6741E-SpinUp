@@ -63,10 +63,10 @@ void Drivetrain::driverCentricSteeringControl(pros::Controller driveController){
     // float eastComponent = (desiredMagnitude * (cos((desiredAngle - eastWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
     // float westComponent = (desiredMagnitude * (cos((desiredAngle - westWheelAngle - 90) * (M_PI/180)))) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-    frontRightMotor.move(pros::E_CONTROLLER_ANALOG_LEFT_Y - pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    backRightMotor.move(pros::E_CONTROLLER_ANALOG_LEFT_Y - pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    frontLeftMotor.move(pros::E_CONTROLLER_ANALOG_LEFT_Y + pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    backLeftMotor.move(pros::E_CONTROLLER_ANALOG_LEFT_Y + pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    frontRightMotor.move(-driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    backRightMotor.move(-driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    frontLeftMotor.move(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    backLeftMotor.move(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 }
 // void Drivetrain::driverCentricSteeringControl(pros::Controller driveController){
 //     pros::Motor northMotor(northMotorPort);
