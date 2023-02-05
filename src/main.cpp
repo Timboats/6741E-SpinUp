@@ -1,5 +1,5 @@
 #include "main.h"
-#include "drivetrain.h"
+#include "H-drive.h"
 #include "gps_wrapper.h"
 #include "mathlib.h"
 #include "pros/adi.hpp"
@@ -47,7 +47,7 @@ DualGps gpsSys(gps1Pointer, gps2Pointer, 0.1);
 DualGps* gpsSysPtr = nullptr;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsSysPtr);
+HDrive train(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
 
 
 void variableFsUpdate(){
@@ -114,7 +114,7 @@ void initialize() {
 
   Inertial.set_heading(90);
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
+  train = HDrive(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
 }
 
 void controllerButtonCalls(){

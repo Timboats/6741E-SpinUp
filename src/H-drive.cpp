@@ -30,4 +30,16 @@ void HDrive::driverCentricSteeringControl(pros::Controller driveController){
     pros::Motor bLMotor(bLMotorPort);
     pros::Motor bRMotor(bRMotorPort);
 
+    fRMotor.move(-driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    bRMotor.move(-driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    fLMotor.move(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    bLMotor.move(driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+
+}
+void HDrive::moveVelocity(int xVelocity, int yVelocity, int heading){
+    pros::Motor fLMotor(fLMotorPort);
+    pros::Motor fRMotor(fRMotorPort);
+    pros::Motor bLMotor(bLMotorPort);
+    pros::Motor bRMotor(bRMotorPort);
+
 }
