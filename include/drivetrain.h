@@ -20,16 +20,16 @@ unsigned int westWheelAngle;
 
 
 
-unsigned int northMotorPort;
-unsigned int southMotorPort;
-unsigned int eastMotorPort;
-unsigned int westMotorPort;
+unsigned int frontRightMotorPort;
+unsigned int backRightMotorPort;
+unsigned int frontLeftMotorPort;
+unsigned int backLeftMotorPort;
 
 DualGps* gpsSystem;
 unsigned int inertialPort;
 
 public:
-Drivetrain(float wheelDiameter, float gearRatio, unsigned int northMotorPort, unsigned int southMotorPort, unsigned int eastMotorPort, unsigned int westMotorPort, unsigned int northWheelAngle, unsigned int southWheelAngle, unsigned int eastWheelAngle, unsigned int westWheelAngle, unsigned int inertialPort, DualGps* gpsSystem);
+Drivetrain(float wheelDiameter, float gearRatio, unsigned int frontRightMotorPort, unsigned int backRightMotorPort, unsigned int frontLeftMotorPort, unsigned int backLeftMotorPort, unsigned int northWheelAngle, unsigned int southWheelAngle, unsigned int eastWheelAngle, unsigned int westWheelAngle, unsigned int inertialPort, DualGps* gpsSystem);
 void goToPos(int x, int y, int maxErrParam = 45, int errTimerEnableThreshold = 70, long exitTimer = 5000); //inf errTimer makes time enabled at all times, -1 exitTimer disables timer as a whole
 void stopAllDrive();
 void faceHeading(int heading, int maxErrParam = 2, long exitTimer = 5000, bool useInertial = false);

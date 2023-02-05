@@ -3,10 +3,14 @@
 // extern pros::Controller controller;
 
 //Device ports
-#define NORTHMOTORPORT 10 
-#define SOUTHMOTORPORT 19 
-#define EASTMOTORPORT 9 
-#define WESTMOTORPORT 20 
+// #define NORTHMOTORPORT 10 
+// #define SOUTHMOTORPORT 19 
+// #define EASTMOTORPORT 9 
+// #define WESTMOTORPORT 20 
+#define FRONTRIGHTMOTORPORT 1
+#define BACKRIGHTMOTORPORT 2
+#define FRONTLEFTMOTORPORT 20
+#define BACKLEFTMOTORPORT 19
 #define GPS1PORT 15
 #define GPS2PORT 18 
 #define LAUNCHERMOTORLEFTPORT 16

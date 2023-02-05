@@ -47,8 +47,8 @@ DualGps gpsSys(gps1Pointer, gps2Pointer, 0.1);
 DualGps* gpsSysPtr = nullptr;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsSysPtr);
-
+//Drivetrain train(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsSysPtr);
+Drivetrain train(3.25, 1, FRONTRIGHTMOTORPORT, FRONTLEFTMOTORPORT, BACKRIGHTMOTORPORT, BACKLEFTMOTORPORT, 45, 225, 315, 135, INERTIALSENSORPORT, gpsSysPtr);
 
 void variableFsUpdate(){
   settings storedSettings = getSettings();
@@ -78,10 +78,14 @@ void initialize() {
   variableFsUpdate();
   // master.clear();
   
-  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  // pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor EastMotorInit(FRONTRIGHTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor NorthMotorInit(BACKRIGHTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor SouthMotorInit(FRONTLEFTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor WestMotorInit(BACKLEFTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, false);
 
@@ -114,7 +118,7 @@ void initialize() {
 
   Inertial.set_heading(90);
 
-  train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
+  //train = Drivetrain(3.25, 1, NORTHMOTORPORT, SOUTHMOTORPORT, EASTMOTORPORT, WESTMOTORPORT, 45, 225, 135, 315, INERTIALSENSORPORT, gpsSysPtr);
 }
 
 void controllerButtonCalls(){
@@ -479,13 +483,13 @@ void opcontrol() {
     }
 
     controllerButtonCalls();
-    if(isGpsAvailable){
-      train.fieldCentricSteeringControl(master, 0, driveDirection);
-    }
-    else{
-      train.driverCentricSteeringControl(master);
-    }
-
+    // if(isGpsAvailable){
+    //   train.fieldCentricSteeringControl(master, 0, driveDirection);
+    // }
+    // else{
+    //   train.driverCentricSteeringControl(master);
+    // }
+    train.driverCentricSteeringControl(master);
     
 
     //0 on the field is 90 on a unit circle
