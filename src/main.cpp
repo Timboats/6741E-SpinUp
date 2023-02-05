@@ -78,10 +78,11 @@ void initialize() {
   variableFsUpdate();
   // master.clear();
   
-  pros::Motor EastMotorInit(EASTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor NorthMotorInit(NORTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor SouthMotorInit(SOUTHMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor WestMotorInit(WESTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor FLMotorInit(L_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor FRMotorInit(R_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor BLMotorInit(L_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor BRMotorInit(R_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, false);
 
@@ -102,10 +103,10 @@ void initialize() {
   pros::ADIDigitalOut endgameNutDropper2(8);
   pros::ADIDigitalOut launcherGate(7);
 
-  NorthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  SouthMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  EastMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  WestMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  FRMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  BLMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  FLMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  BRMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
   bool isInertInit = Inertial.reset();
 
