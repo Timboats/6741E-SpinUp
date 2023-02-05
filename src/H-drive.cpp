@@ -85,9 +85,9 @@ void HDrive::faceHeading(int heading, int maxErrParam, long exitTimer, bool useI
 
         totalVoltage = headPid.calculateOutput(Kp, Ki, Kd, windupUpperLimit, 0, 0);
         
-        fLMotor.move_voltage(-totalVoltage);
+        fLMotor.move_voltage(totalVoltage);
         fRMotor.move_voltage(totalVoltage);
-        bLMotor.move_voltage(-totalVoltage);
+        bLMotor.move_voltage(totalVoltage);
         bRMotor.move_voltage(totalVoltage);
 
         if(startTime == -1){
