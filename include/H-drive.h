@@ -5,6 +5,7 @@
 #include "pros/gps.hpp"
 #include <cstddef>
 #include <cmath>
+#include "controllers.hxx"
 
 
 class HDrive {
