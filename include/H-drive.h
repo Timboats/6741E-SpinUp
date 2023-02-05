@@ -4,6 +4,8 @@
 #include "pros/motors.hpp"
 #include "pros/gps.hpp"
 #include <cstddef>
+#include <cmath>
+
 
 class HDrive {
     double wheelDiameter;
