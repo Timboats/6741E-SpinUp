@@ -393,6 +393,64 @@ void basicRollerGetter(){
   train.stopAllDrive();
 }
 void leftSideAuton(){
+  pros::Motor roller(ROLLERPORT);
+  pros::Motor intake(INTAKEPORT);
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+  int* rpm = (int*)428; //427
+  pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
+
+  basicRollerGetter();
+
+  pros::delay(150);
+  train.moveVelocity(0, 0, -55);
+  pros::delay(245);
+  train.stopAllDrive();
+
+
+
+  pros::delay(150);
+  train.moveVelocity(100, 35, 0);
+  pros::delay(1900);
+  train.moveVelocity(70, 24, 0);
+  pros::delay(2100);
+  train.stopAllDrive();
+
+  pros::delay(150);
+
+  train.moveVelocity(0, 0, -55);
+  pros::delay(370); //390
+  train.stopAllDrive();
+  pros::delay(150);
+  // train.moveVelocity(0, 0, -55);
+  // pros::delay(399); //450
+  // train.stopAllDrive();
+  // pros::delay(150);
+
+  train.moveVelocity(0, 100, 0);
+  pros::delay(250); //330
+  train.stopAllDrive();
+  // train.moveVelocity(0, 50, 0);
+  // pros::delay(330); //310
+  // train.stopAllDrive();
+
+  pros::delay(1000);
+
+  
+
+  pros::ADIDigitalOut launcherGate(7);
+  launcherGate.set_value(true);
+  pros::delay(1500);
+  intake.move_voltage(12000);
+  pros::delay(389);
+  intake.move_velocity(0);
+
+  pros::delay(2500);//time between shots
+  intake.move_voltage(12000);
+  pros::delay(789);
+  intake.move_velocity(0);
+
+  launcherGate.set_value(false);
 
 }
 
@@ -444,6 +502,7 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
+  leftSideAuton();
   
 
   
