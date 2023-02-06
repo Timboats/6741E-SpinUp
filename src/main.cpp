@@ -79,9 +79,9 @@ void initialize() {
   // master.clear();
   
   pros::Motor FLMotorInit(L_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor FRMotorInit(R_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor FRMotorInit(R_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
   pros::Motor BLMotorInit(L_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor BRMotorInit(R_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
+  pros::Motor BRMotorInit(R_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
 
   pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
   pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, false);
@@ -520,10 +520,9 @@ void opcontrol() {
     matchStartTime = pros::millis();
   }
   
-  
-  
-  
-  
+
+
+
   
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
