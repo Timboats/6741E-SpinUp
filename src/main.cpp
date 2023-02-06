@@ -522,8 +522,6 @@ void opcontrol() {
   
 
 
-
-  
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
