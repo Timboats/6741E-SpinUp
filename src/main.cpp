@@ -516,7 +516,6 @@ void autonomous() {
 
 
 void opcontrol() {
-  train.faceHeading(90, 2, -1, true);
   if(pros::competition::is_connected() && !pros::competition::is_disabled()){
     matchStartTime = pros::millis();
   }
