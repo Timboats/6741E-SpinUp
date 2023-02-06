@@ -381,6 +381,12 @@ void disabled() {}
 
 void competition_initialize() {}
 
+void moveTime(int y, int h, long time){
+  train.moveVelocity(y, h);
+  pros::delay(time);
+  train.stopAllDrive();
+}
+
 void basicRollerGetter(){
   pros::Motor roller(ROLLERPORT);
 
@@ -403,39 +409,7 @@ void leftSideAuton(){
 
   basicRollerGetter();
 
-  pros::delay(150);
-  train.moveVelocity(0, -55);
-  pros::delay(245);
-  train.stopAllDrive();
-
-
-
-  pros::delay(150);
-  train.moveVelocity(100, 35, 0);
-  pros::delay(1900);
-  train.moveVelocity(70, 24, 0);
-  pros::delay(2100);
-  train.stopAllDrive();
-
-  pros::delay(150);
-
-  train.moveVelocity(0, 0, -55);
-  pros::delay(370); //390
-  train.stopAllDrive();
-  pros::delay(150);
-  // train.moveVelocity(0, 0, -55);
-  // pros::delay(399); //450
-  // train.stopAllDrive();
-  // pros::delay(150);
-
-  train.moveVelocity(0, 100, 0);
-  pros::delay(250); //330
-  train.stopAllDrive();
-  // train.moveVelocity(0, 50, 0);
-  // pros::delay(330); //310
-  // train.stopAllDrive();
-
-  pros::delay(1000);
+  
 
   
 
