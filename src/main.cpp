@@ -384,12 +384,12 @@ void competition_initialize() {}
 void basicRollerGetter(){
   pros::Motor roller(ROLLERPORT);
 
-  train.moveVelocity(0, -100, 0);
+  train.moveVelocity(-100, 0);
   pros::delay(1500);
   roller.move_relative(400, 100);
   pros::delay(250);
   train.stopAllDrive();
-  train.moveVelocity(0, 100, 0);
+  train.moveVelocity(100, 0);
   pros::delay(250);
   train.stopAllDrive();
 }
@@ -404,7 +404,7 @@ void leftSideAuton(){
   basicRollerGetter();
 
   pros::delay(150);
-  train.moveVelocity(0, 0, -55);
+  train.moveVelocity(0, -55);
   pros::delay(245);
   train.stopAllDrive();
 
