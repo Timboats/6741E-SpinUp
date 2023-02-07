@@ -1,8 +1,8 @@
 #include "launcher.h"
 #include "controllers.hxx"
 
-TBHController<double> leftFlywheelController(55); //55
-TBHController<double> rightFlywheelController(55);
+TBHController<double> leftFlywheelController(35); //55
+TBHController<double> rightFlywheelController(35);
 
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 void moveLauncher(int flywheelRPM){
