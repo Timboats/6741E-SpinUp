@@ -26,25 +26,31 @@ void HDrive::stopAllDrive(){
     bLMotor.brake();
     bRMotor.brake();
 }
-void HDrive::driverCentricSteeringControl(pros::Controller driveController, int damperCoefficien){
+void HDrive::driverCentricSteeringControl(pros::Controller driveController, double maxYChange, double maxYChangeNeg){
     pros::Motor fLMotor(fLMotorPort);
     pros::Motor fRMotor(fRMotorPort);
     pros::Motor bLMotor(bLMotorPort);
     pros::Motor bRMotor(bRMotorPort);
-
+    
+    int yInput = driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     long deltaTime = pros::millis() - drivePrevTime;
     int deltaY = driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - prevMotorVelocity;
 
-    double yInput = (double)deltaY/deltaTime;
- 
-    fRMotor.move(((double)1/127)*((Simpler::sign(damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
-    bRMotor.move(((double)1/127)*((Simpler::sign(damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((damperCoefficien*yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
-    fLMotor.move(((double)1/127)*((Simpler::sign(damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
-    bLMotor.move(((double)1/127)*((Simpler::sign(damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((damperCoefficien*yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
+    if((double)deltaY/deltaTime > maxYChange){
+        yInput = prevMotorVelocity + maxYChange;
+    }
+
+    if((double)deltaY/deltaTime < maxYChangeNeg){
+        yInput = prevMotorVelocity - maxYChangeNeg;
+    }
+
+    fRMotor.move(((double)1/127)*((Simpler::sign(yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
+    bRMotor.move(((double)1/127)*((Simpler::sign(yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((yInput - driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
+    fLMotor.move(((double)1/127)*((Simpler::sign(yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
+    bLMotor.move(((double)1/127)*((Simpler::sign(yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < 0)?(-pow(yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), 2)):pow((yInput + driveController.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)), 2)));
 
     drivePrevTime = pros::millis();
     prevMotorVelocity = driveController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-
 }
 void HDrive::moveVelocity(int yVelocity, int heading){
     pros::Motor fLMotor(fLMotorPort);

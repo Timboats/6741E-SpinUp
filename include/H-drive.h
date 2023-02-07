@@ -24,12 +24,13 @@ class HDrive {
 
     long drivePrevTime = 0;
     int prevMotorVelocity = 0;
+    unsigned int maxYChange = 0;
 
     public:
 
     HDrive(double wheelDiameter, double gearRatio, unsigned int fLMotorPort, unsigned int fRMotorPort, unsigned int bLMotorPort, unsigned int bRMotorPort, unsigned int inertialPort, DualGps* gpsSystem);
     void stopAllDrive();
-    void driverCentricSteeringControl(pros::Controller driveController, int damperCoefficien);
+    void driverCentricSteeringControl(pros::Controller driveController, double maxYChange, double maxYChangeNeg);
     void fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction);
     void moveVelocity(int yVelocity, int heading);
     void faceHeading(int heading, int maxErrParam = 2, long exitTimer = 5000, bool useInertial = false);
