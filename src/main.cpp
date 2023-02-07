@@ -404,10 +404,24 @@ void leftSideAuton(){
   pros::Motor intake(INTAKEPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  int* rpm = (int*)428; //427
+  int* rpm = (int*)335; //427
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
 
   basicRollerGetter();
+
+  train.faceHeading(-35, 2, 1000, true);
+  pros::delay(250);
+  moveTime(100, 0, 1000);
+  pros::delay(250);
+
+  train.faceHeading(35, 2, 1000, true);
+
+  pros::delay(250);
+  moveTime(100, 0, 110);
+  pros::delay(250);
+
+
+
 
   
 
@@ -415,12 +429,12 @@ void leftSideAuton(){
 
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
-  pros::delay(1500);
+  pros::delay(2500);
   intake.move_voltage(12000);
   pros::delay(389);
   intake.move_velocity(0);
 
-  pros::delay(2500);//time between shots
+  pros::delay(3500);//time between shots
   intake.move_voltage(12000);
   pros::delay(789);
   intake.move_velocity(0);

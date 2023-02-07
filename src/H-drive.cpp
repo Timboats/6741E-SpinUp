@@ -58,7 +58,7 @@ void HDrive::faceHeading(int heading, int maxErrParam, long exitTimer, bool useI
     pros::Imu inertial(inertialPort);
     PIDController<double> headPid(true);
 
-    const double Kp = 185; //155 works but oscillates a bit too
+    const double Kp = 195; //155 works but oscillates a bit too
     const double Ki = 0;
     const double Kd = 0;
     const double windupUpperLimit = 5;
