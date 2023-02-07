@@ -528,7 +528,7 @@ void opcontrol() {
       train.fieldCentricSteeringControl(master, 0, driveDirection);
     }
     else{
-      train.driverCentricSteeringControl(master);
+      train.driverCentricSteeringControl(master, -200);
     }
 
     

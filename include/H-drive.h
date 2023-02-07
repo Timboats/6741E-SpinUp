@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cmath>
 #include "controllers.hxx"
+#include "pros/rtos.hpp"
 
 
 class HDrive {
@@ -21,11 +22,14 @@ class HDrive {
     DualGps* gpsSystem;
     unsigned int inertialPort;
 
+    long drivePrevTime = 0;
+    int prevMotorVelocity = 0;
+
     public:
 
     HDrive(double wheelDiameter, double gearRatio, unsigned int fLMotorPort, unsigned int fRMotorPort, unsigned int bLMotorPort, unsigned int bRMotorPort, unsigned int inertialPort, DualGps* gpsSystem);
     void stopAllDrive();
-    void driverCentricSteeringControl(pros::Controller driveController);
+    void driverCentricSteeringControl(pros::Controller driveController, int damperCoefficien);
     void fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction);
     void moveVelocity(int yVelocity, int heading);
     void faceHeading(int heading, int maxErrParam = 2, long exitTimer = 5000, bool useInertial = false);
