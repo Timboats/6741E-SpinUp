@@ -409,35 +409,35 @@ void leftSideAuton(){
 
   basicRollerGetter();
 
-  train.faceHeading(-38, 2, 1000, true);
-  pros::delay(250);
-  moveTime(100, 0, 300);
-  moveTime(75, 0, 500);
-  moveTime(60, 0, 420);
-  pros::delay(250);
+  // train.faceHeading(-32, 2, 1000, true); //-38
+  // pros::delay(250);
+  // moveTime(100, 0, 300);
+  // moveTime(75, 0, 500);
+  // moveTime(60, 0, 420);
+  // pros::delay(250);
 
-  train.faceHeading(32, 2, 1000, true); //33
-
-
+  // train.faceHeading(32, 2, 1000, true); //33
 
 
-  
+
 
   
 
-  pros::ADIDigitalOut launcherGate(7);
-  launcherGate.set_value(true);
-  pros::delay(3500);
-  intake.move_voltage(12000);
-  pros::delay(389);
-  intake.move_velocity(0);
+  
 
-  pros::delay(3500);//time between shots
-  intake.move_voltage(12000);
-  pros::delay(789);
-  intake.move_velocity(0);
+  // pros::ADIDigitalOut launcherGate(7);
+  // launcherGate.set_value(true);
+  // pros::delay(3500);
+  // intake.move_voltage(12000);
+  // pros::delay(389);
+  // intake.move_velocity(0);
 
-  launcherGate.set_value(false);
+  // pros::delay(3500);//time between shots
+  // intake.move_voltage(12000);
+  // pros::delay(789);
+  // intake.move_velocity(0);
+
+  // launcherGate.set_value(false);
 
 }
 
