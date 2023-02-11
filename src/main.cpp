@@ -454,7 +454,7 @@ void rightSideAuton(){
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
   pros::Motor intake(INTAKEPORT);
 
-  moveTime(70, 0, 700);
+  moveTime(70, 0, 725);
   pros::delay(250);
   train.faceHeading(-31, 2, 1000, true);
 
@@ -473,9 +473,9 @@ void rightSideAuton(){
   launcherGate.set_value(false);
 
   pros::delay(250);
-  train.faceHeading(55, 2, 1000, true);
+  train.faceHeading(57, 2, 1000, true);
   pros::delay(250);
-  moveTime(-70, 0, 890);
+  moveTime(-70, 0, 910);
   pros::delay(250);
   train.faceHeading(0, 2, 1000, true);
   pros::delay(250);
