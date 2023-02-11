@@ -526,7 +526,6 @@ void autonomous() {
 
   //sides pov of lower goal
   // leftSideAuton();
-  rightSideAuton();
 
   if(isOnBlue){
     leftSideAuton();
