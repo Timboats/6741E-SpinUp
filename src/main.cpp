@@ -456,7 +456,7 @@ void rightSideAuton(){
 
   moveTime(70, 0, 700);
   pros::delay(250);
-  train.faceHeading(-29, 2, 1000, true);
+  train.faceHeading(-31, 2, 1000, true);
 
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
@@ -473,9 +473,9 @@ void rightSideAuton(){
   launcherGate.set_value(false);
 
   pros::delay(250);
-  train.faceHeading(45, 2, 1000, true);
+  train.faceHeading(55, 2, 1000, true);
   pros::delay(250);
-  moveTime(-70, 0, 850);
+  moveTime(-70, 0, 890);
   pros::delay(250);
   train.faceHeading(0, 2, 1000, true);
   pros::delay(250);
