@@ -391,11 +391,11 @@ void basicRollerGetter(){
   pros::Motor roller(ROLLERPORT);
 
   train.moveVelocity(-100, 0);
-  pros::delay(1500);
+  pros::delay(750);
   roller.move_relative(400, 100);
   pros::delay(250);
   train.stopAllDrive();
-  train.moveVelocity(100, 0);
+  train.moveVelocity(40, 0);
   pros::delay(250);
   train.stopAllDrive();
 }
@@ -404,21 +404,19 @@ void leftSideAuton(){
   pros::Motor intake(INTAKEPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-  int* rpm = (int*)335; //427
+  int* rpm = (int*)255; //270
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
 
   basicRollerGetter();
 
-  train.faceHeading(-35, 2, 1000, true);
+  train.faceHeading(-38, 2, 1000, true);
   pros::delay(250);
-  moveTime(100, 0, 1000);
+  moveTime(100, 0, 300);
+  moveTime(75, 0, 500);
+  moveTime(60, 0, 420);
   pros::delay(250);
 
-  train.faceHeading(35, 2, 1000, true);
-
-  pros::delay(250);
-  moveTime(100, 0, 110);
-  pros::delay(250);
+  train.faceHeading(32, 2, 1000, true); //33
 
 
 
@@ -429,7 +427,7 @@ void leftSideAuton(){
 
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
-  pros::delay(2500);
+  pros::delay(3500);
   intake.move_voltage(12000);
   pros::delay(389);
   intake.move_velocity(0);
@@ -444,6 +442,42 @@ void leftSideAuton(){
 }
 
 void rightSideAuton(){
+  int* rpm = (int*)255; //270
+  pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
+  pros::Motor intake(INTAKEPORT);
+
+  moveTime(70, 0, 700);
+  pros::delay(250);
+  train.faceHeading(-29, 2, 1000, true);
+
+  pros::ADIDigitalOut launcherGate(7);
+  launcherGate.set_value(true);
+  pros::delay(3900);
+  intake.move_voltage(12000);
+  pros::delay(489);
+  intake.move_velocity(0);
+
+  pros::delay(1500);//time between shots
+  intake.move_voltage(12000);
+  pros::delay(689);
+  intake.move_velocity(0);
+
+  launcherGate.set_value(false);
+
+  pros::delay(250);
+  train.faceHeading(45, 2, 1000, true);
+  pros::delay(250);
+  moveTime(-70, 0, 850);
+  pros::delay(250);
+  train.faceHeading(0, 2, 1000, true);
+  pros::delay(250);
+  moveTime(-40, 0, 300);
+  pros::delay(50);
+  basicRollerGetter();
+
+
+
+
 
 }
 
@@ -491,7 +525,8 @@ void autonomous() {
   // }
 
   //sides pov of lower goal
-  leftSideAuton();
+  // leftSideAuton();
+  rightSideAuton();
   
 
   

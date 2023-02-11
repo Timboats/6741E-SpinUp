@@ -1,16 +1,16 @@
 #include "launcher.h"
 #include "controllers.hxx"
 
-TBHController<double> leftFlywheelController(35); //55
-TBHController<double> rightFlywheelController(35);
+TBHController<double> leftFlywheelController(8000); //300
+TBHController<double> rightFlywheelController(8000); //300
 
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 void moveLauncher(int flywheelRPM){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
     pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
-    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.352, flywheelRPM, launcherMotorLeft.get_actual_velocity())); //0.352
-    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.58, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
+    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.453, flywheelRPM, launcherMotorLeft.get_actual_velocity())); //0.352
+    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.59, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
     // printf("Error R: %f\n", ((double)flywheelRPM*LAUNCHERMOTORRATIO) - launcherMotorRight.get_actual_velocity());
     // printf("Error L: %f\n", ((double)flywheelRPM) - launcherMotorLeft.get_actual_velocity());
 
@@ -184,7 +184,7 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     //insert launch code when launching system is complete
 }
 float calcIdleSpeed(float temp){
-    return 8250*(1/(1+exp(0.05*(temp - 50))));
+    return 9000*(1/(1+exp(0.05*(temp - 50))));
 }
 void idleLauncher(){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
