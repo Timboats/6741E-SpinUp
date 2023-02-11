@@ -527,6 +527,13 @@ void autonomous() {
   //sides pov of lower goal
   // leftSideAuton();
   rightSideAuton();
+
+  if(isOnBlue){
+    leftSideAuton();
+  } 
+  if(!isOnBlue){
+    rightSideAuton();
+  }
   
 
   
@@ -559,12 +566,9 @@ void opcontrol() {
     }
 
     controllerButtonCalls();
-    if(isGpsAvailable){
-      train.fieldCentricSteeringControl(master, 0, driveDirection);
-    }
-    else{
-      train.driverCentricSteeringControl(master, 127, 0.5);
-    }
+    
+    train.driverCentricSteeringControl(master, 127, 0.5);
+    
 
     
 
