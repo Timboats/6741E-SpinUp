@@ -202,12 +202,12 @@ void controllerButtonCalls(){
   if((pros::millis() >= (matchStartTime+87000)) && pros::competition::is_connected() && !pros::competition::is_disabled()){
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
     endgame1 = !endgame1;
-    pros::ADIDigitalOut endgameNutDropper1(1);
+    pros::ADIDigitalOut endgameNutDropper1(2);
     endgameNutDropper1.set_value(endgame1);
     }
-    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true) {
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) == true) {
     endgame2 = !endgame2;
-    pros::ADIDigitalOut endgameNutDropper2(8);
+    pros::ADIDigitalOut endgameNutDropper2(1);
     endgameNutDropper2.set_value(endgame2);
     }
 
@@ -215,12 +215,12 @@ void controllerButtonCalls(){
   else if(!pros::competition::is_connected()){
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
     endgame1 = !endgame1;
-    pros::ADIDigitalOut endgameNutDropper1(1);
+    pros::ADIDigitalOut endgameNutDropper1(2);
     endgameNutDropper1.set_value(endgame1);
     }
-    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) == true) {
+    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) == true) {
     endgame2 = !endgame2;
-    pros::ADIDigitalOut endgameNutDropper2(8);
+    pros::ADIDigitalOut endgameNutDropper2(1);
     endgameNutDropper2.set_value(endgame2);
     }
   }
