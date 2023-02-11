@@ -200,10 +200,18 @@ void controllerButtonCalls(){
   }
 
   if((pros::millis() >= (matchStartTime+87000)) && pros::competition::is_connected() && !pros::competition::is_disabled()){
+    pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+
+    launcherMotorLeft.move(0);
+    launcherMotorRight.move(0);
+
+
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
     endgame1 = !endgame1;
     pros::ADIDigitalOut endgameNutDropper1(2);
     endgameNutDropper1.set_value(endgame1);
+    
     }
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) == true) {
     endgame2 = !endgame2;
