@@ -450,7 +450,7 @@ void leftSideAuton(){
 }
 
 void rightSideAuton(){
-  int* rpm = (int*)255; //270
+  int* rpm = (int*)280; //270
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
   pros::Motor intake(INTAKEPORT);
 
@@ -460,8 +460,8 @@ void rightSideAuton(){
 
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
-  pros::delay(3900);
-  intake.move_voltage(12000);
+  pros::delay(2000);
+  intake.move_voltage(10000);
   pros::delay(489);
   intake.move_velocity(0);
 
@@ -473,13 +473,13 @@ void rightSideAuton(){
   launcherGate.set_value(false);
 
   pros::delay(250);
-  train.faceHeading(57, 2, 1000, true);
+  train.faceHeading(58, 2, 1000, true);
   pros::delay(250);
-  moveTime(-70, 0, 910);
+  moveTime(-70, 0, 810);
   pros::delay(250);
   train.faceHeading(0, 2, 1000, true);
   pros::delay(250);
-  moveTime(-40, 0, 300);
+  moveTime(-40, 0, 800);
   pros::delay(50);
   basicRollerGetter();
 
