@@ -1,17 +1,24 @@
 #pragma once
 
+struct coord{
+    double x;
+    double y;
+};
+
 class Formula{
     public:
-    static float twoCoordDistance(float x1, float y1, float x2, float y2);
+    static double twoCoordDistance(double x1, double y1, double x2, double y2);
     static float findComponentVector(float magnitudeOne, float angleOne, float angleTwo);
+    static coord findCircleIntersect(double x1, double y1, double x2, double y2, double radius);
 
 };
 class Simpler{
     public:
     static int degreeToStdPos(int angle);
-    static float abs(float val);
+    static double abs(double val);
     static int sign(float val);
     static float coterminalToStdPos(float degree);
     static double degAvgTwoAngles(double angle1, double angle2);
 
 };
+
