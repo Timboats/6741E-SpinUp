@@ -1,18 +1,20 @@
 #include "launcher.h"
 #include "controllers.hxx"
+#include "pros/rotation.hpp"
 
-TBHController<double> leftFlywheelController(8000); //300
-TBHController<double> rightFlywheelController(8000); //300
+TBHController<double> leftFlywheelController(15); //200
 
 pros::Controller con = pros::Controller(pros::E_CONTROLLER_MASTER);
 void moveLauncher(int flywheelRPM){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
+    pros::Rotation rpmSensor(LAUNCHERSENSORPORT, true);
 
-    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.453, flywheelRPM, launcherMotorLeft.get_actual_velocity())); //0.352
-    launcherMotorRight.move_voltage(rightFlywheelController.calculateOutput(0.59, (double)flywheelRPM*LAUNCHERMOTORRATIO, launcherMotorRight.get_actual_velocity()));
-    // printf("Error R: %f\n", ((double)flywheelRPM*LAUNCHERMOTORRATIO) - launcherMotorRight.get_actual_velocity());
-    // printf("Error L: %f\n", ((double)flywheelRPM) - launcherMotorLeft.get_actual_velocity());
+    double rpm = ((double)rpmSensor.get_velocity()/100)*6;
+
+    launcherMotorLeft.move_voltage(leftFlywheelController.calculateOutput(0.464, flywheelRPM, rpm)); //0.352
+    printf("Error L: %f\n", ((double)flywheelRPM) - rpm);
+
+    
 
 
 }
@@ -122,7 +124,6 @@ float findRequiredRPM(float goalXPos, float goalYPos, float goalZPos, float robo
 void autoAim(bool isBlueGoal, Drivetrain train){
     con.clear();
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, true);
-    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06);
     pros::Gps gps1(GPS1PORT);
     
     //for the purposes of testing, until we get the intertial sensor position tracking to be functional
@@ -164,8 +165,7 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     printf("%f, %f, %f \n", targetRPM, angleFromGoal, robotHeading);
     /////////////////////////////
 
-    launcherMotorRight.move_velocity(targetRPM);
-    launcherMotorLeft.move_velocity(targetRPM * LAUNCHERMOTORRATIO);
+    launcherMotorLeft.move_velocity(targetRPM);
     printf("motor vel set complete \n");
     pros::delay(3000);
     pros::ADIDigitalOut indexer(1, HIGH);
@@ -173,9 +173,6 @@ void autoAim(bool isBlueGoal, Drivetrain train){
     pros::ADIDigitalOut i(1, LOW);
     pros::delay(2000);
 
-
-
-    launcherMotorRight.move_velocity(0);
     launcherMotorLeft.move_velocity(0);
 
 
@@ -188,8 +185,5 @@ float calcIdleSpeed(float temp){
 }
 void idleLauncher(){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
-
     launcherMotorLeft.move_voltage(calcIdleSpeed(launcherMotorLeft.get_temperature()));
-    launcherMotorRight.move_voltage(calcIdleSpeed(launcherMotorRight.get_temperature()));
 }

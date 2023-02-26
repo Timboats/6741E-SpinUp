@@ -27,7 +27,7 @@ int driveDirection = 1;
 int rollerVoltage = 0;
 bool indexState = LOW;
 bool isIdle = true;
-int launcherRpmOptions[1] = {335};
+int launcherRpmOptions[1] = {700};
 int currentRpmIndex = -1;
 bool isGpsAvailable = false;
 bool isOnBlue = false;
@@ -97,7 +97,6 @@ void initialize() {
 
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT, pros::E_MOTOR_GEARSET_06, true);
 
   pros::ADIDigitalOut endgameNutDropper1(1);
   pros::ADIDigitalOut endgameNutDropper2(8);
@@ -120,7 +119,6 @@ void initialize() {
 
 void controllerButtonCalls(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   pros::Motor roller(ROLLERPORT);
   pros::Motor intake(INTAKEPORT);
 
@@ -201,10 +199,8 @@ void controllerButtonCalls(){
 
   if((pros::millis() >= (matchStartTime+87000)) && pros::competition::is_connected() && !pros::competition::is_disabled()){
     pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-    pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
     launcherMotorLeft.move(0);
-    launcherMotorRight.move(0);
 
 
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
@@ -411,7 +407,6 @@ void leftSideAuton(){
   pros::Motor roller(ROLLERPORT);
   pros::Motor intake(INTAKEPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
   int* rpm = (int*)255; //270
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
 
@@ -553,6 +548,7 @@ void autonomous() {
 
 
 void opcontrol() {
+  // train.goToPos(0, 0);
   if(pros::competition::is_connected() && !pros::competition::is_disabled()){
     matchStartTime = pros::millis();
   }
@@ -560,7 +556,6 @@ void opcontrol() {
 
 
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor launcherMotorRight(LAUNCHERMOTORRIGHTPORT);
 
 	while (true) {
     // mainloopControllerUpdater();

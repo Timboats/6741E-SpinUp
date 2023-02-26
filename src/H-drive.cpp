@@ -1,4 +1,5 @@
 #include "H-drive.h"
+#include "controllers.hxx"
 
 
 
@@ -137,5 +138,96 @@ void HDrive::fieldCentricSteeringControl(pros::Controller driveController, int s
 
 }
 void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold, long exitTimer){
+    pros::Motor fLMotor(fLMotorPort);
+    pros::Motor fRMotor(fRMotorPort);
+    pros::Motor bLMotor(bLMotorPort);
+    pros::Motor bRMotor(bRMotorPort);
+    // pros::Imu inertial(inertialPort);
+    PIDController<double> gtPid(true);
+    PIDController<double> angPid(true);
+
+    const double l_Kp = 48; //48 is mid
+    const double l_Ki = 0.04; //0.052 and 0.047 is pretty good
+    const double l_Kd = 0;
+
+    const double a_Kp = 20;
+    const double maxErr = maxErrParam;
+    const double windupUpperLimit = 48;
+    
+    long deltaTime = 0;
+    long prevTime = 0;
+    long startTime = -1;
+    double linError = 0;
+    double targetAng = 0;
+    double angError = 0;
+    double heading = gpsSystem->getHeading();
+
+    double currentX = 0;
+    double currentY = 0;
+    
+
+    while(true){
+        currentX = gpsSystem->getPositions().x * 1000;
+        currentY = gpsSystem->getPositions().y * 1000;
+
+        if(gpsSystem->getHeading() == INFINITY){
+            return;
+        }
+
+        heading = gpsSystem->getHeading();
+
+        
+
+        linError = Formula::twoCoordDistance(currentX, currentY, x, y);
+        gtPid.setError(linError);
+
+        targetAng = atan2(y - currentY, x - currentX);
+
+        if(targetAng < 0){
+            targetAng = targetAng+360;
+        } else {
+    
+        }
+
+        angError = targetAng - heading;
+
+        if(angError > 180 || angError < -180){
+            angError = -Simpler::sign(angError)*(360 - Simpler::abs(angError));
+        } else {
+    
+        }
+
+        printf("x: %f, y: %f, linErr: %f, angErr: %f, tarAng: %f\n", currentX, currentY, linError, angError, targetAng);
+
+        angPid.setError(angError);
+
+        double linearAppliedVoltage = gtPid.calculateOutput(l_Kp, l_Ki, l_Kd, windupUpperLimit, 0, 0);
+        double angularAppliedVoltage = angPid.calculateOutput(a_Kp, 0, 0, 0, 0, 0);
+
+        fLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage)*0.25);
+        fRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage)*0.25);
+        bLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage)*0.25);
+        bRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage)*0.25);
+
+        if(((Simpler::abs(linError) <= errTimerEnableThreshold) && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
+            startTime = pros::millis();
+            printf("started exittime\n");
+        }
+        if((pros::millis() > startTime+exitTimer && exitTimer != -1) && startTime != -1){
+            stopAllDrive();
+            return;
+        }
+
+        if (Simpler::abs(linError) <= maxErr){
+            deltaTime = pros::millis() - prevTime;
+            if (deltaTime > 250){
+                stopAllDrive();
+                return;
+            }
+        } else {
+            prevTime = pros::millis();
+
+        } 
+  }
 
 }
