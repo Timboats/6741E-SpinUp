@@ -231,3 +231,71 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
   }
 
 }
+
+void HDrive::moveDistance(int d, int maxErrParam){
+    pros::Motor fLMotor(fLMotorPort);
+    pros::Motor fRMotor(fRMotorPort);
+    pros::Motor bLMotor(bLMotorPort);
+    pros::Motor bRMotor(bRMotorPort);
+
+    pros::Imu inertial(inertialPort);
+
+    const double l_Kp = 46; //48 is mid
+    const double l_Ki = 0.059; //0.04 and 0.047 is pretty good
+    const double l_Kd = 0;
+
+    const double a_Kp = 190;
+    const double a_Ki = 0.025; //0.01
+    const double a_windupUpperLimit = 5;
+
+    PIDController<double> headPid(true);
+    PIDController<double> linearPid(false);
+
+    const double lockHeading = inertial.get_heading();
+
+    double angError = 0;
+    double linearError = 0; 
+
+    long deltaTime = 0;
+    long prevTime = 0;
+
+    while(true){
+        if(inertial.get_heading() == INFINITY){
+            return;
+        }
+
+        double angleFromSet = lockHeading - inertial.get_heading();
+
+        if(angleFromSet > 180 || angleFromSet < -180){
+            angError = -1*Simpler::sign(angleFromSet)*(360 - Simpler::abs(angleFromSet));
+        } else {
+            angError = angleFromSet;
+        }
+
+        headPid.setError(angError);
+
+        double angVoltage = headPid.calculateOutput(a_Kp, a_Ki, 0, a_windupUpperLimit, 0, 0);
+        
+        fLMotor.move_voltage(angVoltage);
+        fRMotor.move_voltage(-angVoltage);
+        bLMotor.move_voltage(angVoltage);
+        bRMotor.move_voltage(-angVoltage);
+
+        if(Simpler::abs(linearError) <= maxErrParam){
+            deltaTime = pros::millis() - prevTime;
+            if(deltaTime > 250){
+                stopAllDrive();
+                return;
+            }
+        }
+        else {
+            prevTime = pros::millis();
+        }
+    }
+
+}
+
+
+    
+
+

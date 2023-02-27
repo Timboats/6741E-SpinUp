@@ -35,6 +35,7 @@ class HDrive {
     void moveVelocity(int yVelocity, int heading);
     void faceHeading(int heading, int maxErrParam = 2, long exitTimer = 5000, bool useInertial = false);
     void goToPos(int x, int y, int maxErrParam = 45, int errTimerEnableThreshold = 70, long exitTimer = 5000); //inf errTimer makes time enabled at all times, -1 exitTimer disables timer as a whole
+    void moveDistance(int d, int maxErrParam = 30);
 
 
 };
