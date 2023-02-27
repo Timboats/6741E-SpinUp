@@ -392,10 +392,10 @@ void basicRollerGetter(){
   pros::Motor intake1(INTAKEPORT1);
   pros::Motor intake2(INTAKEPORT2);
 
-  train.moveVelocity(-100, 0);
-  pros::delay(750);
-  intake1.move_relative(400, 100);
-  intake2.move_relative(400, 100);
+  train.moveVelocity(-120, 0);
+  pros::delay(800);
+  intake1.move_relative(600, 100);
+  intake2.move_relative(600, 100);
 
   pros::delay(250);
   train.stopAllDrive();
