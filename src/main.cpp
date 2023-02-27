@@ -535,14 +535,14 @@ void autonomous() {
   //sides pov of lower goal
   // leftSideAuton();
 
-  // if(isOnBlue){
-  //   leftSideAuton();
-  // } 
-  // if(!isOnBlue){
-  //   rightSideAuton();
-  // }
+  if(isOnBlue){
+    leftSideAuton();
+  } 
+  if(!isOnBlue){
+    rightSideAuton();
+  }
 
-  train.moveDistance(50);
+  
   
 
   

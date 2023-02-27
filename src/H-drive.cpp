@@ -1,5 +1,7 @@
 #include "H-drive.h"
 #include "controllers.hxx"
+#include "pros/motors.h"
+#include <cstdio>
 
 
 
@@ -241,8 +243,9 @@ void HDrive::moveDistance(int d, int maxErrParam){
     pros::Imu inertial(inertialPort);
 
     const double l_Kp = 46; //48 is mid
-    const double l_Ki = 0.059; //0.04 and 0.047 is pretty good
+    const double l_Ki = 0; //0.04 and 0.047 is pretty good
     const double l_Kd = 0;
+    const double l_windupUpperLimit = 5;
 
     const double a_Kp = 190;
     const double a_Ki = 0.025; //0.01
@@ -253,11 +256,20 @@ void HDrive::moveDistance(int d, int maxErrParam){
 
     const double lockHeading = inertial.get_heading();
 
-    double angError = 0;
-    double linearError = 0; 
+    double angError = 0; 
 
     long deltaTime = 0;
     long prevTime = 0;
+
+    fLMotor.tare_position();
+    fRMotor.tare_position();
+    bLMotor.tare_position();
+    bRMotor.tare_position();
+
+    fRMotor.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+    fLMotor.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+    bRMotor.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+    bLMotor.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 
     while(true){
         if(inertial.get_heading() == INFINITY){
@@ -265,6 +277,8 @@ void HDrive::moveDistance(int d, int maxErrParam){
         }
 
         double angleFromSet = lockHeading - inertial.get_heading();
+
+        double averageDistance = (((fLMotor.get_position()+fRMotor.get_position()+bRMotor.get_position()+bLMotor.get_position())/4)*gearRatio*M_PI*(wheelDiameter*25.4));
 
         if(angleFromSet > 180 || angleFromSet < -180){
             angError = -1*Simpler::sign(angleFromSet)*(360 - Simpler::abs(angleFromSet));
@@ -275,13 +289,15 @@ void HDrive::moveDistance(int d, int maxErrParam){
         headPid.setError(angError);
 
         double angVoltage = headPid.calculateOutput(a_Kp, a_Ki, 0, a_windupUpperLimit, 0, 0);
+        double linearVoltage = linearPid.calculateOutput(l_Kp, l_Ki, l_Kd, l_windupUpperLimit, d, averageDistance);
         
-        fLMotor.move_voltage(angVoltage);
-        fRMotor.move_voltage(-angVoltage);
-        bLMotor.move_voltage(angVoltage);
-        bRMotor.move_voltage(-angVoltage);
+        fLMotor.move_voltage(linearVoltage+angVoltage);
+        fRMotor.move_voltage(linearVoltage-angVoltage);
+        bLMotor.move_voltage(linearVoltage+angVoltage);
+        bRMotor.move_voltage(linearVoltage-angVoltage);
+        
 
-        if(Simpler::abs(linearError) <= maxErrParam){
+        if(Simpler::abs(linearPid.getError()) <= maxErrParam){
             deltaTime = pros::millis() - prevTime;
             if(deltaTime > 250){
                 stopAllDrive();
