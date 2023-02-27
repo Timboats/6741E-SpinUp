@@ -83,8 +83,8 @@ void initialize() {
   pros::Motor BLMotorInit(L_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
   pros::Motor BRMotorInit(R_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
 
-  pros::Motor RollerMotorInit(ROLLERPORT, pros::E_MOTOR_GEARSET_36, false);
-  pros::Motor IntakeMotorInit(INTAKEPORT, pros::E_MOTOR_GEARSET_36, false);
+  pros::Motor RollerMotorInit(INTAKEPORT1, pros::E_MOTOR_GEARSET_36, true);
+  pros::Motor IntakeMotorInit(INTAKEPORT2, pros::E_MOTOR_GEARSET_36, false);
 
   gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
   gps2 = GpsWrapper(GPS2PORT, 0.1, 0.1, GPS2OFFSETFROMFRONT);
@@ -119,23 +119,19 @@ void initialize() {
 
 void controllerButtonCalls(){
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
-  pros::Motor roller(ROLLERPORT);
-  pros::Motor intake(INTAKEPORT);
+  pros::Motor intake2(INTAKEPORT1);
+  pros::Motor intake1(INTAKEPORT2);
 
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == true){
     driveDirection = -driveDirection;
   }
-  if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X) == true){
-    roller.move_voltage(10000);
-  }
-  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) == false){
-    roller.move_voltage(0);
-  }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == true){
-    intake.move_voltage(12000);
+    intake1.move_voltage(12000);
+    intake2.move_voltage(12000);
   }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) == true){
-    intake.move_voltage(-12000);
+    intake1.move_voltage(-12000);
+    intake2.move_voltage(-12000);
     
   }
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) == true){
@@ -190,7 +186,8 @@ void controllerButtonCalls(){
     
   }
   if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) == false && master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) == false){
-    intake.move_voltage(0);
+    intake1.move_voltage(0);
+    intake2.move_voltage(0);
   }
   
   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) == true){
@@ -392,11 +389,14 @@ void moveTime(int y, int h, long time){
 }
 
 void basicRollerGetter(){
-  pros::Motor roller(ROLLERPORT);
+  pros::Motor intake1(INTAKEPORT1);
+  pros::Motor intake2(INTAKEPORT2);
 
   train.moveVelocity(-100, 0);
   pros::delay(750);
-  roller.move_relative(400, 100);
+  intake1.move_relative(400, 100);
+  intake2.move_relative(400, 100);
+
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(40, 0);
@@ -404,8 +404,8 @@ void basicRollerGetter(){
   train.stopAllDrive();
 }
 void leftSideAuton(){
-  pros::Motor roller(ROLLERPORT);
-  pros::Motor intake(INTAKEPORT);
+  pros::Motor intake1(INTAKEPORT1);
+  pros::Motor intake2(INTAKEPORT2);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
   int* rpm = (int*)255; //270
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
@@ -447,7 +447,8 @@ void leftSideAuton(){
 void rightSideAuton(){
   int* rpm = (int*)280; //270
   pros::Task flywheel (flywheelTask, rpm, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "auton ramp flywheel");
-  pros::Motor intake(INTAKEPORT);
+  pros::Motor intake1(INTAKEPORT1);
+  pros::Motor intake2(INTAKEPORT2);
 
   moveTime(70, 0, 725);
   pros::delay(250);
@@ -456,14 +457,18 @@ void rightSideAuton(){
   pros::ADIDigitalOut launcherGate(7);
   launcherGate.set_value(true);
   pros::delay(2000);
-  intake.move_voltage(10000);
+  intake1.move_voltage(10000);
+  intake2.move_voltage(10000);
   pros::delay(489);
-  intake.move_velocity(0);
+  intake1.move_velocity(0);
+  intake2.move_velocity(0);
 
   pros::delay(1500);//time between shots
-  intake.move_voltage(12000);
+  intake1.move_voltage(12000);
+  intake2.move_voltage(12000);
   pros::delay(689);
-  intake.move_velocity(0);
+  intake1.move_velocity(0);
+  intake2.move_velocity(0);
 
   launcherGate.set_value(false);
 
