@@ -86,6 +86,8 @@ void initialize() {
   pros::Motor RollerMotorInit(INTAKEPORT1, pros::E_MOTOR_GEARSET_36, true);
   pros::Motor IntakeMotorInit(INTAKEPORT2, pros::E_MOTOR_GEARSET_36, false);
 
+  pros::Motor ExpansionMotorInit(EXPANSIONPORT, pros::E_MOTOR_GEARSET_36, false);
+
   gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
   gps2 = GpsWrapper(GPS2PORT, 0.1, 0.1, GPS2OFFSETFROMFRONT);
 
@@ -98,9 +100,7 @@ void initialize() {
   pros::Imu Inertial(INERTIALSENSORPORT);
   pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT, pros::E_MOTOR_GEARSET_06, false);
 
-  pros::ADIDigitalOut endgameNutDropper1(1);
-  pros::ADIDigitalOut endgameNutDropper2(8);
-  pros::ADIDigitalOut launcherGate(7);
+  pros::ADIDigitalOut launcherGate(2);
 
   FRMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   BLMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -115,6 +115,26 @@ void initialize() {
   Inertial.set_heading(90);
 
   train = HDrive(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
+}
+
+void expand(){
+  pros::Motor expand(EXPANSIONPORT);
+  pros::Motor launcherMotorLeft(LAUNCHERMOTORLEFTPORT);
+
+  pros::ADIDigitalIn limit(1);
+  isIdle = false;
+  launcherMotorLeft.move(0);
+
+  while(!limit.get_new_press()){
+    expand.move_voltage(12000);
+  }
+
+  expand.move(0);
+  launcherMotorLeft.move(0);
+
+
+
+
 }
 
 void controllerButtonCalls(){
@@ -153,12 +173,12 @@ void controllerButtonCalls(){
     if(currentRpmIndex == -1){
       isIdle = true;
       launcherGateVal = false;
-      pros::ADIDigitalOut launcherGate(7);
+      pros::ADIDigitalOut launcherGate(2);
       launcherGate.set_value(launcherGateVal);
     }
     else{
       launcherGateVal = true;
-      pros::ADIDigitalOut launcherGate(7);
+      pros::ADIDigitalOut launcherGate(2);
       launcherGate.set_value(launcherGateVal);
     }
   }
@@ -175,12 +195,12 @@ void controllerButtonCalls(){
     if(currentRpmIndex == -1){
       isIdle = true;
       launcherGateVal = false;
-      pros::ADIDigitalOut launcherGate(7);
+      pros::ADIDigitalOut launcherGate(2);
       launcherGate.set_value(launcherGateVal);
     }
     else{
       launcherGateVal = true;
-      pros::ADIDigitalOut launcherGate(7);
+      pros::ADIDigitalOut launcherGate(2);
       launcherGate.set_value(launcherGateVal);
     }
     
@@ -201,28 +221,14 @@ void controllerButtonCalls(){
 
 
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
-    endgame1 = !endgame1;
-    pros::ADIDigitalOut endgameNutDropper1(2);
-    endgameNutDropper1.set_value(endgame1);
-    
-    }
-    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) == true) {
-    endgame2 = !endgame2;
-    pros::ADIDigitalOut endgameNutDropper2(1);
-    endgameNutDropper2.set_value(endgame2);
+      expand();
     }
 
   }
   else if(!pros::competition::is_connected()){
     if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT) == true) {
-    endgame1 = !endgame1;
-    pros::ADIDigitalOut endgameNutDropper1(2);
-    endgameNutDropper1.set_value(endgame1);
-    }
-    if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) == true) {
-    endgame2 = !endgame2;
-    pros::ADIDigitalOut endgameNutDropper2(1);
-    endgameNutDropper2.set_value(endgame2);
+      expand();
+  
     }
   }
   
@@ -394,13 +400,13 @@ void basicRollerGetter(){
 
   train.moveVelocity(-120, 0);
   pros::delay(800);
-  intake1.move_relative(600, 100);
-  intake2.move_relative(600, 100);
+  intake1.move_relative(700, 100);
+  intake2.move_relative(700, 100);
 
   pros::delay(250);
   train.stopAllDrive();
   train.moveVelocity(40, 0);
-  pros::delay(250);
+  pros::delay(550);
   train.stopAllDrive();
 }
 void leftSideAuton(){
@@ -454,7 +460,7 @@ void rightSideAuton(){
   pros::delay(250);
   train.faceHeading(-31, 2, 1000, true);
 
-  pros::ADIDigitalOut launcherGate(7);
+  pros::ADIDigitalOut launcherGate(2);
   launcherGate.set_value(true);
   pros::delay(2000);
   intake1.move_voltage(10000);
