@@ -400,8 +400,8 @@ void basicRollerGetter(){
 
   train.moveVelocity(-120, 0);
   pros::delay(800);
-  intake1.move_relative(700, 100);
-  intake2.move_relative(700, 100);
+  intake1.move_relative(650, 100);
+  intake2.move_relative(650, 100);
 
   pros::delay(1250);
   train.stopAllDrive();
@@ -485,8 +485,11 @@ void rightSideAuton(){
   pros::delay(250);
   train.faceHeading(0, 2, 1000, true);
   pros::delay(250);
-  moveTime(-40, 0, 800);
+  train.faceHeading(-10, 2, 1000, true);
+  moveTime(-40, 20, 800);
   pros::delay(50);
+  
+  
   basicRollerGetter();
 
 
