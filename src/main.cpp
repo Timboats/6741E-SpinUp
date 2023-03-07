@@ -544,12 +544,13 @@ void autonomous() {
   //sides pov of lower goal
   // leftSideAuton();
 
-  if(isOnBlue){
-    leftSideAuton();
-  } 
-  if(!isOnBlue){
-    rightSideAuton();
-  }
+  // if(isOnBlue){
+  //   leftSideAuton();
+  // } 
+  // if(!isOnBlue){
+  //   rightSideAuton();
+  // }
+
 
   
   
@@ -568,6 +569,9 @@ void opcontrol() {
   if(pros::competition::is_connected() && !pros::competition::is_disabled()){
     matchStartTime = pros::millis();
   }
+
+    train.goToPos(0, 0);
+
   
 
 

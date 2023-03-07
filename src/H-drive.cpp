@@ -1,6 +1,7 @@
 #include "H-drive.h"
 #include "controllers.hxx"
 #include "pros/motors.h"
+#include "pros/rtos.hpp"
 #include <cstdio>
 
 
@@ -152,7 +153,7 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
     const double l_Ki = 0.04; //0.052 and 0.047 is pretty good
     const double l_Kd = 0;
 
-    const double a_Kp = 20;
+    const double a_Kp = 190;
     const double maxErr = maxErrParam;
     const double windupUpperLimit = 48;
     
@@ -186,30 +187,33 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
         targetAng = atan2(y - currentY, x - currentX);
 
         if(targetAng < 0){
-            targetAng = targetAng+360;
-        } else {
-    
+            targetAng+=(2*M_PI);
         }
 
-        angError = targetAng - heading;
+        targetAng = targetAng * (180/M_PI);
 
-        if(angError > 180 || angError < -180){
-            angError = -Simpler::sign(angError)*(360 - Simpler::abs(angError));
-        } else {
-    
+        angError = ((int)(heading - targetAng) + 360) % 360; //might have to use degreetostdpos here for targetAng
+
+        if(angError > 180){
+            angError = -(180 - (angError - 180));
         }
 
-        printf("x: %f, y: %f, linErr: %f, angErr: %f, tarAng: %f\n", currentX, currentY, linError, angError, targetAng);
+
+        // printf("x: %f, y: %f, linErr: %f, angErr: %f, tarAng: %f\n", currentX, currentY, linError, angError, targetAng);
+        if(pros::millis() % 1000 == 0){
+            // printf("Going to angle: %f\n", targetAng);
+        }
+        
 
         angPid.setError(angError);
 
         double linearAppliedVoltage = gtPid.calculateOutput(l_Kp, l_Ki, l_Kd, windupUpperLimit, 0, 0);
         double angularAppliedVoltage = angPid.calculateOutput(a_Kp, 0, 0, 0, 0, 0);
 
-        fLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage)*0.25);
-        fRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage)*0.25);
-        bLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage)*0.25);
-        bRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage)*0.25);
+        fLMotor.move_voltage((0+angularAppliedVoltage)*1);
+        fRMotor.move_voltage((0-angularAppliedVoltage)*1);
+        bLMotor.move_voltage((0+angularAppliedVoltage)*1);
+        bRMotor.move_voltage((0-angularAppliedVoltage)*1);
 
         if(((Simpler::abs(linError) <= errTimerEnableThreshold) && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
             startTime = pros::millis();
