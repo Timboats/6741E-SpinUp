@@ -2,6 +2,7 @@
 #include "controllers.hxx"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
+#include <cmath>
 #include <cstdio>
 
 
@@ -153,7 +154,9 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
     const double l_Ki = 0.04; //0.052 and 0.047 is pretty good
     const double l_Kd = 0;
 
-    const double a_Kp = 190;
+    const double a_Kp = 147;
+    const double a_Ki = 10;
+    const double a_windupUpperLimit = INFINITY;
     const double maxErr = maxErrParam;
     const double windupUpperLimit = 48;
     
@@ -199,21 +202,23 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
         }
 
 
-        // printf("x: %f, y: %f, linErr: %f, angErr: %f, tarAng: %f\n", currentX, currentY, linError, angError, targetAng);
+        
         if(pros::millis() % 1000 == 0){
-            // printf("Going to angle: %f\n", targetAng);
+            printf("linErr: %f\n", linError);
         }
         
 
         angPid.setError(angError);
 
         double linearAppliedVoltage = gtPid.calculateOutput(l_Kp, l_Ki, l_Kd, windupUpperLimit, 0, 0);
-        double angularAppliedVoltage = angPid.calculateOutput(a_Kp, 0, 0, 0, 0, 0);
+        double angularAppliedVoltage = angPid.calculateOutput(a_Kp, a_Ki, 0, a_windupUpperLimit, 0, 0);
 
-        fLMotor.move_voltage((0+angularAppliedVoltage)*1);
-        fRMotor.move_voltage((0-angularAppliedVoltage)*1);
-        bLMotor.move_voltage((0+angularAppliedVoltage)*1);
-        bRMotor.move_voltage((0-angularAppliedVoltage)*1);
+        linearAppliedVoltage = 0;
+
+        fLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage));
+        fRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage));
+        bLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage));
+        bRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage));
 
         if(((Simpler::abs(linError) <= errTimerEnableThreshold) && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
             startTime = pros::millis();
