@@ -65,8 +65,8 @@ coord Formula::findCircleIntersect(double x1, double y1, double x2, double y2, d
   //TODO make this return a point struct and return null if no intersections are found
 
   coord noResult;
-  noResult.x = -2000;
-  noResult.y = -2000;
+  noResult.x = -INFINITY;
+  noResult.y = -INFINITY;
 
   //change in x and y
   const double dx = x2-x1;

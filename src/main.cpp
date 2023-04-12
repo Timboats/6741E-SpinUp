@@ -571,6 +571,8 @@ void opcontrol() {
   }
 
     train.goToPos(0, 0);
+    // coord c = Formula::findCircleIntersect(-5, 0, 0, 5, 2);
+    // printf("Intersect at x: %f, y: %f\n", c.x, c.y);
 
   
 
@@ -579,17 +581,17 @@ void opcontrol() {
 
 	while (true) {
     // mainloopControllerUpdater();
-    if(isIdle){
-      idleLauncher();
-    }
-    else{
-      moveLauncher(launcherRpmOptions[currentRpmIndex]);
-      master.rumble(rumblePattern);
-    }
+    // if(isIdle){
+    //   idleLauncher();
+    // }
+    // else{
+    //   moveLauncher(launcherRpmOptions[currentRpmIndex]);
+    //   master.rumble(rumblePattern);
+    // }
 
-    controllerButtonCalls();
+    // controllerButtonCalls();
     
-    train.driverCentricSteeringControl(master, 127, 0.5);
+    // train.driverCentricSteeringControl(master, 127, 0.5);
     
 
     

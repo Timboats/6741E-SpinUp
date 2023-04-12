@@ -150,13 +150,13 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
     PIDController<double> gtPid(true);
     PIDController<double> angPid(true);
 
-    const double l_Kp = 48; //48 is mid
+    const double l_Kp = 46; //48 is mid
     const double l_Ki = 0.04; //0.052 and 0.047 is pretty good
     const double l_Kd = 0;
 
     const double a_Kp = 147;
-    const double a_Ki = 10;
-    const double a_windupUpperLimit = INFINITY;
+    const double a_Ki = 0; //was 10
+    const double a_windupUpperLimit = 0; //was inf
     const double maxErr = maxErrParam;
     const double windupUpperLimit = 48;
     
@@ -167,6 +167,8 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
     double targetAng = 0;
     double angError = 0;
     double heading = gpsSystem->getHeading();
+    double prevLinError = 0;
+    int linErrSign = 1;
 
     double currentX = 0;
     double currentY = 0;
@@ -185,7 +187,7 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
         
 
         linError = Formula::twoCoordDistance(currentX, currentY, x, y);
-        gtPid.setError(linError);
+        gtPid.setError(linError*linErrSign);
 
         targetAng = atan2(y - currentY, x - currentX);
 
@@ -204,7 +206,9 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
 
         
         if(pros::millis() % 1000 == 0){
-            printf("linErr: %f\n", linError);
+            // printf("linErr: %f\n", linError);
+            printf("angErr: %f\n", angError);
+
         }
         
 
@@ -213,12 +217,18 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
         double linearAppliedVoltage = gtPid.calculateOutput(l_Kp, l_Ki, l_Kd, windupUpperLimit, 0, 0);
         double angularAppliedVoltage = angPid.calculateOutput(a_Kp, a_Ki, 0, a_windupUpperLimit, 0, 0);
 
-        linearAppliedVoltage = 0;
+        // linearAppliedVoltage = 0;
 
-        fLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage));
-        fRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage));
-        bLMotor.move_voltage((linearAppliedVoltage+angularAppliedVoltage));
-        bRMotor.move_voltage((linearAppliedVoltage-angularAppliedVoltage));
+        fLMotor.move_voltage(((linearAppliedVoltage*0.5)+angularAppliedVoltage));
+        fRMotor.move_voltage(((linearAppliedVoltage*0.5)-angularAppliedVoltage));
+        bLMotor.move_voltage(((linearAppliedVoltage*0.5)+angularAppliedVoltage));
+        bRMotor.move_voltage(((linearAppliedVoltage*0.5)-angularAppliedVoltage));
+
+        prevLinError = linError;
+
+        if(prevLinError > linError){
+            linErrSign = -linErrSign;
+        }
 
         if(((Simpler::abs(linError) <= errTimerEnableThreshold) && startTime == -1) || (errTimerEnableThreshold == INFINITY && startTime == -1)){
             startTime = pros::millis();
