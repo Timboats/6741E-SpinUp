@@ -25,7 +25,7 @@ float Formula::findComponentVector(float magnitudeOne, float angleOne, float ang
   float magnitudeTwo = magnitudeOne * cos(angleOne - angleTwo);
   return magnitudeTwo;
 }
-float Simpler::coterminalToStdPos(float degree){
+double Simpler::coterminalToStdPos(double degree){
   if(degree > 360){
     return degree - 360;
   }
@@ -61,6 +61,7 @@ double Simpler::degAvgTwoAngles(double angle1, double angle2){
 
   return finalRad*(180/M_PI);
 }
+
 coord Formula::findCircleIntersect(double x1, double y1, double x2, double y2, double radius){
   //TODO make this return a point struct and return null if no intersections are found
 

@@ -167,6 +167,7 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
     double targetAng = 0;
     double angError = 0;
     double heading = gpsSystem->getHeading();
+    double reverseHeading = Simpler::coterminalToStdPos(gpsSystem->getHeading() + 180);
     double prevLinError = 0;
     int linErrSign = 1;
 
@@ -183,8 +184,7 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
         }
 
         heading = gpsSystem->getHeading();
-
-        
+        reverseHeading = Simpler::coterminalToStdPos(gpsSystem->getHeading() + 180);
 
         linError = Formula::twoCoordDistance(currentX, currentY, x, y);
         gtPid.setError(linError*linErrSign);
@@ -199,9 +199,27 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
 
         angError = ((int)(heading - targetAng) + 360) % 360; //might have to use degreetostdpos here for targetAng
 
+
         if(angError > 180){
             angError = -(180 - (angError - 180));
         }
+
+        double regAngErr = angError;
+
+        angError = ((int)(reverseHeading - targetAng) + 360) % 360;
+
+        if(angError > 180){
+            angError = -(180 - (angError - 180));
+        }
+
+        if(regAngErr < angError){
+            angError = regAngErr;
+        }
+        else{
+            //reverse the direction of linear movement here
+        }
+
+
 
 
         
@@ -219,10 +237,10 @@ void HDrive::goToPos(int x, int y, int maxErrParam, int errTimerEnableThreshold,
 
         // linearAppliedVoltage = 0;
 
-        fLMotor.move_voltage(((linearAppliedVoltage*0.5)+angularAppliedVoltage));
-        fRMotor.move_voltage(((linearAppliedVoltage*0.5)-angularAppliedVoltage));
-        bLMotor.move_voltage(((linearAppliedVoltage*0.5)+angularAppliedVoltage));
-        bRMotor.move_voltage(((linearAppliedVoltage*0.5)-angularAppliedVoltage));
+        fLMotor.move_voltage((-angularAppliedVoltage));
+        fRMotor.move_voltage((angularAppliedVoltage));
+        bLMotor.move_voltage((-angularAppliedVoltage));
+        bRMotor.move_voltage((angularAppliedVoltage));
 
         prevLinError = linError;
 
