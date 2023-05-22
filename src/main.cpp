@@ -17,8 +17,6 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include "braingui.h"
-#include "vexfs.h"
 #include "launcher.h"
 #include "globals.hpp"
 
@@ -50,32 +48,8 @@ pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
 HDrive train(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
 
 
-void variableFsUpdate(){
-  settings storedSettings = getSettings();
-  if(storedSettings.isOnBlueSide){
-    driveDirection = -1;
-  } 
-  if(!storedSettings.isOnBlueSide){
-    driveDirection = 1;
-  }
-  if(storedSettings.isGpsAvaiable){
-    isGpsAvailable = true;
-  }
-  if(!storedSettings.isGpsAvaiable){
-    isGpsAvailable = false;
-  }
-  if(storedSettings.isOnBlueSide){
-    isOnBlue = true;
-  }
-  if(!storedSettings.isOnBlueSide){
-    isOnBlue = false;
-  }
 
-}
 void initialize() {
-  fileSysInit();
-  lvglInitEx();
-  variableFsUpdate();
   // master.clear();
   
   pros::Motor FLMotorInit(L_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
