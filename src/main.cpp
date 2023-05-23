@@ -17,7 +17,6 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include "launcher.h"
 #include "globals.hpp"
 
 long matchStartTime = 0;
@@ -33,17 +32,19 @@ DualGps gpsSys(gps1Pointer, gps2Pointer, 0.1);
 DualGps* gpsSysPtr = nullptr;
 
 pros::Controller master = pros::Controller(pros::E_CONTROLLER_MASTER);
-HDrive train(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
+HDrive train(4, 1, DRIVEMOTOR1, DRIVEMOTOR2, DRIVEMOTOR3, DRIVEMOTOR4, DRIVEMOTOR5,DRIVEMOTOR6, INERTIALSENSORPORT, gpsSysPtr);
 
 
 
 void initialize() {
   // master.clear();
-  
-  pros::Motor FLMotorInit(L_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor FRMotorInit(R_FRONTMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
-  pros::Motor BLMotorInit(L_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, true);
-  pros::Motor BRMotorInit(R_BACKMOTORPORT, pros::E_MOTOR_GEARSET_18, false);
+
+  pros::Motor driveMotor1(DRIVEMOTOR1, pros::E_MOTOR_GEARSET_06, false);
+  pros::Motor driveMotor2(DRIVEMOTOR2, pros::E_MOTOR_GEARSET_06, false);
+  pros::Motor driveMotor3(DRIVEMOTOR3, pros::E_MOTOR_GEARSET_06, false);
+  pros::Motor driveMotor4(DRIVEMOTOR4, pros::E_MOTOR_GEARSET_06, true);
+  pros::Motor driveMotor5(DRIVEMOTOR5, pros::E_MOTOR_GEARSET_06, true);
+  pros::Motor driveMotor6(DRIVEMOTOR6, pros::E_MOTOR_GEARSET_06, true);
 
   gps1 = GpsWrapper(GPS1PORT, 0.0921, 0.159, GPS1OFFSETFROMFRONT);
   gps2 = GpsWrapper(GPS2PORT, 0.1, 0.1, GPS2OFFSETFROMFRONT);
@@ -56,12 +57,6 @@ void initialize() {
 
   pros::Imu Inertial(INERTIALSENSORPORT);
 
-
-  FRMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  BLMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  FLMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  BRMotorInit.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-
   bool isInertInit = Inertial.reset();
 
   while (Inertial.is_calibrating() && pros::millis() < 3000) {
@@ -69,7 +64,7 @@ void initialize() {
 
   Inertial.set_heading(90);
 
-  train = HDrive(4, ((double)84/32), L_FRONTMOTORPORT, R_FRONTMOTORPORT, L_BACKMOTORPORT, R_BACKMOTORPORT, INERTIALSENSORPORT, gpsSysPtr);
+  train = HDrive(4, 1, DRIVEMOTOR1, DRIVEMOTOR2, DRIVEMOTOR3, DRIVEMOTOR4, DRIVEMOTOR5,DRIVEMOTOR6, INERTIALSENSORPORT, gpsSysPtr);
 }
 
 
@@ -96,7 +91,7 @@ void autonomous() {
 
 void opcontrol() {
   // train.goToPos(0, 0)
-    train.goToPos(0, 0);
+    // train.goToPos(0, 0);
     // coord c = Formula::findCircleIntersect(-5, 0, 0, 5, 2);
     // printf("Intersect at x: %f, y: %f\n", c.x, c.y);
 
@@ -116,7 +111,7 @@ void opcontrol() {
 
     // controllerButtonCalls();
     
-    // train.driverCentricSteeringControl(master, 127, 0.5);
+    train.driverCentricSteeringControl(master, 127, 0.5);
     
 
     

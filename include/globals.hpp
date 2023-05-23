@@ -3,7 +3,13 @@
 // extern pros::Controller controller;
 
 //Device ports
-//remeber to add motors and dat
+#define DRIVEMOTOR1 11
+#define DRIVEMOTOR2 12
+#define DRIVEMOTOR3 1
+#define DRIVEMOTOR4 20
+#define DRIVEMOTOR5 19
+#define DRIVEMOTOR6 10
+
 #define GPS1PORT 17
 #define GPS2PORT 8 
 #define INERTIALSENSORPORT 15

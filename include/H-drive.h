@@ -14,10 +14,12 @@ class HDrive {
     double gearRatio;
     double wheelCircumference;
 
-    unsigned int fLMotorPort;
-    unsigned int fRMotorPort;
-    unsigned int bLMotorPort;
-    unsigned int bRMotorPort;
+    unsigned int driveMotor1Port;
+    unsigned int driveMotor2Port;
+    unsigned int driveMotor3Port;
+    unsigned int driveMotor4Port;
+    unsigned int driveMotor5Port;
+    unsigned int driveMotor6Port;
 
     DualGps* gpsSystem;
     unsigned int inertialPort;
@@ -28,7 +30,7 @@ class HDrive {
 
     public:
 
-    HDrive(double wheelDiameter, double gearRatio, unsigned int fLMotorPort, unsigned int fRMotorPort, unsigned int bLMotorPort, unsigned int bRMotorPort, unsigned int inertialPort, DualGps* gpsSystem);
+    HDrive(double wheelDiameter, double gearRatio, unsigned int driveMotor1, unsigned int driveMotor2, unsigned int driveMotor3, unsigned int driveMotor4, unsigned int driveMotor5, unsigned int driveMotor6, unsigned int inertialPort, DualGps* gpsSystem);
     void stopAllDrive();
     void driverCentricSteeringControl(pros::Controller driveController, double maxYChange, double maxYChangeNeg);
     void fieldCentricSteeringControl(pros::Controller driveController, int storedPercent, int direction);
