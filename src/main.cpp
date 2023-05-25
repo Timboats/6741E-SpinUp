@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include "globals.hpp"
+#include "odometry.h"
 
 long matchStartTime = 0;
 int driveDirection = 1;
@@ -62,7 +63,7 @@ void initialize() {
   while (Inertial.is_calibrating() && pros::millis() < 3000) {
   }
 
-  Inertial.set_heading(90);
+  Inertial.set_heading(0); //was 90
 
   train = HDrive(4, 1, DRIVEMOTOR1, DRIVEMOTOR2, DRIVEMOTOR3, DRIVEMOTOR4, DRIVEMOTOR5,DRIVEMOTOR6, INERTIALSENSORPORT, gpsSysPtr);
 }
@@ -94,12 +95,15 @@ void opcontrol() {
     // train.goToPos(0, 0);
     // coord c = Formula::findCircleIntersect(-5, 0, 0, 5, 2);
     // printf("Intersect at x: %f, y: %f\n", c.x, c.y);
+    Odometry track(LEFTROTATIONPORT, RIGHTROTATIONPORT, BACKROTATIONPORT);
+    pros::Imu Inertial(INERTIALSENSORPORT);
 
   
 
 
 
 	while (true) {
+    printf("inert: %f, track: %f\n", Inertial.get_heading(), track.getHeading()*(180/M_PI));
     // mainloopControllerUpdater();
     // if(isIdle){
     //   idleLauncher();
@@ -111,7 +115,7 @@ void opcontrol() {
 
     // controllerButtonCalls();
     
-    train.driverCentricSteeringControl(master, 127, 0.5);
+    // train.driverCentricSteeringControl(master, 127, 0.5);
     
 
     
